@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-08-15 18:30-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!meta title=\"OpenID\"]]\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!meta robots=\"noindex, follow\"]]\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"[[!if test=\"enabled(openid)\"\n"
+"     then=\"This wiki has OpenID **enabled**.\"\n"
+"     else=\"This wiki has OpenID **disabled**.\"]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"[OpenID](http://openid.net) is a decentralized authentication mechanism that "
+"allows you to have one login that you can use on a growing number of "
+"websites."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"To sign up for an OpenID, visit one of the following identity providers:"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[MyOpenID](https://www.myopenid.com/)"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[GetOpenID](https://getopenid.com/)"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[Videntity](http://videntity.org/)"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[LiveJournal](http://www.livejournal.com/openid/)"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[TrustBearer](https://openid.trustbearer.com/)"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"or any of the [many others out there](http://openiddirectory.com/openid-"
+"providers-c-1.html)"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"Your OpenID is the URL that you are given when you sign up.\n"
+"[[!if test=\"enabled(openid)\" then=\"\"\"\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"To sign in to this wiki using OpenID, just enter it in the OpenID field in "
+"the signin form. You do not need to give this wiki a password or go through "
+"any registration process when using OpenID."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"It's also possible to make a page in the wiki usable as an OpenID url, by "
+"delegating it to an openid server. Here's an example of how to do that:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"\t\\[[!meta openid=\"http://yourid.myopenid.com/\"\n"
+"\t       server=\"http://www.myopenid.com/server\"]]\n"
+msgstr ""
