@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-15 19:09-0300\n"
+"POT-Creation-Date: 2009-08-15 19:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,12 +61,11 @@ msgstr ""
 
 #. type: Bullet: '2. '
 msgid ""
-"Is your language listed as one of the available translations on the "
-"[[index]] page? If not, [[Joey]] needs to enable it. Edit this page and "
-"request it be enabled. Saying something about the translation resources you "
-"have available will help. Is it just you, or will there be a whole team? Do "
-"you have just a little time to help, or do you want to commit to translating "
-"the whole thing?"
+"Is your language listed as one of the available translations above? If not, "
+"[[Joey]] needs to enable it. Edit this page and request it be enabled. "
+"Saying something about the translation resources you have available will "
+"help. Is it just you, or will there be a whole team? Do you have just a "
+"little time to help, or do you want to commit to translating the whole thing?"
 msgstr ""
 
 #. type: Bullet: '3. '
