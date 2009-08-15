@@ -1,0 +1,70 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-08-15 18:30-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!meta robots=\"noindex, follow\"]]\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"[[!if test=\"enabled(search)\"\n"
+"then=\"This wiki has searching **enabled**.\"\n"
+"else=\"This wiki has searching **disabled**.\"]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"If searching is enabled, you can enter search terms in the search field, as "
+"you'd expect. There are a few special things you can do to constuct more "
+"powerful searches."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "To match a phrase, enclose it in double quotes."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "`AND` can be used to search for documents containing two expressions."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"`OR` can be used to search for documents containing either one of two "
+"expressions."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"Parentheses can be used to build up complicated search expressions. For "
+"example, \"(foo AND bar) OR (me AND you)\""
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"Prefix a search term with \"-\" to avoid it from appearing in the results.  "
+"For example, \"-discussion\" will omit \"discussion\"."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "To search for a page with a given title, use \"title:foo\"."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "To search for pages that contain a \"bar\" link, use \"link:bar\"."
+msgstr ""
