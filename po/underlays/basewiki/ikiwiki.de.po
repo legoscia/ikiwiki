@@ -1,0 +1,66 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-08-15 18:30-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!meta robots=\"noindex, follow\"]]\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"This wiki is powered by [ikiwiki](http://ikiwiki.info/).\n"
+"[[!if test=\"enabled(version)\"\n"
+"     then=\"(Currently running version [[!version ]].)\"\n"
+"]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid "Some documentation on using ikiwiki:"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[[ikiwiki/formatting]]"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[[ikiwiki/wikilink]]"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[[ikiwiki/subpage]]"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[[ikiwiki/pagespec]]"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[[ikiwiki/directive]]"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[[ikiwiki/markdown]]"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[[ikiwiki/openid]]"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "[[ikiwiki/searching]]"
+msgstr ""
