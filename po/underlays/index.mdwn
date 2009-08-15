@@ -20,8 +20,8 @@ these steps:
    > Redistribution and use in source and compiled forms, with or without
    > modification, are permitted under any circumstances. No warranty.
 
-2. Is your language listed as one of the available translations on the [[index]]
-   page? If not, [[Joey]] needs to enable it. Edit this page and request
+2. Is your language listed as one of the available translations above?
+   If not, [[Joey]] needs to enable it. Edit this page and request
    it be enabled. Saying something about the translation resources you
    have available will help. Is it just you, or will there be a whole team?
    Do you have just a little time to help, or do you want to commit
