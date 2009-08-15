@@ -45,6 +45,9 @@ these steps:
    * Run `git push` to push your changes back to this wiki. It will
      automatically update!
 
+5. If you get a useful percentage of the basewiki translated, let [[Joey]]
+   know so he can activate your translation in the next ikiwiki release.
+
 ## List of pages
 
 Here is a list of all the translatable pages in the basewiki:
