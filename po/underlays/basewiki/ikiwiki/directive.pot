@@ -1,0 +1,111 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-08-15 18:30-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: ENCODING"
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!meta robots=\"noindex, follow\"]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"Directives are similar to a [[ikiwiki/WikiLink]] in form, except they begin "
+"with `!` and may contain parameters. The general form is:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "\t\\[[!directive param=\"value\" param=\"value\"]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"This gets expanded before the rest of the page is processed, and can be used "
+"to transform the page in various ways."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"The quotes around values can be omitted if the value is a simple word.  "
+"Also, some directives may use parameters without values, for example:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "\t\\[[!tag foo]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"A directive does not need to all be on one line, it can be wrapped to "
+"multiple lines if you like:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"\t\\[[!directive foo=\"baldersnatch\"\n"
+"\tbar=\"supercalifragilisticexpialidocious\" baz=11]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"Also, multiple lines of *quoted* text can be used for a value.  To allow "
+"quote marks inside the quoted text, delimit the block of text with "
+"triple-quotes:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "\t\\[[!directive text=\"\"\"\n"
+msgstr ""
+
+#. type: Bullet: '	1. '
+msgid "\"foo\""
+msgstr ""
+
+#. type: Bullet: '	2. '
+msgid "\"bar\""
+msgstr ""
+
+#. type: Bullet: '	3. '
+msgid "\"baz\""
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"ikiwiki also has an older syntax for directives, which requires a space in "
+"directives to distinguish them from [[wikilinks|ikiwiki/wikilink]]. This "
+"syntax has several disadvantages: it requires a space after directives with "
+"no parameters (such as `\\[[pagecount ]]`), and it prohibits spaces in "
+"[[wikilinks|ikiwiki/wikilink]].  ikiwiki now provides the `!`-prefixed "
+"syntax shown above as default.  However, ikiwiki still supports wikis using "
+"the older syntax, if the `prefix_directives` option is disabled."
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!if test=\"enabled(listdirectives)\" then=\"\"\"\n"
+msgstr ""
+
+#. type: Plain text
+msgid "Here is a list of currently available directives in this wiki:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!listdirectives ]]\n"
+msgstr ""

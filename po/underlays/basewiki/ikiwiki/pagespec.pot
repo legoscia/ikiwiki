@@ -1,0 +1,192 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-08-15 18:30-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: ENCODING"
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!meta robots=\"noindex, follow\"]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"To select a set of pages, such as pages that are locked, pages whose commit "
+"emails you want subscribe to, or pages to combine into a blog, the wiki uses "
+"a PageSpec. This is an expression that matches a set of pages."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"The simplest PageSpec is a simple list of pages. For example, this matches "
+"any of the three listed pages:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "\tfoo or bar or baz\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"More often you will want to match any pages that have a particular thing in "
+"their name. You can do this using a glob pattern. \"`*`\" stands for any "
+"part of a page name, and \"`?`\" for any single letter of a page name. So "
+"this matches all pages about music, and any [[SubPage]]s of the SandBox, but "
+"does not match the SandBox itself:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "\t*music* or SandBox/*\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"You can also prefix an item with \"`!`\" to skip pages that match it. So to "
+"match all pages except for Discussion pages and the SandBox:"
+msgstr ""
+
+#. type: Bullet: '	* '
+msgid "and !SandBox and !*/Discussion"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"Some more elaborate limits can be added to what matches using these "
+"functions:"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "\"`link(page)`\" - matches only pages that link to a given page (or glob)"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"\"`tagged(tag)`\" - matches pages that are tagged or link to the given tag "
+"(or tags matched by a glob)"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "\"`backlink(page)`\" - matches only pages that a given page links to"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "\"`creation_month(month)`\" - matches only pages created on the given month"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "\"`creation_day(mday)`\" - or day of the month"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "\"`creation_year(year)`\" - or year"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"\"`created_after(page)`\" - matches only pages created after the given page "
+"was created"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"\"`created_before(page)`\" - matches only pages created before the given "
+"page was created"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"\"`glob(someglob)`\" - matches pages that match the given glob. Just writing "
+"the glob by itself is actually a shorthand for this function."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"\"`internal(glob)`\" - like `glob()`, but matches even internal-use pages "
+"that globs do not usually match."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"\"`title(glob)`\", \"`author(glob)`\", \"`authorurl(glob)`\", "
+"\"`license(glob)`\", \"`copyright(glob)`\" - match pages that have the given "
+"metadata, matching the specified glob."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"\"`user(username)`\" - tests whether a modification is being made by a user "
+"with the specified username. If openid is enabled, an openid can also be put "
+"here."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"\"`admin()`\" - tests whether a modification is being made by one of the "
+"wiki admins."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"\"`ip(address)`\" - tests whether a modification is being made from the "
+"specified IP address."
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"\"`postcomment(glob)`\" - matches only when comments are being posted to a "
+"page matching the specified glob"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"For example, to match all pages in a blog that link to the page about music "
+"and were written in 2005:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "\tblog/* and link(music) and creation_year(2005)\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"Note the use of \"and\" in the above example, that means that only pages "
+"that match each of the three expressions match the whole. Use \"and\" when "
+"you want to combine expression like that; \"or\" when it's enough for a page "
+"to match one expression. Note that it doesn't make sense to say \"index and "
+"SandBox\", since no page can match both expressions."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"More complex expressions can also be created, by using parentheses for "
+"grouping. For example, to match pages in a blog that are tagged with either "
+"of two tags, use:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "\tblog/* and (tagged(foo) or tagged(bar))\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"Note that page names in PageSpecs are matched against the absolute filenames "
+"of the pages in the wiki, so a pagespec \"foo\" used on page \"a/b\" will "
+"not match a page named \"a/foo\" or \"a/b/foo\". To match relative to the "
+"directory of the page containing the pagespec, you can use \"./\". For "
+"example, \"./foo\" on page \"a/b\" matches page \"a/foo\"."
+msgstr ""
