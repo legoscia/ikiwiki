@@ -12,8 +12,8 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: ENCODING"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
 
 #. type: Plain text
 msgid ""
@@ -74,8 +74,7 @@ msgid ""
 "Now get to translating! The easiest way to get started is to find a page on "
 "this wiki that is less than 100% translated to your language, go to the "
 "translated version of the page, and edit it. You'll be dumped into a web "
-"form, editing a PO file. Save and watch the percent translated numbers go "
-"up!"
+"form, editing a PO file. Save and watch the percent translated numbers go up!"
 msgstr ""
 
 #. type: Bullet: '4. '
@@ -87,14 +86,14 @@ msgstr ""
 
 #. type: Bullet: '   * '
 msgid ""
-"Install git, and run this command to check out the wiki: `git clone "
-"git://l10n.ikiwiki.info/`"
+"Install git, and run this command to check out the wiki: `git clone git://"
+"l10n.ikiwiki.info/`"
 msgstr ""
 
 #. type: Bullet: '   * '
 msgid ""
-"Edit the po files for your language, in the "
-"`l10n.ikiwiki.info/po/underlays/` directory."
+"Edit the po files for your language, in the `l10n.ikiwiki.info/po/underlays/"
+"` directory."
 msgstr ""
 
 #. type: Bullet: '   * '
@@ -129,7 +128,5 @@ msgstr ""
 
 #. type: Plain text
 #, no-wrap
-msgid ""
-"[[!map pages=\"(smiley/* or directives/*) and !*/discussion and "
-"lang(en)\"]]\n"
+msgid "[[!map pages=\"(smiley/* or directives/*) and !*/discussion and lang(en)\"]]\n"
 msgstr ""
