@@ -1,0 +1,18 @@
+The `template` directive is supplied by the [[!iki plugins/template desc=template]] plugin.
+
+[[Templates]] are files that can be filled out and inserted into pages in the
+wiki, by using the template directive. The directive has an `id` parameter
+that identifies the template to use. The remaining parameters are used to
+fill out the template.
+
+Example:
+
+	\[[!template id=note text="""Here is the text to insert into my note."""]]
+
+This fills out the `note` template, filling in the `text` field with
+the specified value, and inserts the result into the page.
+
+For a list of available templates, and details about how to create more,
+see the [[templates]] page.
+
+[[!meta robots="noindex, follow"]]

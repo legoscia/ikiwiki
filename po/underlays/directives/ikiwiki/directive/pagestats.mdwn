@@ -1,0 +1,25 @@
+The `pagestats` directive is supplied by the [[!iki plugins/pagestats desc=pagestats]] plugin.
+
+This directive can generate stats about how pages link to each other. It can
+produce either a tag cloud, or a table counting the number of links to each
+page.
+
+Here's how to use it to create a [[tag]] cloud:
+
+	\[[!pagestats pages="tags/*"]]
+
+And here's how to create a table of all the pages on the wiki:
+
+	\[[!pagestats style="table"]]
+
+The optional `among` parameter limits counting to pages that match a
+[[ikiwiki/PageSpec]]. For instance, to display a cloud of tags used on blog
+entries, you could use:
+
+	\[[!pagestats pages="tags/*" among="blog/posts/*"]]
+
+or to display a cloud of tags related to Linux, you could use:
+
+	\[[!pagestats pages="tags/* and not tags/linux" among="tagged(linux)"]]
+
+[[!meta robots="noindex, follow"]]
