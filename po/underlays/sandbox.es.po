@@ -22,7 +22,7 @@ msgstr ""
 
 #. type: Plain text
 msgid "hi, mom!"
-msgstr ""
+msgstr "¡hola, madre!"
 
 #. type: Plain text
 msgid "Here's a paragraph."
