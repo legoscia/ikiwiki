@@ -33,12 +33,13 @@ msgstr ""
 msgid ""
 "The [[SandBox]] is unlocked if you just want to play around with editing a "
 "translatable wiki."
-msgstr ""
+msgstr "Der [[Sandkasten|SandBox]] ist nicht gesperrt, falls Du bloß ein "
+"wenig mit einem übersetzbaren Wiki herumspielen möchtest."
 
 #. type: Title ##
 #, no-wrap
 msgid "Instructions for translators"
-msgstr ""
+msgstr "Anleitung für Übersetzer"
 
 #. type: Plain text
 msgid ""
@@ -93,11 +94,12 @@ msgstr ""
 msgid ""
 "Edit the po files for your language, in the `l10n.ikiwiki.info/po/underlays/"
 "` directory."
-msgstr ""
+msgstr "Passe die PO-Datei für Deine Sprache in dem "
+"‘l10n.ikiwiki.info/po/underlays/’-Verzeichnis an."
 
 #. type: Bullet: '   * '
 msgid "Run `git commit -a` to commit your changes."
-msgstr ""
+msgstr "Benutze „git commit -a”, um Deine Änderungen wirksam zu machen."
 
 #. type: Bullet: '   * '
 msgid ""
@@ -114,11 +116,12 @@ msgstr ""
 #. type: Title ##
 #, no-wrap
 msgid "List of pages"
-msgstr ""
+msgstr "Index aller Seiten"
 
 #. type: Plain text
+#, fuzzy
 msgid "Here is a list of all the translatable pages in the basewiki:"
-msgstr ""
+msgstr "Hier ist eine Liste aller übersetzbaren Seiten in dem basewiki:"
 
 #. type: Plain text
 #, no-wrap
