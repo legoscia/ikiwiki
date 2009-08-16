@@ -48,6 +48,16 @@ these steps:
 5. If you get a useful percentage of the basewiki translated, let [[Joey]]
    know so he can activate your translation in the next ikiwiki release.
 
+## Translation hints
+
+* Don't translate page names inside [[WikiLinks|ikiwiki/WikiLink]],
+  such as \[[FooPage]]
+* Do translate link *descriptions* inside WikiLinks, such as
+  \[[*Page about foo*|FooPage]]
+* Some [[directives|ikiwiki/directive]] don't contain *translatable bits*;
+  some do. Compare \[[inline pages="blog/*"]]
+  with \[[inline pages="blog/*" description="*this is my blog*"]]
+
 ## List of pages
 
 Here is a list of all the translatable pages in the basewiki:
