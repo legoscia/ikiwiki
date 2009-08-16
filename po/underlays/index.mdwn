@@ -56,7 +56,7 @@ these steps:
   `\[[**Page about foo**|FooPage]]`
 * Some [[directives|ikiwiki/directive]] don't contain **translatable bits**;
   some do. Compare `\[[inline pages="blog/*"]]`
-  with `\[[inline pages="blog/*" description="**this is my blog**"]]`
+  with `\[[inline pages="blog/*" description="`**this is my blog**`"]]`
 
 ## List of pages
 
