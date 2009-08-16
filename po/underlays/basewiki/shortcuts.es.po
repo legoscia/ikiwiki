@@ -217,6 +217,6 @@ msgid ""
 "include your shortcut in the standard underlay."
 msgstr ""
 "Si se le ocurre un atajo que crea que puede ser útil para otros, considere "
-"aportarlo a la [página de atajos en el ikiwiki ikiwiki] (http://ikiwiki.info/shortcuts/), "
+"aportarlo a la [página de atajos en el ikiwiki ikiwiki](http://ikiwiki.info/shortcuts/), "
 "de tal modo que futuras versiones de ikiwiki puedan incluir su atajo en la base estándar."
 
