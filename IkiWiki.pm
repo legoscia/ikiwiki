@@ -1255,9 +1255,10 @@ sub preprocess ($$$;$$) {
 					);
 				};
 				if ($@) {
-					chomp $@;
+					my $error=$@;
+					chomp $error;
 				 	$ret="[[!$command <span class=\"error\">".
-						gettext("Error").": $@"."</span>]]";
+						gettext("Error").": $error"."</span>]]";
 				}
 			}
 			else {
@@ -2055,7 +2056,7 @@ sub match_created_before ($$;@) {
 		}
 	}
 	else {
-		return IkiWiki::FailReason->new("$testpage has no ctime");
+		return IkiWiki::ErrorReason->new("$testpage does not exist");
 	}
 }
 
@@ -2075,7 +2076,7 @@ sub match_created_after ($$;@) {
 		}
 	}
 	else {
-		return IkiWiki::FailReason->new("$testpage has no ctime");
+		return IkiWiki::ErrorReason->new("$testpage does not exist");
 	}
 }
 

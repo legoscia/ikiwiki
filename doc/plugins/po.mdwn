@@ -114,7 +114,8 @@ Apache
 
 Using Apache `mod_negotiation` makes it really easy to have Apache
 serve any page in the client's preferred language, if available.
-This is the default Debian Apache configuration.
+
+Add 'Options MultiViews' to the wiki directory's configuration in Apache.
 
 When `usedirs` is enabled, one has to set `DirectoryIndex index` for
 the wiki context.
@@ -122,6 +123,8 @@ the wiki context.
 Setting `DefaultLanguage LL` (replace `LL` with your default MIME
 language code) for the wiki context can help to ensure
 `bla/page/index.en.html` is served as `Content-Language: LL`.
+
+For details, see [Apache's documentation](http://httpd.apache.org/docs/2.2/content-negotiation.html).
 
 lighttpd
 --------
@@ -304,7 +307,34 @@ pages as edit links, as if those pages do not exist.
 That's really confusing, especially as clicking such a link
 brings up an edit form to create a new, english page.
 
-This is with po_link_to=current. With default, it doesn't happen..
+This is with po_link_to=current or negotiated. With default, it doesn't
+happen.. 
+
+Also, this may only happen if the page being linked to is coming from an
+underlay, and the underlays lack translation to a given language.
+--[[Joey]] 
+
+recentchanges links to po files
+-------------------------------
+
+When a po file is changed, the recentchanges page shows a link such as
+"sandbox.es". But, clicking on it goes to the English (or negotiated
+language) version of the page. It would be better in this one case if
+the link went direct to the translated version of the page. --[[Joey]] 
+
+Double commits of po files
+--------------------------
+
+When adding a new english page, the po files are created, committed,
+and then committed again. The second commit makes this change:
+
+	-"Content-Type: text/plain; charset=utf-8\n"
+	-"Content-Transfer-Encoding: ENCODING"
+	+"Content-Type: text/plain; charset=UTF-8\n"
+	+"Content-Transfer-Encoding: ENCODING\n"
+
+Same thing happens when a change to an existing page triggers a po file
+update. --[[Joey]] 
 
 Documentation
 -------------

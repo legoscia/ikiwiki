@@ -934,7 +934,7 @@ sub otherlanguagesloop ($) {
 				master => 1,
 			};
 		}
-		else {
+		elsif (istranslation($otherpage)) {
 			push @ret, {
 				url => urlto_with_orig_beautiful_urlpath($otherpage, $page),
 				code => $lang,
