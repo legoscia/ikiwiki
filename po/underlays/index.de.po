@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-15 19:51-0300\n"
+"POT-Creation-Date: 2009-08-16 15:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,8 +33,9 @@ msgstr ""
 msgid ""
 "The [[SandBox]] is unlocked if you just want to play around with editing a "
 "translatable wiki."
-msgstr "Der [[Sandkasten|SandBox]] ist nicht gesperrt, falls Du bloß ein "
-"wenig mit einem übersetzbaren Wiki herumspielen möchtest."
+msgstr ""
+"Der [[Sandkasten|SandBox]] ist nicht gesperrt, falls Du bloß ein wenig mit "
+"einem übersetzbaren Wiki herumspielen möchtest."
 
 #. type: Title ##
 #, no-wrap
@@ -94,8 +95,9 @@ msgstr ""
 msgid ""
 "Edit the po files for your language, in the `l10n.ikiwiki.info/po/underlays/"
 "` directory."
-msgstr "Passe die PO-Datei für Deine Sprache in dem "
-"‘l10n.ikiwiki.info/po/underlays/’-Verzeichnis an."
+msgstr ""
+"Passe die PO-Datei für Deine Sprache in dem ‘l10n.ikiwiki.info/po/"
+"underlays/’-Verzeichnis an."
 
 #. type: Bullet: '   * '
 msgid "Run `git commit -a` to commit your changes."
@@ -111,6 +113,30 @@ msgstr ""
 msgid ""
 "If you get a useful percentage of the basewiki translated, let [[Joey]] know "
 "so he can activate your translation in the next ikiwiki release."
+msgstr ""
+
+#. type: Title ##
+#, no-wrap
+msgid "Translation hints"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"Don't translate page names inside [[WikiLinks|ikiwiki/WikiLink]], such as `"
+"\\[[FooPage]]`"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"Do translate link **descriptions** inside WikiLinks, such as `\\[[`**Page "
+"about foo**`|FooPage]]`"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"Some [[directives|ikiwiki/directive]] don't contain **translatable bits**; "
+"some do. Compare `\\[[!inline pages=\"blog/*\"]]` with `\\[[!inline pages="
+"\"blog/*\" description=\"`**this is my blog**`\"]]`"
 msgstr ""
 
 #. type: Title ##
