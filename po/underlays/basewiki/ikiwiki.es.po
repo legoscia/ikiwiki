@@ -1,24 +1,24 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Spanish translation of basewiki/ikiwiki page for ikiwiki.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# This file is distributed under the same license as the ikiwiki package.
+# Fernando González de Requena <fgrequena@gmail.com>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki\n"
 "POT-Creation-Date: 2009-08-15 18:30-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-08-16 20:19+0200\n"
+"Last-Translator: Fernando González de Requena <fgrequena@gmail.com>\n"
+"Language-Team: None\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"
 
 #. type: Plain text
 #, no-wrap
@@ -28,39 +28,44 @@ msgid ""
 "     then=\"(Currently running version [[!version ]].)\"\n"
 "]]\n"
 msgstr ""
+"Este wiki funciona con [ikiwiki](http://ikiwiki.info/).\n"
+"[[!if test=\"enabled(version)\"\n"
+"     then=\"(Versión actualmente en funcionamiento [[!version ]].)\"\n"
+"]]\n"
 
 #. type: Plain text
 msgid "Some documentation on using ikiwiki:"
-msgstr ""
+msgstr "Alguna documentación sobre el uso de ikiwiki:"
 
 #. type: Bullet: '* '
 msgid "[[ikiwiki/formatting]]"
-msgstr ""
+msgstr "[[ikiwiki/formatting]]"
 
 #. type: Bullet: '* '
 msgid "[[ikiwiki/wikilink]]"
-msgstr ""
+msgstr "[[ikiwiki/wikilink]]"
 
 #. type: Bullet: '* '
 msgid "[[ikiwiki/subpage]]"
-msgstr ""
+msgstr "[[ikiwiki/subpage]]"
 
 #. type: Bullet: '* '
 msgid "[[ikiwiki/pagespec]]"
-msgstr ""
+msgstr "[[ikiwiki/pagespec]]"
 
 #. type: Bullet: '* '
 msgid "[[ikiwiki/directive]]"
-msgstr ""
+msgstr "[[ikiwiki/directive]]"
 
 #. type: Bullet: '* '
 msgid "[[ikiwiki/markdown]]"
-msgstr ""
+msgstr "[[ikiwiki/markdown]]"
 
 #. type: Bullet: '* '
 msgid "[[ikiwiki/openid]]"
-msgstr ""
+msgstr "[[ikiwiki/openid]]"
 
 #. type: Bullet: '* '
 msgid "[[ikiwiki/searching]]"
-msgstr ""
+msgstr "[[ikiwiki/searching]]"
+
