@@ -22,7 +22,7 @@ msgstr ""
 
 #. type: Plain text
 msgid "Here's a paragraph."
-msgstr ""
+msgstr "Aquí podemos ver un párrafo."
 
 #. type: Plain text
 msgid "Here's another one with *emphasised* text."
