@@ -67,7 +67,7 @@ msgstr "Lista numerada"
 
 #. type: Bullet: '1. '
 msgid "First item."
-msgstr "Primer item."
+msgstr "Primer elemento."
 
 #. type: Bullet: '1. '
 msgid "Another."
@@ -83,11 +83,11 @@ msgstr "Lista"
 
 #. type: Bullet: '* '
 msgid "*item*"
-msgstr "*item*"
+msgstr "*elemento*"
 
 #. type: Bullet: '* '
 msgid "item"
-msgstr "item"
+msgstr "elemento"
 
 #. type: Plain text
 msgid "[[ikiwiki/WikiLink]]"
