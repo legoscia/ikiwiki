@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-16 15:22-0300\n"
+"POT-Creation-Date: 2009-08-16 15:23-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,14 +128,14 @@ msgstr ""
 
 #. type: Bullet: '* '
 msgid ""
-"Do translate link **descriptions** inside WikiLinks, such as `\\[[**Page "
-"about foo**|FooPage]]`"
+"Do translate link **descriptions** inside WikiLinks, such as `\\[[`**Page "
+"about foo**`|FooPage]]`"
 msgstr ""
 
 #. type: Bullet: '* '
 msgid ""
 "Some [[directives|ikiwiki/directive]] don't contain **translatable bits**; "
-"some do. Compare `\\[[inline pages=\"blog/*\"]]` with `\\[[inline pages="
+"some do. Compare `\\[[!inline pages=\"blog/*\"]]` with `\\[[!inline pages="
 "\"blog/*\" description=\"`**this is my blog**`\"]]`"
 msgstr ""
 
