@@ -29,8 +29,8 @@ msgid ""
 "]]\n"
 msgstr ""
 "[[!if test=\"enabled(template)\"\n"
-"then=\"Éste wiki tiene las plantillas **activadas**.\"\n"
-"else=\"Éste wiki tiene las plantillas **desactivadas**.\"\n"
+"then=\"Este wiki tiene las plantillas **activadas**.\"\n"
+"else=\"Este wiki tiene las plantillas **desactivadas**.\"\n"
 "]]\n"
 
 #. type: Plain text
@@ -78,7 +78,7 @@ msgid ""
 "This fills out the [[note]] template, filling in the `text` field with the "
 "specified value, and inserts the result into the page."
 msgstr ""
-"Esto rellena la plantilla [[note]] («nota»), completando el campo`text` "
+"Esto rellena la plantilla [[note]] («nota»), completando el campo `text` "
 "(«texto») con el valor especificado, e inserta el resultado en la página."
 
 #. type: Plain text
@@ -101,7 +101,7 @@ msgstr "        \\[[!template id=foo name=\"Sally\" color=\"green\" age=8 notes=
 
 #. type: Bullet: '        * '
 msgid "\\[[Charley]]'s sister."
-msgstr "\\Hermana de [[Charley]]."
+msgstr "Hermana de \\[[Charley]]."
 
 #. type: Bullet: '        * '
 msgid "\"I want to be an astronaut when I grow up.\""
@@ -153,7 +153,7 @@ msgid ""
 "To insert the value of a variable, use `<TMPL_VAR variable>`. Wiki markup in "
 "the value will first be converted to html."
 msgstr ""
-"Para introducir el valor de una variable, utilice `<TMPL_VAR variable>. El marcado "
+"Para introducir el valor de una variable, utilice `<TMPL_VAR variable>`. El marcado "
 "(«markup») wiki en el valor será convertido primero a html."
 
 #. type: Bullet: '* '
@@ -178,7 +178,8 @@ msgid ""
 "`<TMPL_IF NAME=\"variable\">text<TMPL_ELSE>other text</TMPL_IF>`"
 msgstr ""
 "Para utilizar un bloque de texto si se ha establecido una variable, y otro texto "
-"si no se ha establecido, utilice `<TMPL_IF NAME=\"variable\">texto<TMPL_ELSE>otro texto</TMPL_IF>`"
+"si no se ha establecido, utilice "
+"`<TMPL_IF NAME=\"variable\">texto<TMPL_ELSE>otro texto</TMPL_IF>`"
 
 #. type: Plain text
 msgid "Here's a sample template:"
