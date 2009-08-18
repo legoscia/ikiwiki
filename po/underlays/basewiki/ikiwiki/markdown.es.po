@@ -44,7 +44,7 @@ msgid ""
 "of the markdown syntax, and are the only bit of markup that this wiki "
 "handles internally."
 msgstr ""
-"Tenga en cuenta que [[WikiLinks|WikiLink]] y [[directivas|directive]] no son "
+"Tenga en cuenta que los [[WikiLinks|WikiLink]] y las [[directivas|directive]] no son "
 "parte de la sintaxis de markdown, y son los únicos elementos de marcado "
 "que este wiki maneja internamente."
 
