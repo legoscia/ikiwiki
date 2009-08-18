@@ -131,4 +131,3 @@ msgstr "Ésta es una lista de las directivas actualmente disponibles en este wik
 #, no-wrap
 msgid "[[!listdirectives ]]\n"
 msgstr "[[!listdirectives ]]\n"
-
