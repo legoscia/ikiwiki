@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-18 03:03-0300\n"
+"POT-Creation-Date: 2009-08-18 03:06-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,9 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-msgid "Let's delete a paragraph and replace by another."
+msgid ""
+"Let's delete a paragraph and replace by another.  Wow, the translations are "
+"automatically updated."
 msgstr ""
 
 #. type: Plain text

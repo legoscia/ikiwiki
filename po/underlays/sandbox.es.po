@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sandbox\n"
-"POT-Creation-Date: 2009-08-18 03:03-0300\n"
+"POT-Creation-Date: 2009-08-18 03:06-0300\n"
 "PO-Revision-Date: 2009-08-16 19:15+0200\n"
 "Last-Translator: Fernando González de Requena <fgrequena@gmail.com>\n"
 "Language-Team: none \n"
@@ -23,7 +23,9 @@ msgstr ""
 "editar para aprender a usar el wiki."
 
 #. type: Plain text
-msgid "Let's delete a paragraph and replace by another."
+msgid ""
+"Let's delete a paragraph and replace by another.  Wow, the translations are "
+"automatically updated."
 msgstr ""
 
 #. type: Plain text
