@@ -1,6 +1,6 @@
 This is the SandBox, a page anyone can edit to learn how to use the wiki.
 
-hi, mom!
+Let's delete a paragraph and replace by another.  Wow, the translations are automatically updated.
 
 ----
 

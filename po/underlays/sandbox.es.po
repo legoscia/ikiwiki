@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sandbox\n"
-"POT-Creation-Date: 2009-08-15 18:56-0300\n"
+"POT-Creation-Date: 2009-08-18 03:06-0300\n"
 "PO-Revision-Date: 2009-08-16 19:15+0200\n"
 "Last-Translator: Fernando González de Requena <fgrequena@gmail.com>\n"
 "Language-Team: none \n"
@@ -16,12 +16,17 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 
 #. type: Plain text
-msgid "This is the SandBox, a page anyone can edit to learn how to use the wiki."
-msgstr "Esta es la Zona de Pruebas («SandBox»), una página que cualquiera puede editar para aprender a usar el wiki."
+msgid ""
+"This is the SandBox, a page anyone can edit to learn how to use the wiki."
+msgstr ""
+"Esta es la Zona de Pruebas («SandBox»), una página que cualquiera puede "
+"editar para aprender a usar el wiki."
 
 #. type: Plain text
-msgid "hi, mom!"
-msgstr "¡hola, mamá!"
+msgid ""
+"Let's delete a paragraph and replace by another.  Wow, the translations are "
+"automatically updated."
+msgstr ""
 
 #. type: Plain text
 msgid "Here's a paragraph."
@@ -92,3 +97,5 @@ msgstr "elemento"
 msgid "[[ikiwiki/WikiLink]]"
 msgstr "[[ikiwiki/WikiLink]]"
 
+#~ msgid "hi, mom!"
+#~ msgstr "¡hola, mamá!"

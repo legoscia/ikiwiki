@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki 3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-15 18:56-0300\n"
+"POT-Creation-Date: 2009-08-18 03:06-0300\n"
 "PO-Revision-Date: 2009-07-22 21:28+0200\n"
 "Last-Translator: Jonas Smedegaard <dr@jones.dk>\n"
 "Language-Team: None\n"
@@ -27,8 +27,10 @@ msgstr ""
 "at lære hvordan en wiki bruges."
 
 #. type: Plain text
-msgid "hi, mom!"
-msgstr "hej, Mor!"
+msgid ""
+"Let's delete a paragraph and replace by another.  Wow, the translations are "
+"automatically updated."
+msgstr ""
 
 #. type: Plain text
 msgid "Here's a paragraph."
@@ -98,3 +100,6 @@ msgstr "emne"
 #. type: Plain text
 msgid "[[ikiwiki/WikiLink]]"
 msgstr "[[ikiwiki/WikiLink]]"
+
+#~ msgid "hi, mom!"
+#~ msgstr "hej, Mor!"
