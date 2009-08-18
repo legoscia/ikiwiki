@@ -31,7 +31,7 @@ msgid ""
 "might write text for an email message. This style of text formatting is "
 "called [[MarkDown]], and it works like this:"
 msgstr ""
-"El texto de este wiki está escrito de manera predeterminada en una forma "
+"El texto de este wiki está escrito, de manera predeterminada, en una forma "
 "muy parecida a cómo se escribe texto para un mensaje de correo electrónico. "
 "Este estilo de asignación de formato al texto se llama [[MarkDown]] y funciona así:"
 
@@ -53,11 +53,11 @@ msgstr "Para crear una lista, inicie cada línea con un asterisco:"
 
 #. type: Bullet: '* '
 msgid "\"* this is my list\""
-msgstr "\"*Ésta es mi lista\""
+msgstr "\"* Ésta es mi lista\""
 
 #. type: Bullet: '* '
 msgid "\"* another item\""
-msgstr "\"*Otro elemento\""
+msgstr "\"* Otro elemento\""
 
 #. type: Plain text
 msgid ""
