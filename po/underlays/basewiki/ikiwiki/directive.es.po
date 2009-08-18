@@ -78,7 +78,7 @@ msgid ""
 "quote marks inside the quoted text, delimit the block of text with triple-"
 "quotes:"
 msgstr ""
-"Además, se pueden usar múltiples líneas de texto *citado* como valor. Para "
+"Además, se pueden usar múltiples líneas de texto *entrecomillado* como valor. Para "
 "que se permitan las comillas dentro del texto citado, delimite el bloque de "
 "texto con comillas triples:"
 
