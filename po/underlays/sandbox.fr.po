@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-15 18:56-0300\n"
+"POT-Creation-Date: 2009-08-18 03:03-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Alexandre Dupas <alexandre.dupas@gmail.com>\n"
 "Language-Team: None\n"
@@ -22,11 +22,12 @@ msgstr ""
 msgid ""
 "This is the SandBox, a page anyone can edit to learn how to use the wiki."
 msgstr ""
-"Ceci est le bac à sable, une page que tout le monde peut éditer pour apprendre comment se servir du wiki."
+"Ceci est le bac à sable, une page que tout le monde peut éditer pour "
+"apprendre comment se servir du wiki."
 
 #. type: Plain text
-msgid "hi, mom!"
-msgstr "salut, maman!"
+msgid "Let's delete a paragraph and replace by another."
+msgstr ""
 
 #. type: Plain text
 msgid "Here's a paragraph."
@@ -96,3 +97,6 @@ msgstr "élément"
 #. type: Plain text
 msgid "[[ikiwiki/WikiLink]]"
 msgstr "[[ikiwiki/WikiLink]]"
+
+#~ msgid "hi, mom!"
+#~ msgstr "salut, maman!"
