@@ -84,7 +84,7 @@ msgid ""
 "Your OpenID is the URL that you are given when you sign up.\n"
 "[[!if test=\"enabled(openid)\" then=\"\"\"\n"
 msgstr ""
-"Su OpenID es el URL que se le proporciona cuando te registres.\n"
+"Su OpenID es el URL que se le proporciona al registrarse.\n"
 "[[!if test=\"enabled(openid)\" then=\"\"\"\n"
 
 #. type: Plain text
