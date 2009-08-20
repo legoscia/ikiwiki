@@ -30,10 +30,12 @@ msgid ""
 "Let's delete a paragraph and replace by another.  Wow, the translations are "
 "automatically updated."
 msgstr ""
+"Allons supprimer un paragraphe et le remplacer par un autre. "
+"Wow, les traductions sont mis à jour automatiquement."
 
 #. type: Plain text
 msgid "Here's a paragraph."
-msgstr "Voici un paragraphe"
+msgstr "Voici un paragraphe."
 
 #. type: Plain text
 msgid "Here's another one with *emphasised* text."
