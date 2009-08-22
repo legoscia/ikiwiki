@@ -1,19 +1,18 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Traduction de ikiwiki
+# Copyright (C)2009 Debian French l10n team <debian-l10n-french@lists.debian.org>
+# This file is distributed under the same license as the PACKAGE Ikiwiki.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: Ikiwiki\n"
 "POT-Creation-Date: 2009-08-16 15:23-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-08-22 12:32+0200\n"
+"Last-Translator: Philippe Batailler <philippe.batailler@free.fr>\n"
+"Language-Team: french <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
@@ -21,6 +20,10 @@ msgid ""
 "translations. [Ikiwiki](http://ikiwiki.info) is a wiki engine; its basewiki "
 "is the set of pages that are copied into every wiki it powers."
 msgstr ""
+"Ce wiki sert à la traduction du « basewiki » de ikiwiki et montre comment "
+"faire cette traduction. [Ikiwiki](http://ikiwiki.info) est un moteur de "
+"wiki. Le « basewiki » est l'ensemble des pages qui sont copiées dans chaque "
+"wiki créé."
 
 #. type: Plain text
 msgid ""
@@ -28,29 +31,38 @@ msgid ""
 "You can, however, edit the translated versions of those pages, and your "
 "edits to their PO files will be folded back into ikiwiki proper."
 msgstr ""
+"La plupart des pages anglaises de ce wiki sont verrouillées. Vous ne pouvez "
+"pas les modifier. Vous pouvez par contre modifier les versions traduites de "
+"ces pages et les fichiers PO modifiés seront intégrées dans ikiwiki."
 
 #. type: Plain text
 msgid ""
 "The [[SandBox]] is unlocked if you just want to play around with editing a "
 "translatable wiki."
 msgstr ""
+"La page [[Sandbox]] n'est pas verrouillée au cas où vous voudriez vous "
+"amuser avec un wiki traduisible."
 
 #. type: Title ##
 #, no-wrap
 msgid "Instructions for translators"
-msgstr ""
+msgstr "Instructions aux traducteurs"
 
 #. type: Plain text
 msgid ""
 "If you want to translate ikiwiki's basewiki into your language, follow these "
 "steps:"
 msgstr ""
+"Si vous voulez traduire le « basewiki » d'ikiwiki dans votre langue, voici la "
+"démarche :"
 
 #. type: Bullet: '1. '
 msgid ""
 "Note that the license of the basewiki is as follows. Your translation will "
 "need to be licensed the same:"
 msgstr ""
+"La licence du « basewiki » est la suivante et votre traduction devra être "
+"couverte par la même licence :"
 
 #. type: Plain text
 #, no-wrap
@@ -58,6 +70,8 @@ msgid ""
 "   > Redistribution and use in source and compiled forms, with or without\n"
 "   > modification, are permitted under any circumstances. No warranty.\n"
 msgstr ""
+"Redistribution and use in source and compiled forms, with or without\n"
+"modification, are permitted under any circumstances. No warranty.\n"
 
 #. type: Bullet: '2. '
 msgid ""
@@ -67,6 +81,11 @@ msgid ""
 "help. Is it just you, or will there be a whole team? Do you have just a "
 "little time to help, or do you want to commit to translating the whole thing?"
 msgstr ""
+"Votre langue apparaît-elle au dessus dans la liste des traductions "
+"disponibles ? Sinon, [[Joey]] devra l'activer. Modifiez cette page et "
+"demandez son activation. Il est souhaitable de présenter votre projet. Êtes-"
+"vous seul ou faites-vous partie d'une équipe ? Aurez-vous juste un peu de "
+"temps pour aider ou êtes-vous décidé à traduire l'ensemble des pages ?"
 
 #. type: Bullet: '3. '
 msgid ""
@@ -75,6 +94,11 @@ msgid ""
 "translated version of the page, and edit it. You'll be dumped into a web "
 "form, editing a PO file. Save and watch the percent translated numbers go up!"
 msgstr ""
+"Maintenant, allons-y ! La meilleure façon de commencer est de prendre une "
+"page qui n'est pas encore entièrement traduite dans votre langue, d'aller "
+"sur la version à traduire de cette page et de l'éditer. Vous serez basculé "
+"dans une sorte de formulaire web qui permet de modifier le fichier PO. "
+"Enregistrez et regardez monter le pourcentage de traduction !"
 
 #. type: Bullet: '4. '
 msgid ""
@@ -82,51 +106,68 @@ msgid ""
 "editor, or even a specialized po file editor. No problem, this wiki can be "
 "edited using git as well:"
 msgstr ""
+"Par la suite vous serez peut-être fatigué de ce formulaire web et vous "
+"voudrez un vrai éditeur de textes, voire un éditeur spécialisé dans "
+"l'édition de fichiers PO. Pas de problème, ce wiki peut être modifié avec "
+"git :"
 
 #. type: Bullet: '   * '
 msgid ""
 "Install git, and run this command to check out the wiki: `git clone git://"
 "l10n.ikiwiki.info/`"
 msgstr ""
+"Installez git, et lancez cette commande pour copier le wiki : `git clone "
+"git://l10n.ikiwiki.info/`"
 
 #. type: Bullet: '   * '
 msgid ""
 "Edit the po files for your language, in the `l10n.ikiwiki.info/po/underlays/"
 "` directory."
 msgstr ""
+"Modifiez les fichiers PO de votre langue qui se trouvent dans le répertoire "
+"l10n.ikiwiki.info/po/underlays/"
 
 #. type: Bullet: '   * '
 msgid "Run `git commit -a` to commit your changes."
-msgstr ""
+msgstr "Exécutez `git commit -a` pour enregistrer vos modifications ;"
 
 #. type: Bullet: '   * '
 msgid ""
 "Run `git push` to push your changes back to this wiki. It will automatically "
 "update!"
 msgstr ""
+"Exécutez 'git push' pour envoyer vos modifications sur ce wiki. Il sera "
+"automatiquement mis à jour !"
 
 #. type: Bullet: '5. '
 msgid ""
 "If you get a useful percentage of the basewiki translated, let [[Joey]] know "
 "so he can activate your translation in the next ikiwiki release."
 msgstr ""
+"Quand la traduction du « basewiki » sera suffisamment engagée, faites le "
+"savoir à [[Joey]] pour qu'il active la traduction dans la prochaine version "
+"d'ikiwiki."
 
 #. type: Title ##
 #, no-wrap
 msgid "Translation hints"
-msgstr ""
+msgstr "Aides pour la traduction"
 
 #. type: Bullet: '* '
 msgid ""
 "Don't translate page names inside [[WikiLinks|ikiwiki/WikiLink]], such as `"
 "\\[[FooPage]]`"
 msgstr ""
+"Ne traduisez pas les noms de page à l'intérieur des [[WikiLinks|ikiwiki/"
+"WikiLink]], comme '\\[[FooPage]]` "
 
 #. type: Bullet: '* '
 msgid ""
 "Do translate link **descriptions** inside WikiLinks, such as `\\[[`**Page "
 "about foo**`|FooPage]]`"
 msgstr ""
+"Vous pouvez traduire les **descriptions** des liens dans les WikiLinks, "
+"comme '\\[[`**Page sur foo** |FooPage]]'"
 
 #. type: Bullet: '* '
 msgid ""
@@ -134,28 +175,34 @@ msgid ""
 "some do. Compare `\\[[!inline pages=\"blog/*\"]]` with `\\[[!inline pages="
 "\"blog/*\" description=\"`**this is my blog**`\"]]`"
 msgstr ""
+"Certaines [[directives|ikiwiki/directive]] ne contiennent pas de **texte à "
+"traduire**, d'autres, oui. Comparez par exemple `\\[[!inline pages=\"blog/*"
+"\"]]` et `\\[[!inline pages=\"blog/*\" description=\"`**this is my blog**`"
+"\"]]`"
 
 #. type: Title ##
 #, no-wrap
 msgid "List of pages"
-msgstr ""
+msgstr "Liste des pages"
 
 #. type: Plain text
 msgid "Here is a list of all the translatable pages in the basewiki:"
-msgstr ""
+msgstr "Voici la liste de toutes les pages à traduire dans le « basewiki » :"
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!map pages=\"basewiki/* and !*/discussion and lang(en)\"]]\n"
-msgstr ""
+msgstr "[[!map pages=\"basewiki/* and !*/discussion and lang(en)\"]]\n"
 
 #. type: Plain text
 msgid ""
 "If you manage to translate all of the above, here are some additional "
 "translatable pages:"
 msgstr ""
+"Pour ceux qui auront réussi à traduire toutes ces pages, voici d'autres "
+"pages à traduire :"
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!map pages=\"(smiley/* or directives/*) and !*/discussion and lang(en)\"]]\n"
-msgstr ""
+msgstr "[[!map pages=\"(smiley/* or directives/*) and !*/discussion and lang(en)\"]]\n"
