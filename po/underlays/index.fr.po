@@ -2,12 +2,11 @@
 # Copyright (C)2009 Debian French l10n team <debian-l10n-french@lists.debian.org>
 # This file is distributed under the same license as the PACKAGE Ikiwiki.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Ikiwiki\n"
 "POT-Creation-Date: 2009-08-16 15:23-0300\n"
-"PO-Revision-Date: 2009-08-22 12:32+0200\n"
+"PO-Revision-Date: 2009-08-23 09:25+0200\n"
 "Last-Translator: Philippe Batailler <philippe.batailler@free.fr>\n"
 "Language-Team: french <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +32,8 @@ msgid ""
 msgstr ""
 "La plupart des pages anglaises de ce wiki sont verrouillées. Vous ne pouvez "
 "pas les modifier. Vous pouvez par contre modifier les versions traduites de "
-"ces pages et les fichiers PO modifiés seront intégrées dans ikiwiki."
+"ces pages et les modifications sur les fichiers PO seront intégrées dans "
+"ikiwiki."
 
 #. type: Plain text
 msgid ""
@@ -70,8 +70,8 @@ msgid ""
 "   > Redistribution and use in source and compiled forms, with or without\n"
 "   > modification, are permitted under any circumstances. No warranty.\n"
 msgstr ""
-"Redistribution and use in source and compiled forms, with or without\n"
-"modification, are permitted under any circumstances. No warranty.\n"
+"   >Redistribution and use in source and compiled forms, with or without\n"
+"   >modification, are permitted under any circumstances. No warranty.\n"
 
 #. type: Bullet: '2. '
 msgid ""
@@ -107,9 +107,9 @@ msgid ""
 "edited using git as well:"
 msgstr ""
 "Par la suite vous serez peut-être fatigué de ce formulaire web et vous "
-"voudrez un vrai éditeur de textes, voire un éditeur spécialisé dans "
-"l'édition de fichiers PO. Pas de problème, ce wiki peut être modifié avec "
-"git :"
+"voudrez un véritable éditeur de textes, voire un éditeur spécialisé dans "
+"l'édition de fichiers PO. Pas de problème, ce wiki peut être également "
+"modifié avec git :"
 
 #. type: Bullet: '   * '
 msgid ""
@@ -117,7 +117,7 @@ msgid ""
 "l10n.ikiwiki.info/`"
 msgstr ""
 "Installez git, et lancez cette commande pour copier le wiki : `git clone "
-"git://l10n.ikiwiki.info/`"
+"git://l10n.ikiwiki.info/` ;"
 
 #. type: Bullet: '   * '
 msgid ""
@@ -125,7 +125,7 @@ msgid ""
 "` directory."
 msgstr ""
 "Modifiez les fichiers PO de votre langue qui se trouvent dans le répertoire "
-"l10n.ikiwiki.info/po/underlays/"
+"l10n.ikiwiki.info/po/underlays/ ;"
 
 #. type: Bullet: '   * '
 msgid "Run `git commit -a` to commit your changes."
@@ -136,7 +136,7 @@ msgid ""
 "Run `git push` to push your changes back to this wiki. It will automatically "
 "update!"
 msgstr ""
-"Exécutez 'git push' pour envoyer vos modifications sur ce wiki. Il sera "
+"Exécutez `git push` pour envoyer vos modifications sur ce wiki. Il sera "
 "automatiquement mis à jour !"
 
 #. type: Bullet: '5. '
@@ -159,7 +159,7 @@ msgid ""
 "\\[[FooPage]]`"
 msgstr ""
 "Ne traduisez pas les noms de page à l'intérieur des [[WikiLinks|ikiwiki/"
-"WikiLink]], comme '\\[[FooPage]]` "
+"WikiLink]], comme `\\[[FooPage]]` "
 
 #. type: Bullet: '* '
 msgid ""
@@ -167,7 +167,7 @@ msgid ""
 "about foo**`|FooPage]]`"
 msgstr ""
 "Vous pouvez traduire les **descriptions** des liens dans les WikiLinks, "
-"comme '\\[[`**Page sur foo** |FooPage]]'"
+"comme `\\[[`**Page sur foo** |FooPage]]`"
 
 #. type: Bullet: '* '
 msgid ""

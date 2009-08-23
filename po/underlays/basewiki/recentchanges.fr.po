@@ -2,12 +2,11 @@
 # Copyright (C) 2009 Debian French l10n team <debian-l10n-french@lists.debian.org>
 # This file is distributed under the same license as the PACKAGE Ikiwiki.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Ikiwiki\n"
 "POT-Creation-Date: 2009-08-15 18:30-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2009-08-23 09:32+0200\n"
 "Last-Translator: Philippe Batailler <philippe.batailler@free.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
