@@ -30,7 +30,7 @@ msgstr ""
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!directive param=\"value\" param=\"value\"]]\n"
-msgstr "\\[[!directive param=\"value\" param=\"value\"]]\n"
+msgstr "\t\\[[!directive param=\"value\" param=\"value\"]]\n"
 
 #. type: Plain text
 msgid ""
@@ -52,7 +52,7 @@ msgstr ""
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!tag foo]]\n"
-msgstr "\\[[!tag foo]]\n"
+msgstr "\t\\[[!tag foo]]\n"
 
 #. type: Plain text
 msgid ""
@@ -68,8 +68,8 @@ msgid ""
 "\t\\[[!directive foo=\"baldersnatch\"\n"
 "\tbar=\"supercalifragilisticexpialidocious\" baz=11]]\n"
 msgstr ""
-"\\t\\[[!directive foo=\"baldersnatch\"\n"
-"\\tbar=\"supercalifragilisticexpialidocious\" baz=11]]\n"
+"\t\\[[!directive foo=\"baldersnatch\"\n"
+"\tbar=\"supercalifragilisticexpialidocious\" baz=11]]\n"
 
 #. type: Plain text
 msgid ""
@@ -84,7 +84,7 @@ msgstr ""
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!directive text=\"\"\"\n"
-msgstr "\\t\\[[!directive text=\"\"\"\n"
+msgstr "\t\\[[!directive text=\"\"\"\n"
 
 #. type: Bullet: '	1. '
 msgid "\"foo\""
