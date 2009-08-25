@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki\n"
 "POT-Creation-Date: 2009-08-15 18:30-0300\n"
-"PO-Revision-Date: 2009-08-24 11:35+0200\n"
+"PO-Revision-Date: 2009-08-25 11:25+0200\n"
 "Last-Translator: Philippe Batailler <philippe.batailler@free.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -23,9 +23,9 @@ msgid ""
 "Directives are similar to a [[ikiwiki/WikiLink]] in form, except they begin "
 "with `!` and may contain parameters. The general form is:"
 msgstr ""
-"La forme des directives est semblable à celle des [[ikiwiki/WikiLink]] mais "
-"elle commence par un `!` et elle peut contenir des paramètres. Cette forme "
-"est la suivante :"
+"Les directives sont semblables aux [[ikiwiki/WikiLink]] mais elles "
+"commencent par un `!` et peuvent contenir des paramètres. La forme d'une "
+"directive est la suivante :"
 
 #. type: Plain text
 #, no-wrap
@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "De plus, une *citation* sur plusieurs lignes peut servir de valeur. Pour "
 "autoriser les guillemets du texte, il suffit de mettre trois séries de "
-"guillemets autour du texte."
+"guillemets autour du texte :"
 
 #. type: Plain text
 #, no-wrap
