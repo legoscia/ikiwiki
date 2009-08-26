@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki\n"
-"POT-Creation-Date: 2009-08-15 18:30-0300\n"
+"POT-Creation-Date: 2009-08-26 13:39-0300\n"
 "PO-Revision-Date: 2009-08-26 12:09+0200\n"
 "Last-Translator: Philippe Batailler <philippe.batailler@fre.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -38,10 +38,16 @@ msgid "Leave blank lines between paragraphs."
 msgstr "Lignes vides entre les paragraphes."
 
 #. type: Plain text
+#, fuzzy
+#| msgid ""
+#| "You can \\**emphasise*\\* or \\*\\***strongly emphasise**\\*\\* text by "
+#| "placing it in single or double asterisks."
 msgid ""
-"You can \\**emphasise*\\* or \\*\\***strongly emphasise**\\*\\* text by "
+"You can *\\*emphasise\\** or **\\*\\*strongly emphasise\\*\\*** text by "
 "placing it in single or double asterisks."
-msgstr "Texte en *\\*italique\\** avec un astérisque ou texte en **\\*\\*gras\\*\\*** avec deux astérisques."
+msgstr ""
+"Texte en *\\*italique\\** avec un astérisque ou texte en **\\*\\*gras\\*"
+"\\*** avec deux astérisques."
 
 #. type: Plain text
 msgid "To create a list, start each line with an asterisk:"

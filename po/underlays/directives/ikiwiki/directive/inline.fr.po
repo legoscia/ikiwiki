@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-15 18:30-0300\n"
+"POT-Creation-Date: 2009-08-26 13:39-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -147,7 +147,7 @@ msgstr ""
 
 #. type: Bullet: '* '
 msgid ""
-"`rootpage` - Enable the postform, and allows controling where newly posted "
+"`rootpage` - Enables the postform, and allows controling where newly posted "
 "pages should go, by specifiying the page that they should be a [[SubPage]] "
 "of."
 msgstr ""

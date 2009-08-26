@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki\n"
-"POT-Creation-Date: 2009-08-15 18:30-0300\n"
+"POT-Creation-Date: 2009-08-26 13:39-0300\n"
 "PO-Revision-Date: 2009-08-17 01:02+0200\n"
 "Last-Translator: Fernando González de Requena <fgrequena@gmail.com>\n"
 "Language-Team: None\n"
@@ -61,7 +61,8 @@ msgstr "[[!shortcut name=gmap url=\"http://maps.google.com/maps?q=%s\"]]"
 
 #. type: Bullet: '* '
 msgid "[[!shortcut name=gmsg url=\"http://groups.google.com/groups?selm=%s\"]]"
-msgstr "[[!shortcut name=gmsg url=\"http://groups.google.com/groups?selm=%s\"]]"
+msgstr ""
+"[[!shortcut name=gmsg url=\"http://groups.google.com/groups?selm=%s\"]]"
 
 #. type: Bullet: '* '
 msgid "[[!shortcut name=wikipedia url=\"http://en.wikipedia.org/wiki/%s\"]]"
@@ -76,8 +77,10 @@ msgid "[[!shortcut name=wiktionary url=\"http://en.wiktionary.org/wiki/%s\"]]"
 msgstr "[[!shortcut name=wiktionary url=\"http://en.wiktionary.org/wiki/%s\"]]"
 
 #. type: Bullet: '* '
-msgid "[[!shortcut name=debbug url=\"http://bugs.debian.org/%s\" desc=\"bug #%s\"]]"
-msgstr "[[!shortcut name=debbug url=\"http://bugs.debian.org/%s\" desc=\"bug #%s\"]]"
+msgid ""
+"[[!shortcut name=debbug url=\"http://bugs.debian.org/%s\" desc=\"bug #%s\"]]"
+msgstr ""
+"[[!shortcut name=debbug url=\"http://bugs.debian.org/%s\" desc=\"bug #%s\"]]"
 
 #. type: Bullet: '* '
 msgid ""
@@ -100,8 +103,10 @@ msgid "[[!shortcut name=debpts url=\"http://packages.qa.debian.org/%s\"]]"
 msgstr "[[!shortcut name=debpts url=\"http://packages.qa.debian.org/%s\"]]"
 
 #. type: Bullet: '* '
-msgid "[[!shortcut name=debmsg url=\"http://lists.debian.org/msgid-search/%s\"]]"
-msgstr "[[!shortcut name=debmsg url=\"http://lists.debian.org/msgid-search/%s\"]]"
+msgid ""
+"[[!shortcut name=debmsg url=\"http://lists.debian.org/msgid-search/%s\"]]"
+msgstr ""
+"[[!shortcut name=debmsg url=\"http://lists.debian.org/msgid-search/%s\"]]"
 
 #. type: Bullet: '* '
 msgid ""
@@ -185,17 +190,23 @@ msgstr ""
 "* [[!shortcut name=ohloh url=\"http://www.ohloh.net/projects/%s\"]]\n"
 
 #. type: Plain text
+#, fuzzy
+#| msgid ""
+#| "To add a new shortcut, use the `shortcut` [[ikiwiki/directive]]. In the "
+#| "url, \"%s\" is replaced with the text passed to the named shortcut, after "
+#| "url-encoding it, and '%S' is replaced with the raw, non-encoded text. The "
+#| "optional `desc` parameter controls the description of the link."
 msgid ""
 "To add a new shortcut, use the `shortcut` [[ikiwiki/directive]]. In the url, "
-"\"%s\" is replaced with the text passed to the named shortcut, after url-"
-"encoding it, and '%S' is replaced with the raw, non-encoded text. The "
-"optional `desc` parameter controls the description of the link."
+"\"%s\" is replaced with the text passed to the named shortcut, after [[!"
+"wikipedia url_encoding]] it, and '%S' is replaced with the raw, non-encoded "
+"text. The optional `desc` parameter controls the description of the link."
 msgstr ""
-"Para añadir un nuevo atajo, utilice la [[directiva|ikiwiki/directive]] `shortcut`. En "
-"el url, «%s» se reemplaza con el texto que se pasa al atajo nombrado, después "
-"de codificarlo para el url («url-encoding»), y «%S» se reemplaza con el texto en "
-"bruto, no codificado. El parámetro opcional `desc` controla la descripción del "
-"enlace."
+"Para añadir un nuevo atajo, utilice la [[directiva|ikiwiki/directive]] "
+"`shortcut`. En el url, «%s» se reemplaza con el texto que se pasa al atajo "
+"nombrado, después de codificarlo para el url («url-encoding»), y «%S» se "
+"reemplaza con el texto en bruto, no codificado. El parámetro opcional `desc` "
+"controla la descripción del enlace."
 
 #. type: Plain text
 msgid ""
@@ -204,19 +215,25 @@ msgid ""
 "directive.  These directives also accept a `desc` parameter that will "
 "override the one provided at definition time."
 msgstr ""
-"Recuerde que el `name` («nombre») que le dé al atajo se convertirá en una nueva "
-"[[directiva|ikiwiki/directive]]. Evite utilizar un `name` («nombre») que choque con "
-"una directiva que ya exista. Estas directivas también aceptan un parámetro `desc` "
-"que anulará la que se proporcione en la definición."
+"Recuerde que el `name` («nombre») que le dé al atajo se convertirá en una "
+"nueva [[directiva|ikiwiki/directive]]. Evite utilizar un `name` («nombre») "
+"que choque con una directiva que ya exista. Estas directivas también aceptan "
+"un parámetro `desc` que anulará la que se proporcione en la definición."
 
 #. type: Plain text
+#, fuzzy
+#| msgid ""
+#| "If you come up with a shortcut that you think others might find useful, "
+#| "consider contributing it to the [shortcuts page on the ikiwiki ikiwiki]"
+#| "(http://ikiwiki.info/shortcuts/), so that future versions of ikiwiki will "
+#| "include your shortcut in the standard underlay."
 msgid ""
 "If you come up with a shortcut that you think others might find useful, "
-"consider contributing it to the [shortcuts page on the ikiwiki ikiwiki]"
-"(http://ikiwiki.info/shortcuts/), so that future versions of ikiwiki will "
-"include your shortcut in the standard underlay."
+"consider contributing it to the [shortcuts page on the ikiwiki wiki](http://"
+"ikiwiki.info/shortcuts/), so that future versions of ikiwiki will include "
+"your shortcut in the standard underlay."
 msgstr ""
 "Si se le ocurre un atajo que crea que puede ser útil para otros, considere "
-"aportarlo a la [página de atajos en el ikiwiki ikiwiki](http://ikiwiki.info/shortcuts/), "
-"de tal modo que futuras versiones de ikiwiki puedan incluir su atajo en la base estándar."
-
+"aportarlo a la [página de atajos en el ikiwiki ikiwiki](http://ikiwiki.info/"
+"shortcuts/), de tal modo que futuras versiones de ikiwiki puedan incluir su "
+"atajo en la base estándar."

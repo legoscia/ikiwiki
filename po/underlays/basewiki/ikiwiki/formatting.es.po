@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki\n"
-"POT-Creation-Date: 2009-08-15 18:30-0300\n"
+"POT-Creation-Date: 2009-08-26 13:39-0300\n"
 "PO-Revision-Date: 2009-08-18 20:20+0200\n"
 "Last-Translator: Fernando González de Requena <fgrequena@gmail.com>\n"
 "Language-Team: None\n"
@@ -33,19 +33,24 @@ msgid ""
 msgstr ""
 "El texto de este wiki está escrito, de manera predeterminada, en una forma "
 "muy parecida a cómo se escribe texto para un mensaje de correo electrónico. "
-"Este estilo de asignación de formato al texto se llama [[MarkDown]] y funciona así:"
+"Este estilo de asignación de formato al texto se llama [[MarkDown]] y "
+"funciona así:"
 
 #. type: Plain text
 msgid "Leave blank lines between paragraphs."
 msgstr "Deje líneas vacías entre párrafos."
 
 #. type: Plain text
+#, fuzzy
+#| msgid ""
+#| "You can \\**emphasise*\\* or \\*\\***strongly emphasise**\\*\\* text by "
+#| "placing it in single or double asterisks."
 msgid ""
-"You can \\**emphasise*\\* or \\*\\***strongly emphasise**\\*\\* text by "
+"You can *\\*emphasise\\** or **\\*\\*strongly emphasise\\*\\*** text by "
 "placing it in single or double asterisks."
 msgstr ""
-"Puede \\**resaltar*\\* o \\*\\***resaltar fuertemente**\\*\\* el texto colocándolo "
-"entre asteriscos simples o dobles."
+"Puede \\**resaltar*\\* o \\*\\***resaltar fuertemente**\\*\\* el texto "
+"colocándolo entre asteriscos simples o dobles."
 
 #. type: Plain text
 msgid "To create a list, start each line with an asterisk:"
@@ -64,8 +69,8 @@ msgid ""
 "To make a numbered list, start each line with a number (any number will do) "
 "followed by a period:"
 msgstr ""
-"Para hacer una lista numerada, inicie cada línea con un número (cualquier número "
-"servirá) seguido de un punto:"
+"Para hacer una lista numerada, inicie cada línea con un número (cualquier "
+"número servirá) seguido de un punto:"
 
 #. type: Bullet: '1. '
 msgid "\"1. first line\""
@@ -85,9 +90,9 @@ msgid ""
 "a space and the header text. The number of `#` characters controls the size "
 "of the header:"
 msgstr ""
-"Para crear un título, inicie una línea con uno o más caracteres `#` seguidos de "
-"un espacio y el texto del título. El número de caracteres `#` controla el tamaño "
-"del título:"
+"Para crear un título, inicie una línea con uno o más caracteres `#` seguidos "
+"de un espacio y el texto del título. El número de caracteres `#` controla el "
+"tamaño del título:"
 
 #. type: Title #
 #, no-wrap
@@ -144,8 +149,8 @@ msgstr ""
 #. type: Plain text
 msgid "To write a code block, indent each line with a tab or 4 spaces:"
 msgstr ""
-"Para escribir un bloque de código, sangre cada línea con una tabulación "
-"o con 4 espacios:"
+"Para escribir un bloque de código, sangre cada línea con una tabulación o "
+"con 4 espacios:"
 
 #. type: Plain text
 #, no-wrap
@@ -172,16 +177,17 @@ msgid ""
 "In addition to basic html formatting using [[MarkDown]], this wiki lets you "
 "use the following additional features:"
 msgstr ""
-"Además de la aplicación de formato html básico utilizando [[MarkDown]], este wiki "
-"le permite usar las siguientes características adicionales:"
+"Además de la aplicación de formato html básico utilizando [[MarkDown]], este "
+"wiki le permite usar las siguientes características adicionales:"
 
 #. type: Bullet: '* '
 msgid ""
 "To link to another page on the wiki, place the page's name inside double "
 "square brackets. So you would use `\\[[WikiLink]]` to link to [[WikiLink]]."
 msgstr ""
-"Para enlazar a otra página del wiki, coloque el nombre de la página entre dobles "
-"corchetes. Así, puede utilizar `\\[[WikiLink]]` para enlazar a [[WikiLink]]."
+"Para enlazar a otra página del wiki, coloque el nombre de la página entre "
+"dobles corchetes. Así, puede utilizar `\\[[WikiLink]]` para enlazar a "
+"[[WikiLink]]."
 
 #. type: Plain text
 #, no-wrap
@@ -215,7 +221,9 @@ msgstr "[[!if test=\"enabled(template) and templates\" then=\"\"\"\n"
 msgid ""
 "Create and fill out [[templates]] for repeated chunks of parameterized wiki "
 "text."
-msgstr "Cree y rellene [[plantillas|templates]] para bloques repetidos de texto wiki con parámetros."
+msgstr ""
+"Cree y rellene [[plantillas|templates]] para bloques repetidos de texto wiki "
+"con parámetros."
 
 #. type: Plain text
 #, no-wrap
@@ -289,4 +297,3 @@ msgstr "  Lista completa de [[directivas|directive]] activadas en este wiki:\n"
 #, no-wrap
 msgid "  [[!listdirectives ]]\n"
 msgstr "  [[!listdirectives ]]\n"
-

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-15 18:30-0300\n"
+"POT-Creation-Date: 2009-08-26 13:39-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 #. type: Plain text
 msgid ""
 "If searching is enabled, you can enter search terms in the search field, as "
-"you'd expect. There are a few special things you can do to constuct more "
+"you'd expect. There are a few special things you can do to construct more "
 "powerful searches."
 msgstr ""
 

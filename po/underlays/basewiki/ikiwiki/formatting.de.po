@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-15 18:30-0300\n"
+"POT-Creation-Date: 2009-08-26 13:39-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr ""
 
 #. type: Plain text
 msgid ""
-"You can \\**emphasise*\\* or \\*\\***strongly emphasise**\\*\\* text by "
+"You can *\\*emphasise\\** or **\\*\\*strongly emphasise\\*\\*** text by "
 "placing it in single or double asterisks."
 msgstr ""
 
