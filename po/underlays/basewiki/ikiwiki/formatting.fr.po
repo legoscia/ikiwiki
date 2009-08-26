@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki\n"
 "POT-Creation-Date: 2009-08-15 18:30-0300\n"
-"PO-Revision-Date: 2009-08-24 16:29+0200\n"
+"PO-Revision-Date: 2009-08-26 09:35+0200\n"
 "Last-Translator: Philippe Batailler <philippe.batailler@fre.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -35,15 +35,15 @@ msgstr ""
 
 #. type: Plain text
 msgid "Leave blank lines between paragraphs."
-msgstr "lignes vides entre les paragraphes."
+msgstr "Lignes vides entre les paragraphes."
 
 #. type: Plain text
 msgid ""
 "You can \\**emphasise*\\* or \\*\\***strongly emphasise**\\*\\* text by "
 "placing it in single or double asterisks."
 msgstr ""
-"Mettre un texte en \\**italique*\\* avec un astérisque ou le mettre en \\*"
-"\\***gras**\\*\\* avec deux astérisques."
+"Texte en \\**italique*\\* avec un astérisque ou texte en \\*\\***gras**\\*"
+"\\* avec deux astérisques."
 
 #. type: Plain text
 msgid "To create a list, start each line with an asterisk:"
@@ -75,7 +75,7 @@ msgstr "\"2. deuxième ligne\""
 
 #. type: Bullet: '2. '
 msgid "\"2. third line\""
-msgstr "\"3. troisième ligne\""
+msgstr "\"2. troisième ligne\""
 
 #. type: Plain text
 msgid ""
@@ -162,7 +162,7 @@ msgid ""
 msgstr ""
 "Pour créer un lien avec une URL ou une adresse électronique,\n"
 "mettre l'URL entre crochets, <<http://ikiwiki.info>>,\n"
-"ou utiliser la forme \\[link text\\]\\(url\\)\n"
+"ou utiliser la forme \\[texte du lien\\]\\(url\\)\n"
 
 #. type: Plain text
 msgid ""
@@ -178,7 +178,7 @@ msgid ""
 "square brackets. So you would use `\\[[WikiLink]]` to link to [[WikiLink]]."
 msgstr ""
 "Pour créer un lien vers une autre page du wiki, mettre le nom de la page "
-"entre une paire de crochets. Ainsi, utilisez `\\[[WikiLink]]` pour un lien "
+"entre deux paires de crochets. Ainsi, utilisez `\\[[WikiLink]]` pour un lien "
 "avec [[WikiLink]]."
 
 #. type: Plain text
@@ -193,7 +193,7 @@ msgstr "Insérer des [[smileys]] et d'autres symboles très utiles :-)"
 #. type: Plain text
 #, no-wrap
 msgid "[[!if test=\"enabled(shortcut) and shortcuts\" then=\"\"\"\n"
-msgstr "[[!if test=\"enabled(shortcut) and shortcuts\\\" then=\"\"\"\n"
+msgstr "[[!if test=\"enabled(shortcut) and shortcuts\" then=\"\"\"\n"
 
 #. type: Bullet: '* '
 msgid "Use [[shortcuts]] to link to common resources."
@@ -214,8 +214,8 @@ msgid ""
 "Create and fill out [[templates]] for repeated chunks of parameterized wiki "
 "text."
 msgstr ""
-"Créer et utiliser des [[templates]] pour répéter des morceaux de texte "
-"standard."
+"Créer et utiliser des modèles ([[templates]]) pour répéter des morceaux de "
+"texte standard."
 
 #. type: Plain text
 #, no-wrap
@@ -258,7 +258,7 @@ msgstr "changer le titre d'une page :"
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!meta title=\"full page title\"]]\n"
-msgstr "\t\\[[!meta title=\"full page title\"]]\n"
+msgstr "\t\\[[!meta title=\"titre complet de la page\"]]\n"
 
 #. type: Plain text
 #, no-wrap
