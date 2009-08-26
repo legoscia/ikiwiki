@@ -1,24 +1,22 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Traduction de ikiwiki
+# Copyright (C) 2009 Debian French l10n team <debian-l10n-french@lists.debian.org>
+# This file is distributed under the same license as the PACKAGE Ikiwiki.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki\n"
 "POT-Creation-Date: 2009-08-15 18:30-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-08-26 10:58+0200\n"
+"Last-Translator: Philippe Batailler <philippe.batailler@free.fr>\n"
+"Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bits\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"
 
 #. type: Plain text
 #, no-wrap
@@ -27,6 +25,9 @@ msgid ""
 "     then=\"This wiki has attachments **enabled**.\"\n"
 "     else=\"This wiki has attachments **disabled**.\"]]\n"
 msgstr ""
+"[[!if test=\"enabled(attachment)\"\n"
+"     then=\"Les pièces jointes sont autorisées sur ce wiki.\"\n"
+"     else=\"Les pièces jointes ne sont pas autorisées sur ce wiki.\"]]\n"
 
 #. type: Plain text
 msgid ""
@@ -34,6 +35,9 @@ msgid ""
 "attachments will be accepted, via the `allowed_attachments` configuration "
 "setting."
 msgstr ""
+"Quand les pièces jointes sont autorisées, l'administrateur du wiki peut "
+"contrôler le type des pièces acceptées, avec l'option de configuration "
+"`allowed_attachments`."
 
 #. type: Plain text
 msgid ""
@@ -41,17 +45,23 @@ msgid ""
 "files to be uploaded by joey into a specific directory, and check all "
 "attachments for viruses, something like this could be used:"
 msgstr ""
+"Par exemple, pour limiter tous les fichiers à 50 kilooctets mais permettre "
+"que des fichiers mp3 plus grands soient envoyés par joey dans un répertoire "
+"donné et pour vérifier que toutes les pièces jointes soient sans virus, on "
+"peut utiliser quelque chose comme ça :"
 
 #. type: Plain text
 #, no-wrap
 msgid "\tvirusfree() and ((user(joey) and podcast/*.mp3 and mimetype(audio/mpeg) and maxsize(15mb)) or (!ispage() and maxsize(50kb)))\n"
-msgstr ""
+msgstr "\tvirusfree() and ((user(joey) and podcast/*.mp3 and mimetype(audio/mpeg) and maxsize(15mb)) or (!ispage() and maxsize(50kb)))\n"
 
 #. type: Plain text
 msgid ""
 "The regular [[ikiwiki/PageSpec]] syntax is expanded with the following "
 "additional tests:"
 msgstr ""
+"La syntaxe normale de [[ikiwiki/PageSpec]] est appliquée avec les tests "
+"supplémentaires suivants :"
 
 #. type: Bullet: '* '
 msgid ""
@@ -59,12 +69,17 @@ msgid ""
 "specified size. The size defaults to being in bytes, but \"kb\", \"mb\", \"gb"
 "\" etc can be used to specify the units."
 msgstr ""
+"`maxsize(size)` - teste si la taille de la pièce n'est pas plus grande que "
+"la taille donnée. La taille est mesurée en octet mais on peut l'indiquer en "
+"« ko », « mo », « go » etc."
 
 #. type: Bullet: '* '
 msgid ""
 "\"`minsize(size)`\" - tests whether the attachment is no smaller than the "
 "specified size."
 msgstr ""
+"`minsize(size)` -  teste si la taille de la pièce n'est pas plus petite que "
+"la taille donnée."
 
 #. type: Bullet: '* '
 msgid ""
@@ -72,6 +87,8 @@ msgid ""
 "a wiki page. (Ie, if it has an extension of \".mdwn\", or of any other "
 "enabled page format)."
 msgstr ""
+"`ispage()` - teste si la pièce jointe sera traitée comme page de wiki par "
+"ikiwiki,c'est-à-dire si son extension est « mdwn » ou un autre format accepté."
 
 #. type: Plain text
 #, no-wrap
@@ -80,13 +97,17 @@ msgid ""
 "  use `!ispage()` ; if you only want to allow wiki pages to be uploaded\n"
 "  as attachments, use `ispage()`.\n"
 msgstr ""
+" Donc, si vous ne voulez pas que des pages de wiki puissent être envoyées en pièces jointes, utilisez  `!ispage()`\n"
+" et dans le cas contraire, `ispage()`.\n"
 
 #. type: Bullet: '* '
 msgid ""
 "\"`mimetype(foo/bar)`\" - checks the MIME type of the attachment. You can "
 "include a glob in the type, for example `mimetype(image/*)`."
 msgstr ""
+"`mimetype(foo/bar)` - teste le type MIME de la pièce jointe. Vous pouvez "
+"inclure un motif dans le type, par exemple  `mimetype(image/*)`."
 
 #. type: Bullet: '* '
 msgid "\"`virusfree()`\" - checks the attachment with an antiviral program."
-msgstr ""
+msgstr "`virusfree()` - teste la pièce jointe avec un programme antivirus."
