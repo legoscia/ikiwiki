@@ -38,9 +38,6 @@ msgid "Leave blank lines between paragraphs."
 msgstr "Lignes vides entre les paragraphes."
 
 #. type: Plain text
-#| msgid ""
-#| "You can \\**emphasise*\\* or \\*\\***strongly emphasise**\\*\\* text by "
-#| "placing it in single or double asterisks."
 msgid ""
 "You can *\\*emphasise\\** or **\\*\\*strongly emphasise\\*\\*** text by "
 "placing it in single or double asterisks."
