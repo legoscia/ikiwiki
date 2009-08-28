@@ -12,8 +12,8 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: ENCODING"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
 
 #. type: Plain text
 msgid ""
@@ -33,9 +33,7 @@ msgstr ""
 
 #. type: Plain text
 #, no-wrap
-msgid ""
-"\t\\[[!inline pages=\"blog/* and !*/Discussion\" show=\"10\" "
-"rootpage=\"blog\"]]\n"
+msgid "\t\\[[!inline pages=\"blog/* and !*/Discussion\" show=\"10\" rootpage=\"blog\"]]\n"
 msgstr ""
 
 #. type: Plain text
@@ -139,7 +137,8 @@ msgid ""
 msgstr ""
 
 #. type: Bullet: '* '
-msgid "`postform` - Set to \"yes\" to enable a form to post new pages to a blog."
+msgid ""
+"`postform` - Set to \"yes\" to enable a form to post new pages to a blog."
 msgstr ""
 
 #. type: Bullet: '* '
@@ -265,18 +264,18 @@ msgstr ""
 msgid ""
 "`feedfile` - Can be used to change the name of the file generated for the "
 "feed. This is particularly useful if a page contains multiple feeds.  For "
-"example, set \"feedfile=feed\" to cause it to generate `page/feed.atom` "
-"and/or `page/feed.rss`. This option is not supported if the wiki is "
-"configured not to use `usedirs`."
+"example, set \"feedfile=feed\" to cause it to generate `page/feed.atom` and/"
+"or `page/feed.rss`. This option is not supported if the wiki is configured "
+"not to use `usedirs`."
 msgstr ""
 
 #. type: Bullet: '* '
 msgid ""
-"`pagenames` - If given instead of `pages`, this is interpreted as a "
-"space-separated list of links to pages (with the same "
-"[[SubPage/LinkingRules]] as in a [[ikiwiki/WikiLink]]), and they are inlined "
-"in exactly the order given: the `sort` and `pages` parameters cannot be used "
-"in conjunction with this one."
+"`pagenames` - If given instead of `pages`, this is interpreted as a space-"
+"separated list of links to pages (with the same [[SubPage/LinkingRules]] as "
+"in a [[ikiwiki/WikiLink]]), and they are inlined in exactly the order given: "
+"the `sort` and `pages` parameters cannot be used in conjunction with this "
+"one."
 msgstr ""
 
 #. type: Plain text

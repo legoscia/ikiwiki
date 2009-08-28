@@ -12,17 +12,17 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: ENCODING"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
 
 #. type: Plain text
-msgid "The `map` directive is supplied by the [[!iki plugins/map desc=map]] plugin."
+msgid ""
+"The `map` directive is supplied by the [[!iki plugins/map desc=map]] plugin."
 msgstr ""
 
 #. type: Plain text
 msgid ""
-"This directive generates a hierarchical page map for the wiki. Example "
-"usage:"
+"This directive generates a hierarchical page map for the wiki. Example usage:"
 msgstr ""
 
 #. type: Plain text

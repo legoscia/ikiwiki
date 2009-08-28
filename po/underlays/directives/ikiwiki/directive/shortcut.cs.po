@@ -12,8 +12,8 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: ENCODING"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
 
 #. type: Plain text
 msgid ""
@@ -29,8 +29,8 @@ msgstr ""
 
 #. type: Plain text
 msgid ""
-"The available shortcuts are defined on the [[shortcuts]] page in the "
-"wiki. The `shortcut` directive can only be used on that page."
+"The available shortcuts are defined on the [[shortcuts]] page in the wiki. "
+"The `shortcut` directive can only be used on that page."
 msgstr ""
 
 #. type: Plain text

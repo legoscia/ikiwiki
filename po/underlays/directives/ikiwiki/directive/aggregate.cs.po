@@ -12,8 +12,8 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: ENCODING"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
 
 #. type: Plain text
 msgid ""
@@ -75,7 +75,8 @@ msgid ""
 msgstr ""
 
 #. type: Bullet: '* '
-msgid "`name` - A name for the feed. Each feed must have a unique name.  Required."
+msgid ""
+"`name` - A name for the feed. Each feed must have a unique name.  Required."
 msgstr ""
 
 #. type: Bullet: '* '

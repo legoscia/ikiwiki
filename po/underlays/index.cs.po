@@ -12,8 +12,8 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: ENCODING"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
 
 #. type: Plain text
 msgid ""
@@ -62,11 +62,10 @@ msgstr ""
 #. type: Bullet: '2. '
 msgid ""
 "Is your language listed as one of the available translations above? If not, "
-"[[Joey]] needs to enable it. Edit this page and request it be "
-"enabled. Saying something about the translation resources you have available "
-"will help. Is it just you, or will there be a whole team? Do you have just a "
-"little time to help, or do you want to commit to translating the whole "
-"thing?"
+"[[Joey]] needs to enable it. Edit this page and request it be enabled. "
+"Saying something about the translation resources you have available will "
+"help. Is it just you, or will there be a whole team? Do you have just a "
+"little time to help, or do you want to commit to translating the whole thing?"
 msgstr ""
 
 #. type: Bullet: '3. '
@@ -74,8 +73,7 @@ msgid ""
 "Now get to translating! The easiest way to get started is to find a page on "
 "this wiki that is less than 100% translated to your language, go to the "
 "translated version of the page, and edit it. You'll be dumped into a web "
-"form, editing a PO file. Save and watch the percent translated numbers go "
-"up!"
+"form, editing a PO file. Save and watch the percent translated numbers go up!"
 msgstr ""
 
 #. type: Bullet: '4. '
@@ -87,14 +85,14 @@ msgstr ""
 
 #. type: Bullet: '   * '
 msgid ""
-"Install git, and run this command to check out the wiki: `git clone "
-"git://l10n.ikiwiki.info/`"
+"Install git, and run this command to check out the wiki: `git clone git://"
+"l10n.ikiwiki.info/`"
 msgstr ""
 
 #. type: Bullet: '   * '
 msgid ""
-"Edit the po files for your language, in the "
-"`l10n.ikiwiki.info/po/underlays/` directory."
+"Edit the po files for your language, in the `l10n.ikiwiki.info/po/underlays/"
+"` directory."
 msgstr ""
 
 #. type: Bullet: '   * '
@@ -129,8 +127,7 @@ msgstr ""
 #. type: Bullet: '  * '
 msgid ""
 "I have the translation of basewiki already ready, so after the activation I "
-"will just commit it and fix any issues I will notice in the live "
-"environment."
+"will just commit it and fix any issues I will notice in the live environment."
 msgstr ""
 
 #. type: Bullet: '  * '
@@ -140,7 +137,8 @@ msgid ""
 msgstr ""
 
 #. type: Bullet: '  * '
-msgid "I *might* have a look at the other pages in the future, but nothing promised"
+msgid ""
+"I *might* have a look at the other pages in the future, but nothing promised"
 msgstr ""
 
 #. type: Title ##
@@ -150,8 +148,8 @@ msgstr ""
 
 #. type: Bullet: '* '
 msgid ""
-"Don't translate page names inside [[WikiLinks|ikiwiki/WikiLink]], such as "
-"`\\[[FooPage]]`"
+"Don't translate page names inside [[WikiLinks|ikiwiki/WikiLink]], such as `"
+"\\[[FooPage]]`"
 msgstr ""
 
 #. type: Bullet: '* '
@@ -163,8 +161,8 @@ msgstr ""
 #. type: Bullet: '* '
 msgid ""
 "Some [[directives|ikiwiki/directive]] don't contain **translatable bits**; "
-"some do. Compare `\\[[!inline pages=\"blog/*\"]]` with `\\[[!inline "
-"pages=\"blog/*\" description=\"`**this is my blog**`\"]]`"
+"some do. Compare `\\[[!inline pages=\"blog/*\"]]` with `\\[[!inline pages="
+"\"blog/*\" description=\"`**this is my blog**`\"]]`"
 msgstr ""
 
 #. type: Title ##
@@ -189,7 +187,5 @@ msgstr ""
 
 #. type: Plain text
 #, no-wrap
-msgid ""
-"[[!map pages=\"(smiley/* or directives/*) and !*/discussion and "
-"lang(en)\"]]\n"
+msgid "[[!map pages=\"(smiley/* or directives/*) and !*/discussion and lang(en)\"]]\n"
 msgstr ""

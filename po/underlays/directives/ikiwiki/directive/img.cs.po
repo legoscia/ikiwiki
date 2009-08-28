@@ -12,19 +12,20 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: ENCODING"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
 
 #. type: Plain text
-msgid "The `img` directive is supplied by the [[!iki plugins/img desc=img]] plugin."
+msgid ""
+"The `img` directive is supplied by the [[!iki plugins/img desc=img]] plugin."
 msgstr ""
 
 #. type: Plain text
 msgid ""
-"This is an image handling directive.  While ikiwiki supports inlining "
-"full-size images by making a [[ikiwiki/WikiLink]] that points to the image, "
-"using this directive you can easily scale down an image for inclusion onto a "
-"page, providing a link to a full-size version."
+"This is an image handling directive.  While ikiwiki supports inlining full-"
+"size images by making a [[ikiwiki/WikiLink]] that points to the image, using "
+"this directive you can easily scale down an image for inclusion onto a page, "
+"providing a link to a full-size version."
 msgstr ""
 
 #. type: Title ##

@@ -12,8 +12,8 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: ENCODING"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: ENCODING\n"
 
 #. type: Plain text
 #, no-wrap
@@ -46,9 +46,9 @@ msgstr ""
 
 #. type: Plain text
 msgid ""
-"You can also specify a link that contains a directory name, like "
-"\"FooBar/OtherPage\" to more exactly specify what page to link to. This is "
-"the only way to link to an unrelated [[SubPage]]."
+"You can also specify a link that contains a directory name, like \"FooBar/"
+"OtherPage\" to more exactly specify what page to link to. This is the only "
+"way to link to an unrelated [[SubPage]]."
 msgstr ""
 
 #. type: Plain text
@@ -61,9 +61,9 @@ msgstr ""
 msgid ""
 "You can also use \"/\" at the start of a link, to specify exactly which page "
 "to link to, when there are multiple pages with similar names and the link "
-"goes to the wrong page by default. For example, linking from "
-"\"FooBar/SubPage\" to \"/OtherPage\" will link to the \"OtherPage\" in the "
-"root of the wiki, even if there is a \"FooBar/OtherPage\"."
+"goes to the wrong page by default. For example, linking from \"FooBar/SubPage"
+"\" to \"/OtherPage\" will link to the \"OtherPage\" in the root of the wiki, "
+"even if there is a \"FooBar/OtherPage\"."
 msgstr ""
 
 #. type: Plain text
