@@ -48,6 +48,16 @@ these steps:
 5. If you get a useful percentage of the basewiki translated, let [[Joey]]
    know so he can activate your translation in the next ikiwiki release.
 
+## Requests for translation
+
+* Czech: Hi Joey, could you please enable Czech (cs) language?
+
+  * It seems I'm the only translator for this language
+  * I have the translation of basewiki already ready, so after the activation
+    I will just commit it and fix any issues I will notice in the live environment.
+  * I have just enough of time to keep basewiki updated (expecting it not to change too much)
+  * I *might* have a look at the other pages in the future, but nothing promised
+
 ## Translation hints
 
 * Don't translate page names inside [[WikiLinks|ikiwiki/WikiLink]],
