@@ -22,7 +22,7 @@ these steps:
 
 2. Is your language listed as one of the available translations above?
    If not, [[Joey]] needs to enable it. Edit this page and request
-   it be enabled. Saying something about the translation resources you
+   it be enabled. Include the name of your language as it should be displayed, and the two letter language code. Saying something about the translation resources you
    have available will help. Is it just you, or will there be a whole team?
    Do you have just a little time to help, or do you want to commit
    to translating the whole thing?
@@ -58,8 +58,11 @@ these steps:
   * I have just enough of time to keep basewiki updated (expecting it not to change too much)
   * I *might* have a look at the other pages in the future, but nothing promised
 
+> Done, thanks! Please let me know when it's checked. Hope I got the name right BTW. --[[Joey]]
+
 ## Translation hints
 
+* This page does not need to be translated. :-)
 * Don't translate page names inside [[WikiLinks|ikiwiki/WikiLink]],
   such as `\[[FooPage]]`
 * Do translate link **descriptions** inside WikiLinks, such as
