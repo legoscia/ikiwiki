@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki\n"
 "POT-Creation-Date: 2009-08-15 18:30-0300\n"
-"PO-Revision-Date: 2009-08-26 09:22+0200\n"
+"PO-Revision-Date: 2009-08-28 16:05+0200\n"
 "Last-Translator: Philippe Batailler <philippe.batailler@free.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr "[[!meta robots=\"noindex, follow\"]\n"
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"
 
 #. type: Plain text
 msgid ""
