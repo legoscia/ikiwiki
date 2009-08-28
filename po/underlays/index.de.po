@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-28 02:38-0300\n"
+"POT-Creation-Date: 2009-08-28 02:59-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,9 +65,11 @@ msgstr ""
 msgid ""
 "Is your language listed as one of the available translations above? If not, "
 "[[Joey]] needs to enable it. Edit this page and request it be enabled. "
-"Saying something about the translation resources you have available will "
-"help. Is it just you, or will there be a whole team? Do you have just a "
-"little time to help, or do you want to commit to translating the whole thing?"
+"Include the name of your language as it should be displayed, and the two "
+"letter language code. Saying something about the translation resources you "
+"have available will help. Is it just you, or will there be a whole team? Do "
+"you have just a little time to help, or do you want to commit to translating "
+"the whole thing?"
 msgstr ""
 
 #. type: Bullet: '3. '
@@ -146,9 +148,18 @@ msgid ""
 "I *might* have a look at the other pages in the future, but nothing promised"
 msgstr ""
 
+#. type: Plain text
+#, no-wrap
+msgid "> Done, thanks! Please let me know when it's checked. Hope I got the name right BTW. --[[Joey]]\n"
+msgstr ""
+
 #. type: Title ##
 #, no-wrap
 msgid "Translation hints"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "This page does not need to be translated. :-)"
 msgstr ""
 
 #. type: Bullet: '* '

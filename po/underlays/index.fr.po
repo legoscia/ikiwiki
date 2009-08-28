@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ikiwiki\n"
-"POT-Creation-Date: 2009-08-28 02:38-0300\n"
+"POT-Creation-Date: 2009-08-28 02:59-0300\n"
 "PO-Revision-Date: 2009-08-23 09:25+0200\n"
 "Last-Translator: Philippe Batailler <philippe.batailler@free.fr>\n"
 "Language-Team: french <debian-l10n-french@lists.debian.org>\n"
@@ -74,12 +74,22 @@ msgstr ""
 "   >modification, are permitted under any circumstances. No warranty.\n"
 
 #. type: Bullet: '2. '
+#, fuzzy
+#| msgid ""
+#| "Is your language listed as one of the available translations above? If "
+#| "not, [[Joey]] needs to enable it. Edit this page and request it be "
+#| "enabled. Saying something about the translation resources you have "
+#| "available will help. Is it just you, or will there be a whole team? Do "
+#| "you have just a little time to help, or do you want to commit to "
+#| "translating the whole thing?"
 msgid ""
 "Is your language listed as one of the available translations above? If not, "
 "[[Joey]] needs to enable it. Edit this page and request it be enabled. "
-"Saying something about the translation resources you have available will "
-"help. Is it just you, or will there be a whole team? Do you have just a "
-"little time to help, or do you want to commit to translating the whole thing?"
+"Include the name of your language as it should be displayed, and the two "
+"letter language code. Saying something about the translation resources you "
+"have available will help. Is it just you, or will there be a whole team? Do "
+"you have just a little time to help, or do you want to commit to translating "
+"the whole thing?"
 msgstr ""
 "Votre langue apparaît-elle au dessus dans la liste des traductions "
 "disponibles ? Sinon, [[Joey]] devra l'activer. Modifiez cette page et "
@@ -179,10 +189,19 @@ msgid ""
 "I *might* have a look at the other pages in the future, but nothing promised"
 msgstr ""
 
+#. type: Plain text
+#, no-wrap
+msgid "> Done, thanks! Please let me know when it's checked. Hope I got the name right BTW. --[[Joey]]\n"
+msgstr ""
+
 #. type: Title ##
 #, no-wrap
 msgid "Translation hints"
 msgstr "Aides pour la traduction"
+
+#. type: Bullet: '* '
+msgid "This page does not need to be translated. :-)"
+msgstr ""
 
 #. type: Bullet: '* '
 msgid ""
