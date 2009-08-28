@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-16 15:23-0300\n"
+"POT-Creation-Date: 2009-08-28 02:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,6 +113,37 @@ msgstr ""
 msgid ""
 "If you get a useful percentage of the basewiki translated, let [[Joey]] know "
 "so he can activate your translation in the next ikiwiki release."
+msgstr ""
+
+#. type: Title ##
+#, fuzzy, no-wrap
+#| msgid "Instructions for translators"
+msgid "Requests for translation"
+msgstr "Anleitung für Übersetzer"
+
+#. type: Bullet: '* '
+msgid "Czech: Hi Joey, could you please enable Czech (cs) language?"
+msgstr ""
+
+#. type: Bullet: '  * '
+msgid "It seems I'm the only translator for this language"
+msgstr ""
+
+#. type: Bullet: '  * '
+msgid ""
+"I have the translation of basewiki already ready, so after the activation I "
+"will just commit it and fix any issues I will notice in the live environment."
+msgstr ""
+
+#. type: Bullet: '  * '
+msgid ""
+"I have just enough of time to keep basewiki updated (expecting it not to "
+"change too much)"
+msgstr ""
+
+#. type: Bullet: '  * '
+msgid ""
+"I *might* have a look at the other pages in the future, but nothing promised"
 msgstr ""
 
 #. type: Title ##
