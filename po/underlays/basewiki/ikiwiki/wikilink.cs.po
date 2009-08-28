@@ -1,0 +1,82 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-08-28 02:49-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: ENCODING"
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!meta robots=\"noindex, follow\"]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"WikiLinks provide easy linking between pages of the wiki. To create a "
+"[[WikiLink]], just put the name of the page to link to in double brackets.  "
+"For example `\\[[WikiLink]]`."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"If you ever need to write something like `\\[[WikiLink]]` without creating a "
+"wikilink, just prefix it with a `\\`, like `\\\\[[WikiLink]]`."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"There are some special [[SubPage/LinkingRules]] that come into play when "
+"linking between [[SubPages|SubPage]]."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"Also, if the file linked to by a WikiLink looks like an image, it will be "
+"displayed inline on the page."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"WikiLinks are matched with page names in a case-insensitive manner, so you "
+"don't need to worry about getting the case the same, and can capitalise "
+"links at the start of a sentence, and so on."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"It's also possible to write a WikiLink that uses something other than the "
+"page name as the link text. For example `\\[[foo_bar|SandBox]]` links to the "
+"SandBox page, but the link will appear like this: [[foo_bar|SandBox]]."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"To link to an anchor inside a page, you can use something like "
+"`\\[[WikiLink#foo]]` ."
+msgstr ""
+
+#. type: Title ##
+#, no-wrap
+msgid "Directives and WikiLinks"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"ikiwiki has two syntaxes for [[directives|directive]].  The older syntax "
+"used spaces to distinguish between directives and wikilinks; as a result, "
+"with that syntax in use, you cannot use spaces in WikiLinks, and must "
+"replace spaces with underscores.  The newer syntax, enabled with the "
+"`prefix_directives` option in an ikiwiki setup file, prefixes directives "
+"with `!`, and thus does not prevent links with spaces.  Future versions of "
+"ikiwiki will turn this option on by default."
+msgstr ""

@@ -1,0 +1,264 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-08-28 02:49-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: ENCODING"
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!meta title=\"Formatting wiki pages\"]]\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!meta robots=\"noindex, follow\"]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"Text on this wiki is, by default, written in a form very close to how you "
+"might write text for an email message. This style of text formatting is "
+"called [[MarkDown]], and it works like this:"
+msgstr ""
+
+#. type: Plain text
+msgid "Leave blank lines between paragraphs."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"You can *\\*emphasise\\** or **\\*\\*strongly emphasise\\*\\*** text by "
+"placing it in single or double asterisks."
+msgstr ""
+
+#. type: Plain text
+msgid "To create a list, start each line with an asterisk:"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "\"* this is my list\""
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "\"* another item\""
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"To make a numbered list, start each line with a number (any number will do) "
+"followed by a period:"
+msgstr ""
+
+#. type: Bullet: '1. '
+msgid "\"1. first line\""
+msgstr ""
+
+#. type: Bullet: '2. '
+msgid "\"2. second line\""
+msgstr ""
+
+#. type: Bullet: '2. '
+msgid "\"2. third line\""
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"To create a header, start a line with one or more `#` characters followed by "
+"a space and the header text. The number of `#` characters controls the size "
+"of the header:"
+msgstr ""
+
+#. type: Title #
+#, no-wrap
+msgid "# h1"
+msgstr ""
+
+#. type: Title ##
+#, no-wrap
+msgid "## h2"
+msgstr ""
+
+#. type: Title ###
+#, no-wrap
+msgid "### h3"
+msgstr ""
+
+#. type: Title ####
+#, no-wrap
+msgid "#### h4"
+msgstr ""
+
+#. type: Title #####
+#, no-wrap
+msgid "##### h5"
+msgstr ""
+
+#. type: Title ######
+#, no-wrap
+msgid "###### h6"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"To create a horizontal rule, just write three or more dashes or stars on "
+"their own line:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "To quote someone, prefix the quote with \">\":\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"> To be or not to be,\n"
+"> that is the question.\n"
+msgstr ""
+
+#. type: Plain text
+msgid "To write a code block, indent each line with a tab or 4 spaces:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"\t10 PRINT \"Hello, world!\"\n"
+"\t20 GOTO 10\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"To link to an url or email address, you can just put the\n"
+"url in angle brackets: <<http://ikiwiki.info>>, or you can use the\n"
+"form \\[link text\\]\\(url\\)\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"In addition to basic html formatting using [[MarkDown]], this wiki lets you "
+"use the following additional features:"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"To link to another page on the wiki, place the page's name inside double "
+"square brackets. So you would use `\\[[WikiLink]]` to link to [[WikiLink]]."
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!if test=\"enabled(smiley) and smileys\" then=\"\"\"\n"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "Insert [[smileys]] and some other useful symbols. :-)"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!if test=\"enabled(shortcut) and shortcuts\" then=\"\"\"\n"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "Use [[shortcuts]] to link to common resources."
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "\t\\[[!wikipedia War\\_of\\_1812]]\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!if test=\"enabled(template) and templates\" then=\"\"\"\n"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"Create and fill out [[templates]] for repeated chunks of parameterized wiki "
+"text."
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"* Insert various [[directives|directive]] onto a page to perform useful\n"
+"  actions.\n"
+"[[!if test=\"enabled(toc) or enabled(meta) or enabled(inline)\" "
+"then=\"\"\"\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "  For example, you can:\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!if test=\"enabled(toc)\" then=\"\"\"\n"
+msgstr ""
+
+#. type: Bullet: '  * '
+msgid "Add a table of contents to a page:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "\t\\[[!toc]]\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!if test=\"enabled(meta)\" then=\"\"\"\n"
+msgstr ""
+
+#. type: Bullet: '  * '
+msgid "Change the title of a page:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "\t\\[[!meta title=\"full page title\"]]\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!if test=\"enabled(inline)\" then=\"\"\"\n"
+msgstr ""
+
+#. type: Bullet: '  * '
+msgid "Create a blog by inlining a set of pages:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "\t\\[[!inline pages=\"blog/*\"]]\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!if test=\"enabled(listdirectives)\" then=\"\"\"\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "  Full list of [[directives|directive]] enabled for this wiki:\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "  [[!listdirectives ]]\n"
+msgstr ""

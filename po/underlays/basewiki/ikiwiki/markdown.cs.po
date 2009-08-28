@@ -1,0 +1,41 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-08-28 02:48-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: ENCODING"
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!meta robots=\"noindex, follow\"]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"[Markdown](http://daringfireball.net/projects/markdown/)  is a minimal "
+"markup language that resembles plain text as used in email messages. It is "
+"the markup language used by this wiki by default."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"For documentation about the markdown syntax, see [[formatting]] and "
+"[Markdown: syntax](http://daringfireball.net/projects/markdown/syntax)."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"Note that [[WikiLinks|WikiLink]] and [[directives|directive]] are not part "
+"of the markdown syntax, and are the only bit of markup that this wiki "
+"handles internally."
+msgstr ""

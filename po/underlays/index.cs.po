@@ -1,0 +1,195 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2009-08-28 02:48-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: ENCODING"
+
+#. type: Plain text
+msgid ""
+"This wiki is used to translate ikiwiki's basewiki, and demonstrate those "
+"translations. [Ikiwiki](http://ikiwiki.info) is a wiki engine; its basewiki "
+"is the set of pages that are copied into every wiki it powers."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"Most of the English pages on this wiki are locked. You cannot edit them.  "
+"You can, however, edit the translated versions of those pages, and your "
+"edits to their PO files will be folded back into ikiwiki proper."
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"The [[SandBox]] is unlocked if you just want to play around with editing a "
+"translatable wiki."
+msgstr ""
+
+#. type: Title ##
+#, no-wrap
+msgid "Instructions for translators"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"If you want to translate ikiwiki's basewiki into your language, follow these "
+"steps:"
+msgstr ""
+
+#. type: Bullet: '1. '
+msgid ""
+"Note that the license of the basewiki is as follows. Your translation will "
+"need to be licensed the same:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"   > Redistribution and use in source and compiled forms, with or without\n"
+"   > modification, are permitted under any circumstances. No warranty.\n"
+msgstr ""
+
+#. type: Bullet: '2. '
+msgid ""
+"Is your language listed as one of the available translations above? If not, "
+"[[Joey]] needs to enable it. Edit this page and request it be "
+"enabled. Saying something about the translation resources you have available "
+"will help. Is it just you, or will there be a whole team? Do you have just a "
+"little time to help, or do you want to commit to translating the whole "
+"thing?"
+msgstr ""
+
+#. type: Bullet: '3. '
+msgid ""
+"Now get to translating! The easiest way to get started is to find a page on "
+"this wiki that is less than 100% translated to your language, go to the "
+"translated version of the page, and edit it. You'll be dumped into a web "
+"form, editing a PO file. Save and watch the percent translated numbers go "
+"up!"
+msgstr ""
+
+#. type: Bullet: '4. '
+msgid ""
+"After a while you might get tired of the web form and want a real text "
+"editor, or even a specialized po file editor. No problem, this wiki can be "
+"edited using git as well:"
+msgstr ""
+
+#. type: Bullet: '   * '
+msgid ""
+"Install git, and run this command to check out the wiki: `git clone "
+"git://l10n.ikiwiki.info/`"
+msgstr ""
+
+#. type: Bullet: '   * '
+msgid ""
+"Edit the po files for your language, in the "
+"`l10n.ikiwiki.info/po/underlays/` directory."
+msgstr ""
+
+#. type: Bullet: '   * '
+msgid "Run `git commit -a` to commit your changes."
+msgstr ""
+
+#. type: Bullet: '   * '
+msgid ""
+"Run `git push` to push your changes back to this wiki. It will automatically "
+"update!"
+msgstr ""
+
+#. type: Bullet: '5. '
+msgid ""
+"If you get a useful percentage of the basewiki translated, let [[Joey]] know "
+"so he can activate your translation in the next ikiwiki release."
+msgstr ""
+
+#. type: Title ##
+#, no-wrap
+msgid "Requests for translation"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid "Czech: Hi Joey, could you please enable Czech (cs) language?"
+msgstr ""
+
+#. type: Bullet: '  * '
+msgid "It seems I'm the only translator for this language"
+msgstr ""
+
+#. type: Bullet: '  * '
+msgid ""
+"I have the translation of basewiki already ready, so after the activation I "
+"will just commit it and fix any issues I will notice in the live "
+"environment."
+msgstr ""
+
+#. type: Bullet: '  * '
+msgid ""
+"I have just enough of time to keep basewiki updated (expecting it not to "
+"change too much)"
+msgstr ""
+
+#. type: Bullet: '  * '
+msgid "I *might* have a look at the other pages in the future, but nothing promised"
+msgstr ""
+
+#. type: Title ##
+#, no-wrap
+msgid "Translation hints"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"Don't translate page names inside [[WikiLinks|ikiwiki/WikiLink]], such as "
+"`\\[[FooPage]]`"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"Do translate link **descriptions** inside WikiLinks, such as `\\[[`**Page "
+"about foo**`|FooPage]]`"
+msgstr ""
+
+#. type: Bullet: '* '
+msgid ""
+"Some [[directives|ikiwiki/directive]] don't contain **translatable bits**; "
+"some do. Compare `\\[[!inline pages=\"blog/*\"]]` with `\\[[!inline "
+"pages=\"blog/*\" description=\"`**this is my blog**`\"]]`"
+msgstr ""
+
+#. type: Title ##
+#, no-wrap
+msgid "List of pages"
+msgstr ""
+
+#. type: Plain text
+msgid "Here is a list of all the translatable pages in the basewiki:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "[[!map pages=\"basewiki/* and !*/discussion and lang(en)\"]]\n"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"If you manage to translate all of the above, here are some additional "
+"translatable pages:"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"[[!map pages=\"(smiley/* or directives/*) and !*/discussion and "
+"lang(en)\"]]\n"
+msgstr ""
