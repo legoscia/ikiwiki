@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki\n"
 "POT-Creation-Date: 2009-08-15 18:30-0300\n"
-"PO-Revision-Date: 2009-08-22 14:45+0200\n"
+"PO-Revision-Date: 2009-08-30 09:46+0200\n"
 "Last-Translator: Philippe Batailler <philippe.batailler@free.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr ""
 
 #. type: Plain text
 msgid "Some documentation on using ikiwiki:"
-msgstr "Voici de la documentation sur l'utilisation d'ikiwiki :"
+msgstr "Voici quelques pages de documentation sur l'utilisation d'ikiwiki :"
 
 #. type: Bullet: '* '
 msgid "[[ikiwiki/formatting]]"
