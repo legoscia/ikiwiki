@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-28 02:59-0300\n"
+"POT-Creation-Date: 2009-08-28 19:18-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 
 #. type: Plain text
 msgid ""
-"Esta wiki se utiliza para traducir la wiki base de ikiwiki, y demostrar esas "
-"traducciones. [Ikiwiki](http://ikiwiki.info) es un motor wiki; su wiki base "
-"es el conjunto de páginas que se copian en todas las wikis que genera."
+"This wiki is used to translate ikiwiki's basewiki, and demonstrate those "
+"translations. [Ikiwiki](http://ikiwiki.info) is a wiki engine; its basewiki "
+"is the set of pages that are copied into every wiki it powers."
 msgstr ""
 
 #. type: Plain text
 msgid ""
-"La mayoría de las páginas en inglés de esta wiki están bloqueadas. No puedes editarlas.  "
-"Sin embargo, puedes editar las versiones traducidas de las páginas, y tus "
-"cambios a sus archivos PO  se aplicarán en ikiwiki."
+"Most of the English pages on this wiki are locked. You cannot edit them.  "
+"You can, however, edit the translated versions of those pages, and your "
+"edits to their PO files will be folded back into ikiwiki proper."
 msgstr ""
 
 #. type: Plain text
