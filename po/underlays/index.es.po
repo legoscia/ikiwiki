@@ -21,6 +21,9 @@ msgid ""
 "translations. [Ikiwiki](http://ikiwiki.info) is a wiki engine; its basewiki "
 "is the set of pages that are copied into every wiki it powers."
 msgstr ""
+"Esta wiki se utiliza para traducir la wiki base de ikiwiki, y demostrar esas "
+"traducciones. [Ikiwiki](http://ikiwiki.info) es un motor wiki; su wiki base "
+"es el conjunto de páginas que se copian en todas las wikis que genera."
 
 #. type: Plain text
 msgid ""
@@ -28,6 +31,9 @@ msgid ""
 "You can, however, edit the translated versions of those pages, and your "
 "edits to their PO files will be folded back into ikiwiki proper."
 msgstr ""
+"La mayoría de las páginas en inglés de esta wiki están bloqueadas. No puedes editarlas.  "
+"Sin embargo, puedes editar las versiones traducidas de las páginas, y tus "
+"cambios a sus archivos PO  se aplicarán en ikiwiki."
 
 #. type: Plain text
 msgid ""
