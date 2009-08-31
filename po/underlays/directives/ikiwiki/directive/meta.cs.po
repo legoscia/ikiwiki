@@ -1,31 +1,33 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/meta page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:48-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-09-06 19:58+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
 "The `meta` directive is supplied by the [[!iki plugins/meta desc=meta]] "
 "plugin."
 msgstr ""
+"Direktiva `meta` je poskytována modulem [[!iki plugins/meta desc=meta]]."
 
 #. type: Plain text
 msgid ""
 "This directive allows inserting arbitrary metadata into the source of a "
 "page.  Enter the metadata as follows:"
 msgstr ""
+"Direktiva umožňuje do zdrojové stránky vkládat libovolná metadata. Syntaxe "
+"je následující:"
 
 #. type: Plain text
 #, no-wrap
@@ -33,26 +35,32 @@ msgid ""
 "\t\\[[!meta field=\"value\"]]\n"
 "\t\\[[!meta field=\"value\" param=\"value\" param=\"value\"]]\n"
 msgstr ""
+"\t\\[[!meta pole=\"hodnota\"]]\n"
+"\t\\[[!meta pole=\"hodnota\" param=\"hodnota\" param=\"hodnota\"]]\n"
 
 #. type: Plain text
 msgid ""
 "The first form sets a given field to a given value, while the second form "
 "also specifies some additional sub-parameters."
 msgstr ""
+"První způsob nastaví dané pole na zadanou hodnotu, druhý pak přidává nějaké "
+"další parametry."
 
 #. type: Plain text
 msgid ""
 "The field values are treated as HTML entity-escaped text, so you can include "
 "a quote in the text by writing `&quot;` and so on."
 msgstr ""
+"Hodnoty polí jsou považovány za HTML text, takže můžete používat entity "
+"jako `&quot;` místo uvozovek a podobně."
 
 #. type: Plain text
 msgid "Supported fields:"
-msgstr ""
+msgstr "Podporovaná pole:"
 
 #. type: Bullet: '* '
 msgid "title"
-msgstr ""
+msgstr "title"
 
 #. type: Plain text
 #, no-wrap
@@ -60,6 +68,7 @@ msgid ""
 "  Overrides the title of the page, which is generally the same as the\n"
 "  page name.\n"
 msgstr ""
+"  Přepíše název stránky, který je obvykle stejný jako jméno stránky.\n"
 
 #. type: Plain text
 #, no-wrap
@@ -68,10 +77,13 @@ msgid ""
 "  be set to a true value in the template; this can be used to format things\n"
 "  differently in this case.\n"
 msgstr ""
+"  Pokud je název stránky přepsán, nastaví se v šabloně proměnná\n"
+"  „title_overridden“ na hodnotu true; toho můžete využít například pro\n"
+"  odlišné formátování takovýchto stránek.\n"
 
 #. type: Bullet: '* '
 msgid "license"
-msgstr ""
+msgstr "license"
 
 #. type: Plain text
 #, no-wrap
@@ -79,10 +91,12 @@ msgid ""
 "  Specifies a license for the page, for example, \"GPL\". Can contain\n"
 "  WikiLinks and arbitrary markup.\n"
 msgstr ""
+"  Zadá licenci stránky, například „GPL“. Může obsahovat wiki odkazy\n"
+"  a libovolné značkovací příkazy.\n"
 
 #. type: Bullet: '* '
 msgid "copyright"
-msgstr ""
+msgstr "copyright"
 
 #. type: Plain text
 #, no-wrap
@@ -90,28 +104,30 @@ msgid ""
 "  Specifies the copyright of the page, for example, \"Copyright 2007 by\n"
 "  Joey Hess\". Can contain WikiLinks and arbitrary markup.\n"
 msgstr ""
+"  Zadá copyright stránky, například „Copyright 2007 by Joey Hess“.\n"
+"  Může obsahovat wiki odkazy a libovolné značkovací příkazy.\n"
 
 #. type: Bullet: '* '
 msgid "author"
-msgstr ""
+msgstr "author"
 
 #. type: Plain text
 #, no-wrap
 msgid "  Specifies the author of a page.\n"
-msgstr ""
+msgstr "  Zadá autora stránky.\n"
 
 #. type: Bullet: '* '
 msgid "authorurl"
-msgstr ""
+msgstr "authorurl"
 
 #. type: Plain text
 #, no-wrap
 msgid "  Specifies an url for the author of a page.\n"
-msgstr ""
+msgstr "  Zadá url autora stránky.\n"
 
 #. type: Bullet: '* '
 msgid "description"
-msgstr ""
+msgstr "description"
 
 #. type: Plain text
 #, no-wrap
@@ -119,10 +135,12 @@ msgid ""
 "  Specifies a \"description\" of the page. You could use this to provide\n"
 "  a summary, for example, to be picked up by the [[map]] directive.\n"
 msgstr ""
+"  Zadá „popis“ stránky. Můžete sem zadat krátkou anotaci, kterou pak\n"
+"  využijete například v direktivě [[map]].\n"
 
 #. type: Bullet: '* '
 msgid "permalink"
-msgstr ""
+msgstr "permalink"
 
 #. type: Plain text
 #, no-wrap
@@ -130,10 +148,12 @@ msgid ""
 "  Specifies a permanent link to the page, if different than the page\n"
 "  generated by ikiwiki.\n"
 msgstr ""
+"  Zadá permanentní odkaz na stránku - například pokud je jiný, než stránka\n"
+"  vygenerovaná ikiwiki.\n"
 
 #. type: Bullet: '* '
 msgid "date"
-msgstr ""
+msgstr "date"
 
 #. type: Plain text
 #, no-wrap
@@ -141,10 +161,12 @@ msgid ""
 "  Specifies the creation date of the page. The date can be entered in\n"
 "  nearly any format, since it's parsed by [[!cpan TimeDate]].\n"
 msgstr ""
+"  Zadá datum vytvoření stránky. Datum je možno zadat v téměř libovolném\n"
+"  formátu, protože je zpracováno perlovým modulem [[!cpan TimeDate]].\n"
 
 #. type: Bullet: '* '
 msgid "stylesheet"
-msgstr ""
+msgstr "stylesheet"
 
 #. type: Plain text
 #, no-wrap
@@ -153,6 +175,9 @@ msgid ""
 "  a `.css` file in the wiki, so it cannot be used to add links to external\n"
 "  stylesheets. Example:\n"
 msgstr ""
+"  Přidá do stránky odkaz na soubor se stylem. Styl je chápán jako wiki odkaz\n"
+"  na `.css` soubor, tudíž takto nelze přidávat odkazy na externí styly.\n"
+"  Příklad:\n"
 
 #. type: Plain text
 #, no-wrap
@@ -160,10 +185,12 @@ msgid ""
 "\t\\[[!meta stylesheet=somestyle rel=\"alternate stylesheet\"\n"
 "\ttitle=\"somestyle\"]]\n"
 msgstr ""
+"\t\\[[!meta stylesheet=mujstyl rel=\"alternate stylesheet\"\n"
+"\ttitle=\"mujstyl\"]]\n"
 
 #. type: Bullet: '* '
 msgid "openid"
-msgstr ""
+msgstr "openid"
 
 #. type: Plain text
 #, no-wrap
@@ -171,6 +198,8 @@ msgid ""
 "  Adds html &lt;link&gt; tags to perform OpenID delegation to an external\n"
 "  OpenID server. This lets you use an ikiwiki page as your OpenID.\n"
 msgstr ""
+"  Přidá html značky &lt;link&gt;, aby delegoval OpenID na externí\n"
+"  OpenID server. Tímto můžete použít stránku v ikiwiki jako své OpenID.\n"
 
 #. type: Plain text
 #, no-wrap
@@ -178,6 +207,9 @@ msgid ""
 "  By default this will delegate for both `openid` and `openid2`. To only\n"
 "  delegate for one, add a parameter such as `delegate=openid`.\n"
 msgstr ""
+"  Implicitně se deleguje `openid` i `openid2`. Chcete-li delegovat\n"
+"  pouze jedno z nich, přidejte parametr `delegate`, např\n"
+"  `delegate=openid`.\n"
 
 #. type: Plain text
 #, no-wrap
@@ -186,11 +218,14 @@ msgid ""
 "  parameter lets you specify the location of any [eXtensible Resource\n"
 "  DescriptorS](http://www.windley.com/archives/2007/05/using_xrds.shtml).\n"
 msgstr ""
+"  Volitelný parametr `xrds-location` vám umožní zadat umístění libovolných\n"
+"  [eXtensible Resource\n"
+"  DescriptorS](http://www.windley.com/archives/2007/05/using_xrds.shtml).\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  Example:\n"
-msgstr ""
+msgstr "  Příklad:\n"
 
 #. type: Plain text
 #, no-wrap
@@ -199,10 +234,13 @@ msgid ""
 "\tserver=\"http://www.myopenid.com/server\"\n"
 "\txrds-location=\"http://www.myopenid.com/xrds?username=joeyh.myopenid.com\"\"]]\n"
 msgstr ""
+"\t\\\\[[!meta openid=\"http://joeyh.myopenid.com/\"\n"
+"\tserver=\"http://www.myopenid.com/server\"\n"
+"\txrds-location=\"http://www.myopenid.com/xrds?username=joeyh.myopenid.com\"\"]]\n"
 
 #. type: Bullet: '* '
 msgid "link"
-msgstr ""
+msgstr "link"
 
 #. type: Plain text
 #, no-wrap
@@ -211,21 +249,24 @@ msgid ""
 "  wiki treat one page as linking to another without displaying a user-visible\n"
 "  [[ikiwiki/WikiLink]]:\n"
 msgstr ""
+"  Vytvoří odkaz na jinou stránku. Toho se dá využít pro to, aby ikiwiki\n"
+"  věděla, že stránka odkazuje na jinou stránku, ale přitom se nezobrazil\n"
+"  viditelný [[wiki odkaz|ikiwiki/WikiLink]]:\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "       \\[[!meta link=otherpage]]\n"
-msgstr ""
+msgstr "       \\[[!meta link=jinastranka]]\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  It can also be used to insert a html &lt;link&gt; tag. For example:\n"
-msgstr ""
+msgstr "  Také se dá využít pro vložení html značky &lt;link&gt;. Například:\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "       \\[[!meta link=\"http://joeyh.myopenid.com/\" rel=\"openid.delegate\"]]\n"
-msgstr ""
+msgstr "       \\[[!meta link=\"http://joeyh.myopenid.com/\" rel=\"openid.delegate\"]]\n"
 
 #. type: Plain text
 #, no-wrap
@@ -234,20 +275,23 @@ msgid ""
 "  [[!iki plugins/htmlscrubber desc=htmlscrubber]] plugin is enabled, since it can be used to\n"
 "  insert unsafe content.\n"
 msgstr ""
+"  Tato druhá syntaxe bude fungovat pouze pokud máte povolený také modul\n"
+"  [[!iki plugins/htmlscrubber desc=htmlscrubber]], protože jinak byste\n"
+"  mohli do stránky vložit nebezpečný obsah.\n"
 
 #. type: Bullet: '* '
 msgid "redir"
-msgstr ""
+msgstr "redir"
 
 #. type: Plain text
 #, no-wrap
 msgid "  Causes the page to redirect to another page in the wiki.\n"
-msgstr ""
+msgstr "  Přesměruje návštěvníky na jinou stránku ve wiki.\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  \t\\[[!meta redir=otherpage]]\n"
-msgstr ""
+msgstr "  \t\\[[!meta redir=jinastranka]]\n"
 
 #. type: Plain text
 #, no-wrap
@@ -255,16 +299,18 @@ msgid ""
 "  Optionally, a delay (in seconds) can be specified. The default is to\n"
 "  redirect without delay.\n"
 msgstr ""
+"  Volitelně můžete přidat zpoždění (v sekundách) parametrem `delay`.\n"
+"  Implicitně se přesměrovává bez zpoždění.\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  It can also be used to redirect to an external url. For example:\n"
-msgstr ""
+msgstr "  Je možné přesměrování i na externí url. Například:\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  \t\\[[!meta redir=\"http://example.com/\"]]\n"
-msgstr ""
+msgstr "  \t\\[[!meta redir=\"http://www.debian.org/\"]]\n"
 
 #. type: Plain text
 #, no-wrap
@@ -272,20 +318,22 @@ msgid ""
 "  For both cases, an anchor to jump to inside the destination page may also be\n"
 "  specified using the common `#ANCHOR` syntax.\n"
 msgstr ""
+"  V obou případech je možné skočit na konkrétní místo v cílové stránce\n"
+"  (kotvu) pomocí běžné syntaxe `#KOTVA`.\n"
 
 #. type: Bullet: '* '
 msgid "robots"
-msgstr ""
+msgstr "robots"
 
 #. type: Plain text
 #, no-wrap
 msgid "  Causes the robots meta tag to be written:\n"
-msgstr ""
+msgstr "  Zapíše metaznačku pro webové roboty:\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "        \\[[!meta robots=\"index, nofollow\"]]\n"
-msgstr ""
+msgstr "        \\[[!meta robots=\"index, nofollow\"]]\n"
 
 #. type: Plain text
 #, no-wrap
@@ -295,15 +343,21 @@ msgid ""
 "  some combinations make sense. If there is no robots meta tag, \"index,\n"
 "  follow\" is used as the default.\n"
 msgstr ""
+"  Platné hodnoty jsou: „index“, „noindex“, „follow“ a „nofollow“.\n"
+"  Je povoleno více hodnot oddělených čárkou, ale smysl mají pochopitelně\n"
+"  pouze některé kombinace. Pokud ve stránce žádná metaznačka robots není,\n"
+"  použije se automaticky „index, follow“.\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  The value is escaped, but its contents are not otherwise checked.\n"
 msgstr ""
+"  Hodnota je chráněná proti nebezpečným znakům, ale jinak se samotný obsah\n"
+"  nijak nekontroluje.\n"
 
 #. type: Bullet: '* '
 msgid "guid"
-msgstr ""
+msgstr "guid"
 
 #. type: Plain text
 #, no-wrap
@@ -314,6 +368,10 @@ msgid ""
 "  and Atom feeds. If not given, the default is to use the page's URL as its\n"
 "  guid.\n"
 msgstr ""
+"  Zadává globálně jedinečné ID stránky. guid by mělo být URI\n"
+"  (konkrétně to může být `urn:uuid:` následované UUID dle [[!rfc 4122]])\n"
+"  a použije se pro identifikaci stránky v RSS a Atom kanálech. Není-li\n"
+"  zadáno, použije se jako guid URL stránky.\n"
 
 #. type: Plain text
 #, no-wrap
@@ -322,10 +380,13 @@ msgid ""
 "  pages unchanged and avoid_flooding_aggregators\n"
 "  (see [[!iki tips/howto_avoid_flooding_aggregators]]).\n"
 msgstr ""
+"  Zachování guid se hodí převážně při přesunu stránek na jiné místo,\n"
+"  když chcete předejít zaplavení agregátorů\n"
+"  (vizte [[!iki tips/howto_avoid_flooding_aggregators]]).\n"
 
 #. type: Bullet: '* '
 msgid "updated"
-msgstr ""
+msgstr "updated"
 
 #. type: Plain text
 #, no-wrap
@@ -337,6 +398,13 @@ msgid ""
 "  value. The date/time can be given in any format that\n"
 "  [[!cpan TimeDate]] can understand, just like the `date` field.\n"
 msgstr ""
+"  Pro RSS a Atom kanály použije falešný čas změny stránky. To se\n"
+"  občas hodí jako prevence proti zaplavení agregátorů, které zobrazují\n"
+"  články dle času změny (jako třeba Planeta). Například pokud do\n"
+"  staršího blogu přidáváte štítky, můžete nastavit `updated` o\n"
+"  jednu sekundu před původním časem. Datum/čas můžete stejně jako u jiných\n"
+"  časových polí zadat v libovolném formátu, kterému rozumí modul\n"
+"  [[!cpan TimeDate]].\n"
 
 #. type: Plain text
 msgid ""
@@ -345,8 +413,13 @@ msgid ""
 "won't be allowed if the [[!iki plugins/htmlscrubber desc=htmlscrubber]] "
 "plugin is enabled, since it can be used to insert unsafe content."
 msgstr ""
+"Pokud zadané pole není některé z předdefinovaných polí výše, zapíší "
+"se metadata do vygenerované html stránky jako hlavička &lt;meta&gt;. "
+"Aby to však fungovalo, musíte mít povolený modul "
+"[[!iki plugins/htmlscrubber desc=htmlscrubber]], protože jinak byste "
+"mohli do stránky vložit nebezpečný obsah."
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"

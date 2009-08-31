@@ -1,25 +1,26 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/template page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:49-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-09-07 20:59+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
 "The `template` directive is supplied by the [[!iki plugins/template "
 "desc=template]] plugin."
 msgstr ""
+"Direktiva `template` je poskytována modulem [[!iki plugins/template "
+"desc=template]]."
 
 #. type: Plain text
 msgid ""
@@ -28,29 +29,37 @@ msgid ""
 "parameter that identifies the template to use. The remaining parameters are "
 "used to fill out the template."
 msgstr ""
+"[[Šablony|Templates]] jsou soubory, které je možno vyplnit a vložit do "
+"stránek ve wiki pomocí direktivy template. Direktiva má parametr `id`, "
+"který určuje šablonu, která se má použít. Zbývající parametry se používají "
+"pro vyplnění šablony."
 
 #. type: Plain text
 msgid "Example:"
-msgstr ""
+msgstr "Příklad:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!template id=note text=\"\"\"Here is the text to insert into my note.\"\"\"]]\n"
-msgstr ""
+msgstr "\t\\[[!template id=note text=\"\"\"Tento text se vloží do mé poznámky.\"\"\"]]\n"
 
 #. type: Plain text
 msgid ""
 "This fills out the `note` template, filling in the `text` field with the "
 "specified value, and inserts the result into the page."
 msgstr ""
+"Příklad vyplní šablonu `note`, předá jí pole `text` se zadanou hodnotou "
+"a výsledek vloží do stránky."
 
 #. type: Plain text
 msgid ""
 "For a list of available templates, and details about how to create more, see "
 "the [[templates]] page."
 msgstr ""
+"Seznam dostupných šablon a návod na vytváření nových naleznete na stránce "
+"[[templates]]."
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"

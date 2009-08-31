@@ -1,25 +1,26 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/brokenlinks page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:49-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-08-31 08:34+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
 "The `brokenlinks` directive is supplied by the [[!iki plugins/brokenlinks "
 "desc=brokenlinks]] plugin."
 msgstr ""
+"Direktiva `brokenlinks` je poskytována modulem [[!iki plugins/brokenlinks "
+"desc=brokenlinks]]."
 
 #. type: Plain text
 msgid ""
@@ -27,23 +28,29 @@ msgid ""
 "is a useful way to find pages that still need to be written, or links that "
 "are written wrong."
 msgstr ""
+"Tato direktiva generuje seznam nefunkčních odkazů ve wiki. Můžete tak "
+"jednoduše nalézt stránky, které je teprve třeba napsat, nebo odkazy, které "
+"jsou zapsány špatně."
 
 #. type: Plain text
 msgid ""
 "The optional parameter \"pages\" can be a [[ikiwiki/PageSpec]] specifying "
 "the pages to search for broken links, default is search them all."
 msgstr ""
+"Volitelný parametr „pages“ může být [[ikiwiki/PageSpec]] omezující hledání "
+"nefunkčních odkazů pouze na zadané stránky. Ve výchozím nastavení se "
+"prohledávají všechny stránky."
 
 #. type: Plain text
 msgid "Example:"
-msgstr ""
+msgstr "Příklad:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!brokenlinks pages=\"* and !recentchanges\"]]\n"
-msgstr ""
+msgstr "\t\\[[!brokenlinks pages=\"* and !recentchanges\"]]\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"

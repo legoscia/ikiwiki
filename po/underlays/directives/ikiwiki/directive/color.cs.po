@@ -1,76 +1,81 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/color page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:48-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-08-31 10:24+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
 "The `color` directive is supplied by the [[!iki plugins/color desc=color]] "
 "plugin."
 msgstr ""
+"Direktiva `color` je poskytována modulem [[!iki plugins/color desc=color]]."
 
 #. type: Plain text
 msgid ""
 "This directive can be used to color a piece of text on a page.  It can be "
 "used to set the foreground and/or background color of the text."
 msgstr ""
+"Tuto direktivu můžete použít pro obarvení části textu na stránce. Je možné "
+"nastavit barvu popředí i pozadí textu."
 
 #. type: Plain text
 msgid ""
 "You can use a color name (e.g. `white`) or HTML code (e.g. `#ffffff`)  to "
 "define colors."
 msgstr ""
+"Barvy můžete definovat jejich anglickým jménem (např. `white`) nebo HTML "
+"kódem (např. `#ffffff`)."
 
 #. type: Title ##
 #, no-wrap
 msgid "examples"
-msgstr ""
+msgstr "Příklady"
 
 #. type: Plain text
 msgid ""
 "Here the foreground color is defined as a word, while the background color "
 "is defined as a HTML color code:"
-msgstr ""
+msgstr "Zde je barva popředí definována slovně, barva pozadí HTML kódem:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!color foreground=white background=#ff0000 text=\"White text on red background\"]]\n"
-msgstr ""
+msgstr "\t\\[[!color foreground=white background=#ff0000 text=\"Bílý text na červeném pozadí\"]]\n"
 
 #. type: Plain text
 msgid ""
 "The background color is missing, so the text is displayed on default "
 "background:"
-msgstr ""
+msgstr "Zde není uvedena barva pozadí, tudíž se použije výchozí barva pozadí:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!color foreground=white text=\"White text on default color background\"]]\n"
-msgstr ""
+msgstr "\t\\[[!color foreground=white text=\"Bílý text na výchozím pozadí\"]]\n"
 
 #. type: Plain text
 msgid ""
 "The foreground is missing, so the text has the default foreground color:"
 msgstr ""
+"Zde není uvedena barva popředí (textu), tudíž se použije výchozí barva popředí:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!color background=#ff0000 text=\"Default color text on red background\"]]\n"
-msgstr ""
+msgstr "\t\\[[!color background=#ff0000 text=\"Výchozí barva textu na červeném pozadí\"]]\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"

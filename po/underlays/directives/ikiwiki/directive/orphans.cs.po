@@ -1,42 +1,48 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/orphans page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:49-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-09-06 20:21+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
 "The `orphans` directive is supplied by the [[!iki plugins/orphans "
 "desc=orphans]] plugin."
 msgstr ""
+"Direktiva `orphans` je poskytována modulem [[!iki plugins/orphans "
+"desc=orphans]]."
 
 #. type: Plain text
 msgid ""
 "This directive generates a list of possibly orphaned pages -- pages that no "
 "other page links to. Example:"
 msgstr ""
+"Direktiva generuje seznam potenciálně opuštěných stránek -- stránek, na "
+"které neodkazuje žádná jiná stránka. Příklad:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!orphans pages=\"* and !blog/*\"]]\n"
-msgstr ""
+msgstr "\t\\[[!orphans pages=\"* and !blog/*\"]]\n"
 
 #. type: Plain text
 msgid ""
 "The optional parameter \"pages\" can be a [[ikiwiki/PageSpec]] specifying "
 "the pages to check for orphans, default is search them all."
 msgstr ""
+"Volitelný parametr „pages“\" může být [[ikiwiki/PageSpec]] omezující seznam "
+"stránek, ve kterých se mají hledat sirotci. Výchozí nastavení je prohledat "
+"všechny stránky."
 
 #. type: Plain text
 msgid ""
@@ -44,8 +50,11 @@ msgid ""
 "page as linking to it, so will generally count many blog-type pages as "
 "orphans."
 msgstr ""
+"Poznamenejme, že kontrola bere do úvahy zpětné odkazy, ale už ne vkládání "
+"stránek, takže se obvykle mezi sirotky ocitne spousta stránek z blogu či "
+"podobného formátu."
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"

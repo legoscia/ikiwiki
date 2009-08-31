@@ -1,19 +1,18 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/calendar page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:48-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-09-01 10:29+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
@@ -21,32 +20,37 @@ msgid ""
 "desc=calendar]] plugin.  This plugin requires extra setup.  See the plugin "
 "documentation for details."
 msgstr ""
+"Direktiva `calendar` je poskytována modulem [[!iki plugins/calendar "
+"desc=calendar]]. Tento modul vyžaduje speciální nastavení, podrobnosti "
+"naleznete v dokumentaci k modulu."
 
 #. type: Plain text
 msgid ""
 "This directive displays a calendar, similar to the typical calendars shown "
 "on some blogs."
 msgstr ""
+"Tato direktiva zobrazí kalendář podobný typickým kalendářům na některých "
+"blozích."
 
 #. type: Title #
 #, no-wrap
 msgid "examples"
-msgstr ""
+msgstr "Příklady"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!calendar ]]\n"
-msgstr ""
+msgstr "\t\\[[!calendar ]]\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!calendar type=\"month\" pages=\"blog/* and !*/Discussion\"]]\n"
-msgstr ""
+msgstr "\t\\[[!calendar type=\"month\" pages=\"blog/* and !*/Discussion\"]]\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!calendar type=\"year\" year=\"2005\" pages=\"blog/* and !*/Discussion\"]]\n"
-msgstr ""
+msgstr "\t\\[[!calendar type=\"year\" year=\"2005\" pages=\"blog/* and !*/Discussion\"]]\n"
 
 #. type: Plain text
 msgid ""
@@ -54,6 +58,9 @@ msgid ""
 "usually used for blogs. It can produce a calendar for a given month, or a "
 "list of months for a given year."
 msgstr ""
+"Kalendář je v podstatě rozhraní k archivu předchozích stránek používané "
+"obvykle u blogů. Umí vyrobit kalendář zadaného měsíce nebo měsíců v zadaném "
+"roce."
 
 #. type: Plain text
 msgid ""
@@ -64,23 +71,33 @@ msgid ""
 "typically use [[inline]] to display or list pages created in the given time "
 "frame."
 msgstr ""
+"Měsíční formát kalendáře jednoduše odkazuje na stránky vytvořené daný "
+"den měsíce. Roční formát kalendáře se odkazuje na archivní stránky se "
+"jmény jako `archivy/2007` (pro celý rok 2007) a `archivy/2007/01` (pro "
+"leden 2007). Aby to však fungovalo, musíte tyto archivní stránky vytvořit. "
+"Archivní stránky budou pro zobrazení seznamu stránek v daném období nejspíše "
+"používat direktivu [[inline]]."
 
 #. type: Title ##
 #, no-wrap
 msgid "usage"
-msgstr ""
+msgstr "Použití"
 
 #. type: Bullet: '* '
 msgid ""
 "`type` - Used to specify the type of calendar wanted. Can be one of \"month"
 "\" or \"year\". The default is a month view calendar."
 msgstr ""
+"`type` - Určuje typ kalendáře, který se má použít. Může nabývat hodnoty "
+"„month“ nebo „year“. Výchozí je měsíční kalendář."
 
 #. type: Bullet: '* '
 msgid ""
 "`pages` - Specifies the [[ikiwiki/PageSpec]] of pages to link to from the "
 "month calendar. Defaults to \"*\"."
 msgstr ""
+"`pages` - Pomocí [[ikiwiki/PageSpec]] vybírá stránky, na které má měsíční "
+"kalendář odkazovat. Výchozí hodnota je „*“."
 
 #. type: Bullet: '* '
 msgid ""
@@ -88,12 +105,15 @@ msgid ""
 "is \"archives\". Note that this default can also be overridden for the whole "
 "wiki by setting `archivebase` in ikiwiki's setup file."
 msgstr ""
+"`archivebase` - Nastaví počáteční adresář hierarchie archivu. Výchozí je "
+"„archives“. Výchozí hodnotu lze změnit také globálně pro celou wiki "
+"nastavením parametru `archivebase` v konfiguračním souboru ikiwiki."
 
 #. type: Bullet: '* '
 msgid ""
 "`year` - The year for which the calendar is requested. Defaults to the "
 "current year."
-msgstr ""
+msgstr "`year` - Rok, pro který je kalendář vyžadován. Výchozí je aktuální rok."
 
 #. type: Bullet: '* '
 msgid ""
@@ -101,6 +121,9 @@ msgid ""
 "range 1..12. Used only for the month view calendar, and defaults to the "
 "current month."
 msgstr ""
+"`month` - Číselné označení měsíce (v rozsahu 1..12), pro který je kalendář "
+"vyžadován. Používá se pouze při měsíčním pohledu a výchozí hodnotou je "
+"aktuální měsíc."
 
 #. type: Bullet: '* '
 msgid ""
@@ -108,14 +131,19 @@ msgid ""
 "the week that the month calendar starts with. 0 is Sunday, 1 is Monday, and "
 "so on. Defaults to 0, which is Sunday."
 msgstr ""
+"`week_start_day` - Číslo z rozsahu 0..6, které reprezentuje den v týdnu, "
+"kterým má týden začínat. 0 je neděle, 1 je pondělí, atd. Výchozí hodnotou "
+"je 0 (neděle)."
 
 #. type: Bullet: '* '
 msgid ""
 "`months_per_row` - In the annual calendar, number of months to place in each "
 "row. Defaults to 3."
 msgstr ""
+"`months_per_row` - Počet měsíců, které se mají v ročním kalendáři zobrazit "
+"na jednom řádku. Výchozí hodnota je 3."
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"

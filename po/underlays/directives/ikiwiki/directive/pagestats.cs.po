@@ -1,25 +1,26 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/pagestats page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:49-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-09-06 21:09+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
 "The `pagestats` directive is supplied by the [[!iki plugins/pagestats "
 "desc=pagestats]] plugin."
 msgstr ""
+"Direktiva `pagestats` je poskytována modulem [[!iki plugins/pagestats "
+"desc=pagestats]]."
 
 #. type: Plain text
 msgid ""
@@ -27,24 +28,27 @@ msgid ""
 "produce either a tag cloud, or a table counting the number of links to each "
 "page."
 msgstr ""
+"Direktiva umí vytvářet statistiky o tom, jak jsou stránky mezi sebou "
+"pospojovány. Umí vytvořit buď oblak štítků, nebo tabulku zobrazující počet "
+"odkazů na každou stránku."
 
 #. type: Plain text
 msgid "Here's how to use it to create a [[tag]] cloud:"
-msgstr ""
+msgstr "Takto se vytvoří oblak [[štítků|tag]]:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!pagestats pages=\"tags/*\"]]\n"
-msgstr ""
+msgstr "\t\\[[!pagestats pages=\"tags/*\"]]\n"
 
 #. type: Plain text
 msgid "And here's how to create a table of all the pages on the wiki:"
-msgstr ""
+msgstr "A takto tabulka všech stránek ve wiki:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!pagestats style=\"table\"]]\n"
-msgstr ""
+msgstr "\t\\[[!pagestats style=\"table\"]]\n"
 
 #. type: Plain text
 msgid ""
@@ -52,22 +56,25 @@ msgid ""
 "[[ikiwiki/PageSpec]]. For instance, to display a cloud of tags used on blog "
 "entries, you could use:"
 msgstr ""
+"Volitelný parametr `among` omezuje počítání odkazů na stránky, které "
+"vyhovují dané [[ikiwiki/PageSpec]]. Například pro zobrazení oblaku štítků "
+"jako bývá na blozích, můžete použít:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!pagestats pages=\"tags/*\" among=\"blog/posts/*\"]]\n"
-msgstr ""
+msgstr "\t\\[[!pagestats pages=\"tags/*\" among=\"blog/posts/*\"]]\n"
 
 #. type: Plain text
 msgid "or to display a cloud of tags related to Linux, you could use:"
-msgstr ""
+msgstr "nebo pro zobrazení oblaku štítků spojených s Linuxem:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!pagestats pages=\"tags/* and not tags/linux\" among=\"tagged(linux)\"]]\n"
-msgstr ""
+msgstr "\t\\[[!pagestats pages=\"tags/* and not tags/linux\" among=\"tagged(linux)\"]]\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"

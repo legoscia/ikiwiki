@@ -1,29 +1,30 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/progress page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:48-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-09-07 10:19+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
 "The `progress` directive is supplied by the [[!iki plugins/progress "
 "desc=progress]] plugin."
 msgstr ""
+"Direktiva `progress` je poskytována modulem [[!iki plugins/progress "
+"desc=progress]]."
 
 #. type: Plain text
 msgid "This directive generates a progress bar."
-msgstr ""
+msgstr "Tato direktiva zobrazí ukazatel postupu."
 
 #. type: Plain text
 msgid ""
@@ -31,6 +32,9 @@ msgid ""
 "\"percent\" which holds a percentage figure of how complete the progress bar "
 "is."
 msgstr ""
+"Direktiva se dá použít dvěma způsoby. První používá jediný parametr "
+"„percent“, který obsahuje procentní hodnotu toho, jak je ukazatel postupu "
+"„daleko“."
 
 #. type: Plain text
 msgid ""
@@ -38,17 +42,21 @@ msgid ""
 "`totalpages` and `donepages`. The directive counts the number of pages in "
 "each pagespec and shows the percentage of the total pages that are done."
 msgstr ""
+"Druhý způsob vyžaduje dvojici parametrů `totalpages` a `donepages`, což "
+"jsou vlastně [[specifikace stránek|ikiwiki/PageSpec]]. Direktiva spočítá "
+"počet stránek vyhovující oběma spefifikacím a zobrazí, jaké procento "
+"všech stránek (`totalpages`) tvoří hotové stránky (`donepages`)."
 
 #. type: Plain text
 msgid "For example, to show what percentage of pages have discussion pages:"
-msgstr ""
+msgstr "Například můžete zobrazit, jaké procento stránek obsahuje diskusi:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!progress totalpages=\"* and !*/Discussion\" donepages=\"*/Discussion\"]]\n"
-msgstr ""
+msgstr "\t\\[[!progress totalpages=\"* and !*/Discussion\" donepages=\"*/Discussion\"]]\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"

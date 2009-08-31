@@ -1,40 +1,43 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/inline page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:48-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-09-06 12:51+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
 "The `inline` directive is supplied by the [[!iki plugins/inline "
 "desc=inline]] plugin."
 msgstr ""
+"Direktiva `inline` je poskytována modulem [[!iki plugins/inline "
+"desc=inline]]."
 
 #. type: Plain text
 msgid ""
 "This is a directive that allows including one wiki page inside another.  The "
 "most common use of inlining is generating blogs and RSS or Atom feeds."
 msgstr ""
+"Tato direktiva umožňuje vkládat jednu wiki stránku do druhé. Vkládání se "
+"nejčastěji používá pro generování blogů a RSS nebo Atom kanálů."
 
 #. type: Plain text
 msgid "Example:"
-msgstr ""
+msgstr "Příklad:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!inline pages=\"blog/* and !*/Discussion\" show=\"10\" rootpage=\"blog\"]]\n"
-msgstr ""
+msgstr "\t\\[[!inline pages=\"blog/* and !*/Discussion\" show=\"10\" rootpage=\"blog\"]]\n"
 
 #. type: Plain text
 msgid ""
@@ -44,6 +47,12 @@ msgid ""
 "[[PageSpec]], they will be included in the feed using RSS enclosures, which "
 "is useful for podcasting."
 msgstr ""
+"Všechny stránky, které odpovídají zadané [[speficikaci stránek|PageSpec]] "
+"(v příkladu libovolná [[podstránka|SubPage]] adresáře „blog“) budou součástí "
+"blogu a na stránce se zobrazí 10 nejnovějších článků. Pokud zadané "
+"[[speficikaci stránek|PageSpec]] vyhovují soubory, které nejsou stránkami, "
+"budou do kanálu vloženy pomocí RSS elementu enclosure. Toho se dá využít "
+"pro podcasting."
 
 #. type: Plain text
 msgid ""
@@ -51,28 +60,35 @@ msgid ""
 "should default to being [[SubPages|SubPage]] of \"blog\", and enables a form "
 "at the top of the blog that can be used to add new items."
 msgstr ""
+"Volitelný parametr `rootpage` informuje wiki, že nové články tohoto blogu "
+"mají být [[podstránky|SubPage]] stránky „blog“ a také nad blogem aktivuje "
+"formulář, který lze použít pro přidávání nových článků."
 
 #. type: Plain text
 msgid ""
 "If you want your blog to have an archive page listing every post ever made "
 "to it, you can accomplish that like this:"
 msgstr ""
+"Pokud ve svém blogu chcete stránku, která by vypisovala úplně všechny články, "
+"které jste kdy vytvořili, můžete použít:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!inline pages=\"blog/* and !*/Discussion\" archive=\"yes\"]]\n"
-msgstr ""
+msgstr "\t\\[[!inline pages=\"blog/* and !*/Discussion\" archive=\"yes\"]]\n"
 
 #. type: Plain text
 msgid ""
 "You can even create an automatically generated list of all the pages on the "
 "wiki, with the most recently added at the top, like this:"
 msgstr ""
+"Obdobně můžete vytvořit automaticky generovaný seznam všech stránek ve wiki "
+"(nejnovější stránky jsou nahoře):"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!inline pages=\"* and !*/Discussion\" archive=\"yes\"]]\n"
-msgstr ""
+msgstr "\t\\[[!inline pages=\"* and !*/Discussion\" archive=\"yes\"]]\n"
 
 #. type: Plain text
 msgid ""
@@ -81,35 +97,41 @@ msgid ""
 "that represent its tags. Then use the special `link()` [[PageSpec]] to match "
 "all pages that have a given tag:"
 msgstr ""
+"Chcete-li přidávat do blogovacího kanálu stránky na základě štítků, žádný "
+"problém. Pro přidání štítku na stránku jednoduše na stránce vytvořte odkaz "
+"na stránku nebo stránky reprezentující požadované štítky. Poté můžete "
+"vybrat stránky s daným štítkem pomocí speciální \n"
+"[[specifikace stránky|PageSpec]] `link()`:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!inline pages=\"link(life)\"]]\n"
-msgstr ""
+msgstr "\t\\[[!inline pages=\"link(život)\"]]\n"
 
 #. type: Plain text
 msgid "Or include some tags and exclude others:"
-msgstr ""
+msgstr "Nebo vybrat některé štítky a ignorovat jiné:"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!inline pages=\"link(debian) and !link(social)\"]]\n"
-msgstr ""
+msgstr "\t\\[[!inline pages=\"link(debian) and !link(social)\"]]\n"
 
 #. type: Title ##
 #, no-wrap
 msgid "usage"
-msgstr ""
+msgstr "Použití"
 
 #. type: Plain text
 msgid ""
 "There are many parameters you can use with the `inline` directive. These are "
 "the commonly used ones:"
 msgstr ""
+"V direktivě `inline` lze použít mnoho parametrů, tyto jsou nejpoužívanější:"
 
 #. type: Bullet: '* '
 msgid "`pages` - A [[PageSpec]] of the pages to inline."
-msgstr ""
+msgstr "`pages` - [[Specifikace stránek|PageSpec]], které se mají vložit."
 
 #. type: Bullet: '* '
 msgid ""
@@ -117,33 +139,46 @@ msgid ""
 "10, unless archiving, when the default is to show all.  Set to 0 to show all "
 "matching pages."
 msgstr ""
+"`show` - Zadá maximální počet stránek, které se mají vložit. Výchozí hodnota "
+"je 10 (s výjimkou archivování, kdy se implicitně zobrazují všechny stránky). "
+"Pro zobrazení všech stránek odpovídajících specifikaci použijte hodnotu „0“."
 
 #. type: Bullet: '* '
 msgid ""
 "`archive` - If set to \"yes\", only list page titles and some metadata, not "
 "full contents."
 msgstr ""
+"`archive` - Má-li hodnotu „yes“ nezobrazí se celý obsah, ale pouze názvy "
+"stránek a nějaká metadata."
 
 #. type: Bullet: '* '
 msgid ""
 "`description` - Sets the description of the rss feed if one is generated.  "
 "Defaults to the name of the wiki."
 msgstr ""
+"`description` - Pokud se generuje RSS kanál, nastaví jeho popis. Výchozí "
+"hodnotou je název wiki."
 
 #. type: Bullet: '* '
 msgid ""
 "`skip` - Specify a number of pages to skip displaying. Can be useful to "
 "produce a feed that only shows archived pages."
 msgstr ""
+"`skip` - Určuje počet stránek, které se mají přeskočit. Může být užitečné "
+"pro vytvoření kanálu, který zobrazuje pouze archivované stránky."
 
 #. type: Bullet: '* '
 msgid ""
 "`postform` - Set to \"yes\" to enable a form to post new pages to a blog."
 msgstr ""
+"`postform` - Nastavení na „yes“ povolí formulář pro vkládání nových stránek "
+"do blogu."
 
 #. type: Bullet: '* '
 msgid "`postformtext` - Set to specify text that is displayed in a postform."
 msgstr ""
+"`postformtext` - Text, který se má zobrazit ve formuláři pro přidání nového "
+"článku."
 
 #. type: Bullet: '* '
 msgid ""
@@ -151,10 +186,13 @@ msgid ""
 "pages should go, by specifiying the page that they should be a [[SubPage]] "
 "of."
 msgstr ""
+"`rootpage` - Povolí formulář pro přidání nového článku a zároveň určuje, "
+"kam se mají nové stránky ukládat, protože tyto budou [[podstránky|SubPage]] "
+"zadané stránky."
 
 #. type: Plain text
 msgid "Here are some less often needed parameters:"
-msgstr ""
+msgstr "Následují některé méně používané parametry:"
 
 #. type: Bullet: '* '
 msgid ""
@@ -162,6 +200,9 @@ msgid ""
 "for editing and discussion (if they would be shown at the top of the page "
 "itself)."
 msgstr ""
+"`actions` - Má-li hodnotu „yes“, přidá do spodní části vložených stránek "
+"odkazy pro úpravu a diskusi (pokud by byly tyto prvky zobrazeny v záhlaví "
+"samotné stránky)."
 
 #. type: Bullet: '* '
 msgid ""
@@ -169,6 +210,9 @@ msgid ""
 "generate rss feeds by default, set to \"no\" to disable. If the wiki is "
 "configured to `allowrss`, set to \"yes\" to enable."
 msgstr ""
+"`rss` - Povoluje vytváření rss kanálu. Pokud je wiki nastavená, aby vytvářela "
+"rss kanály automaticky, můžete to nastavením na „no“ potlačit. Pokud je "
+"wiki nastavená s hodnotou `allowrss` můžete rss povolit hodnotou „yes“."
 
 #. type: Bullet: '* '
 msgid ""
@@ -176,18 +220,26 @@ msgid ""
 "generate atom feeds by default, set to \"no\" to disable. If the wiki is "
 "configured to `allowatom`, set to \"yes\" to enable."
 msgstr ""
+"`rss` - Povoluje vytváření atom kanálu. Pokud je wiki nastavená, aby "
+"vytvářela atom kanály automaticky, můžete to nastavením na „no“ potlačit. "
+"Pokud je wiki nastavená s hodnotou `allowatom` můžete atom povolit hodnotou "
+"„yes“."
 
 #. type: Bullet: '* '
 msgid ""
 "`feeds` - controls generation of all types of feeds. Set to \"no\" to "
 "disable generating any feeds."
 msgstr ""
+"`feeds` - Řídí vytváření všech typů kanálů. Hodnotou „no“ zakážete vytváření "
+"kanálů."
 
 #. type: Bullet: '* '
 msgid ""
 "`emptyfeeds` - Set to \"no\" to disable generation of empty feeds.  Has no "
 "effect if `rootpage` or `postform` is set."
 msgstr ""
+"`emptyfeeds` - Nastavením na „no“ zakážete vytváření prázdných kanálů. Pokud "
+"je použit parametr `rootpage` nebo `postform`, nedělá nic."
 
 #. type: Bullet: '* '
 msgid ""
@@ -199,6 +251,12 @@ msgid ""
 "still set `archive=yes` if your custom template does not include the page "
 "content."
 msgstr ""
+"`template` - Určuje šablonu, která se má použít pro zobrazení každé vložené "
+"stránky. Implicitně se používá šablona `inlinepage` a pro archivy šablona "
+"`archivepage`. Pro použití jiné šablony nastavte tento parametr na její "
+"název. Například `titlepage`zobrazí pouze názvy článků, `microblog` je "
+"šablona optimalizovaná pro mikroblogování. Jestliže vaše specializovaná "
+"šablona nezobrazuje obsah stránky, měli byste také nastavit `archive=yes`."
 
 #. type: Bullet: '* '
 msgid ""
@@ -206,6 +264,10 @@ msgid ""
 "to \"yes\", the page will be included raw, without additional markup around "
 "it, as if it were a literal part of the source of the inlining page."
 msgstr ""
+"`raw` - Na rozdíl od výchozího chování, kdy se vytváří blog, se při "
+"nastavení raw na „yes“ vloží stránky bez dodatečných dekorací okolo, "
+"taže to vypadá, jako by byly nedělitelnou součástí stránky, do které "
+"jsou vkládány."
 
 #. type: Bullet: '* '
 msgid ""
@@ -216,34 +278,46 @@ msgid ""
 "sort by title with numbers treated as such (\"1 2 9 10 20\" instead of \"1 "
 "10 2 20 9\")."
 msgstr ""
+"`sort` - Určuje řazení vložených stránek. Výchozí je „age“, což řadí "
+"nejnovější stránky jako první. Nastavení „title“ seřadí stránky abecedně "
+"dle názvu a „mtime“ na první místa dosadí stránky, které byly nedávno "
+"změněny. Pokud je nainstalován modul [[!cpan Sort::Naturally]], můžete použít "
+"řazení „title_natural“, které řadí dle názvu, ale čísla jsou řazena přirozeně "
+"„1 2 9 10 20“ místo lexikograficky „1 10 2 20 9“."
 
 #. type: Bullet: '* '
 msgid "`reverse` - If set to \"yes\", causes the sort order to be reversed."
-msgstr ""
+msgstr "`reverse` - Nastavení na hodnotu „yes“ obrátí způsob řazení."
 
 #. type: Bullet: '* '
 msgid ""
 "`feedshow` - Specify the maximum number of matching pages to include in the "
 "rss/atom feeds. The default is the same as the `show` value above."
 msgstr ""
+"`feedshow` - Zadá maximální počet stránek, které se mají zahrnout do "
+"rss/atom kanálů. Výchozí hodnota se bere z parametru `show` výše."
 
 #. type: Bullet: '* '
 msgid ""
 "`feedonly` - Only generate the feed, do not display the pages inline on the "
 "page."
-msgstr ""
+msgstr "`feedonly` - Nezobrazuje vložené stránky, pouze vygeneruje kanál."
 
 #. type: Bullet: '* '
 msgid ""
 "`quick` - Build archives in quick mode, without reading page contents for "
 "metadata. By default, this also turns off generation of any feeds."
 msgstr ""
+"`quick` - Vytvoří archiv v „rychlém“ režimu - ve stránkách nehledá metadata. "
+"Implicitně se tím také vypne generování kanálů."
 
 #. type: Bullet: '* '
 msgid ""
 "`timeformat` - Use this to specify how to display the time or date for pages "
 "in the blog. The format string is passed to the strftime(3) function."
 msgstr ""
+"`timeformat` - Určuje, jak se má v blogu zobrazit datum nebo čas. "
+"Formátovací řetězec se předá funkci strftime(3)."
 
 #. type: Bullet: '* '
 msgid ""
@@ -252,6 +326,9 @@ msgid ""
 "matched by that value are included, but some of those can be excluded by "
 "specifying a tighter [[PageSpec]] here."
 msgstr ""
+"`feedpages` - [[Specifikace stránek|PageSpec]], které se mají vložit do "
+"rss/atom kanálů. Výchozí hodnota se bere z parametru `pages` výše, nicméně "
+"zde můžete definovat přísnější [[PageSpec]] a vyřadit tak některé stránky."
 
 #. type: Bullet: '* '
 msgid ""
@@ -259,6 +336,9 @@ msgid ""
 "the Atom feed will have this as its `<id>`. The default is to use the URL of "
 "the page containing the `inline` directive."
 msgstr ""
+"`guid` - Pokud zde zadáte URI (volitelně s UUID prefixem `urn:uuid:`), "
+"použije ho Atom jako své `<id>`. Ve výchozím nastavení se použije URL "
+"stránky obsahující direktivu `inline`."
 
 #. type: Bullet: '* '
 msgid ""
@@ -268,6 +348,11 @@ msgid ""
 "or `page/feed.rss`. This option is not supported if the wiki is configured "
 "not to use `usedirs`."
 msgstr ""
+"`feedfile` - Slouží pro změnu jména souboru, do kterého se generuje "
+"obsah kanálu, což se hodí, pokud stránka stránka obsahuje více kanálů. "
+"Například „feedfile=denicek“ by vytvořil soubory `stranka/denicek.atom` "
+"a/nebo `stranka/denicek.rss`. Tato volba není dostupná v případě, že "
+"wiki nemá povoleno použití `usedirs`."
 
 #. type: Bullet: '* '
 msgid ""
@@ -277,14 +362,21 @@ msgid ""
 "the `sort` and `pages` parameters cannot be used in conjunction with this "
 "one."
 msgstr ""
+"`pagenames` - Pokud je použito místo `pages`, interpretuje se jako mezerami "
+"oddělený seznam odkazů na stránky, které se mají vložit. Platí zde stejná "
+"[[pravidla vytváření odkazů|SubPage/LinkingRules]] jako u "
+"[[wiki odkazů|ikiwiki/WikiLink]] a jsou vloženy přesně v zadaném pořadí: "
+"parametry `sort` a `pages` nelze použít."
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"
 
 #. type: Plain text
 msgid ""
 "A related directive is the [[ikiwiki/directive/edittemplate]] directive, "
 "which allows default text for a new page to be specified."
 msgstr ""
+"Příbuznou direktivou je direktiva [[ikiwiki/directive/edittemplate]], "
+"která umožňuje definovat výchozí text pro nové stránky."

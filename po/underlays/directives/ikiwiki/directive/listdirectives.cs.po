@@ -1,36 +1,37 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/listdirectives page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:49-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-09-06 13:44+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
 "The `listdirectives` directive is supplied by the [[!iki plugins/"
 "listdirectives desc=listdirectives]] plugin."
 msgstr ""
+"Direktiva `listdirectives` je poskytována modulem [[!iki plugins/"
+"listdirectives desc=listdirectives]]."
 
 #. type: Plain text
 msgid ""
 "This directive generates a list of available [[directives|ikiwiki/"
 "directive]]."
-msgstr ""
+msgstr "Direktiva generuje seznam dostupných [[direktiv|ikiwiki/directive]]."
 
 #. type: Plain text
 #, no-wrap
 msgid "\t\\[[!listdirectives]]\n"
-msgstr ""
+msgstr "\t\\[[!listdirectives]]\n"
 
 #. type: Plain text
 msgid ""
@@ -41,19 +42,27 @@ msgid ""
 "directives generated in turn by the `shortcut` directive.  They will only be "
 "listed if the `generated` argument is supplied."
 msgstr ""
+"Direktiva `listdirectives` standardně vypíše seznam všech zabudovaných "
+"direktiv a direktiv registrovaných přímo moduly. Volitelný argument "
+"`generated` způsobí, že se vypíší také direktivy vytvořené později. "
+"Například všechny [[zkratky|shortcuts]] jsou vlastně direktivy generované "
+"direktivou `shortcut` a proto se zobrazí jenom po zadání argumentu "
+"`generated`."
 
 #. type: Plain text
 #, no-wrap
 msgid "    \\[[!listdirectives generated]]\n"
-msgstr ""
+msgstr "    \\[[!listdirectives generated]]\n"
 
 #. type: Plain text
 msgid ""
 "This extended list is often quite long, and often contains many undocumented "
 "directives."
 msgstr ""
+"Rozšířený seznam může být docela dlouhý a často obsahuje mnoho "
+"nedokumentovaných direktiv."
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"

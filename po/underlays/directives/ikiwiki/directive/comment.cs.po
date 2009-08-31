@@ -1,19 +1,18 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/comment page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:48-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-08-31 11:15+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
@@ -22,10 +21,14 @@ msgid ""
 "the directive is the only thing on a comment page, and is filled out by the "
 "comment plugin when a user posts a comment."
 msgstr ""
+"Direktiva `comment` je poskytována modulem [[!iki plugins/comments "
+"desc=comments]] a používá se pro přidání komentáře ke stránce. Typicky bývá "
+"tato direktiva jediná věc na stránce s komentáři a je vyplněna komentářovým "
+"modulem v případě, že uživatel zašle komentář."
 
 #. type: Plain text
 msgid "Example:"
-msgstr ""
+msgstr "Příklad:"
 
 #. type: Plain text
 #, no-wrap
@@ -36,6 +39,11 @@ msgid ""
 "\tdate=\"2009-06-02T19:05:01Z\"\n"
 "\tcontent=\"\"\"\n"
 msgstr ""
+"\t\\[[!comment format=mdwn\n"
+"\tusername=\"Kdosi\"\n"
+"\tsubject=\"Cokoliv\"\n"
+"\tdate=\"2009-06-02T19:05:01Z\"\n"
+"\tcontent=\"\"\"\n"
 
 #. type: Plain text
 #, no-wrap
@@ -43,22 +51,26 @@ msgid ""
 "\tBlah blah.\n"
 "\t\"\"\"\n"
 msgstr ""
+"\tBlá, blá, blá.\n"
+"\t\"\"\"\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "\t]]\n"
-msgstr ""
+msgstr "\t]]\n"
 
 #. type: Title ##
 #, no-wrap
 msgid "usage"
-msgstr ""
+msgstr "Použití"
 
 #. type: Plain text
 msgid ""
 "The only required parameter is `content`, the others just add or override "
 "metadata of the comment."
 msgstr ""
+"Jediným vyžadovaným parametrem je `content`, ostatní parametry pouze "
+"přidávají nebo přepisují metadata komentáře."
 
 #. type: Bullet: '* '
 msgid ""
@@ -66,40 +78,51 @@ msgid ""
 "directive]] may not be allowed, depending on the configuration of the "
 "comment plugin."
 msgstr ""
+"`content` - Text, který se má zobrazit jako komentář. V závislosti na "
+"nastavení komentářového modulu nemusí být [[direktivy|ikiwiki/directive]] "
+"povoleny."
 
 #. type: Bullet: '* '
 msgid "`format` - Specifies the markup used for the content."
-msgstr ""
+msgstr "`format` - Určuje značkovací jazyk použitý pro obsah komentáře."
 
 #. type: Bullet: '* '
 msgid "`subject` - Subject for the comment."
-msgstr ""
+msgstr "`subject` - Název komentáře."
 
 #. type: Bullet: '* '
 msgid ""
 "`date` - Date the comment was posted. Can be entered in nearly any format, "
 "since it's parsed by [[!cpan TimeDate]]"
 msgstr ""
+"`date` - Datum odeslání komentáře. Může být zadán v téměř libovolném formátu, "
+"protože je zpracován modulem [[!cpan TimeDate]]."
 
 #. type: Bullet: '* '
 msgid ""
 "`username` - Used to record the username (or OpenID)  of a logged in "
 "commenter."
 msgstr ""
+"`username` - Používá se pro uchování uživatelského jména (nebo OpenID) "
+"přihlášeného autora komentáře."
 
 #. type: Bullet: '* '
 msgid ""
 "`ip` - Can be used to record the IP address of a commenter, if they posted "
 "anonymously."
 msgstr ""
+"`ip` - Lze použít pro uchování IP adresy autora komentáře (např. pokud "
+"komentují anonymně)."
 
 #. type: Bullet: '* '
 msgid ""
 "`claimedauthor` - Records the name that the user entered, if anonmous "
 "commenters are allowed to enter their (unverified)  name."
 msgstr ""
+"`claimedauthor` - Uchová jméno, které uživatel zadal v případě, že je "
+"anonymním komentátorům umožněno zadat jejich (neověřené) jméno."
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"

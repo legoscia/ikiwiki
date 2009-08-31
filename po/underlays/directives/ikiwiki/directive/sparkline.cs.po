@@ -1,25 +1,26 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation of directives/sparkline page for ikiwiki.
+# Copyright (C) 2009 Miroslav Kure <kurem@debian.cz>
+# This file is distributed under the same license as the ikiwiki package.
+# Miroslav Kure <kurem@debian.cz>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki/directives\n"
 "POT-Creation-Date: 2009-08-28 02:49-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-09-07 19:09+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. type: Plain text
 msgid ""
 "The `sparkline` directive is supplied by the [[!iki plugins/sparkline "
 "desc=sparkline]] plugin."
 msgstr ""
+"Direktiva `sparkline` je poskytována modulem [[!iki plugins/sparkline "
+"desc=sparkline]]."
 
 #. type: Plain text
 msgid ""
@@ -27,11 +28,14 @@ msgid ""
 "is a small word-size graphic chart, that is designed to be displayes "
 "alongside text."
 msgstr ""
+"Tato direktiva možňuje do wiki vložit sparkline (minigrafy). Sparkline je "
+"malý graf nepřevyšující velikost písma, který je uzpůsoben vložení přímo "
+"do textu"
 
 #. type: Title #
 #, no-wrap
 msgid "examples"
-msgstr ""
+msgstr "Příklady"
 
 #. type: Plain text
 #, no-wrap
@@ -39,6 +43,8 @@ msgid ""
 "\t\\[[!sparkline 1 3 5 -3 10 0 width=40 height=16\n"
 "\tfeaturepoint=\"4,-3,red,3\" featurepoint=\"5,10,green,3\"]]\n"
 msgstr ""
+"\t\\[[!sparkline 1 3 5 -3 10 0 width=40 height=16\n"
+"\tfeaturepoint=\"4,-3,red,3\" featurepoint=\"5,10,green,3\"]]\n"
 
 #. type: Plain text
 msgid ""
@@ -46,6 +52,9 @@ msgid ""
 "40 pixels wide and 16 pixels high. The high point in the line has a green "
 "marker, and the low point has a red marker."
 msgstr ""
+"Toto vytvoří jednoduchý čárový graf zobrazující několik bodů. Rozměry jsou "
+"40 pixelů na šířku a 16 pixelů na výšku. Nejvyšší bod je označen zelenou "
+"značkou, nejnižší červenou."
 
 #. type: Plain text
 #, no-wrap
@@ -53,6 +62,8 @@ msgid ""
 "\t\\[[!sparkline 1 -1(red) 1 -1(red) 1 1 1 -1(red) -1(red) style=bar barwidth=2\n"
 "\tbarspacing=1 height=13]]\n"
 msgstr ""
+"\t\\[[!sparkline 1 -1(red) 1 -1(red) 1 1 1 -1(red) -1(red) style=bar barwidth=2\n"
+"\tbarspacing=1 height=13]]\n"
 
 #. type: Plain text
 msgid ""
@@ -61,17 +72,23 @@ msgid ""
 "determined automatically for bar graphs. The points with negative values are "
 "colored red, instead of the default black."
 msgstr ""
+"Tento komplexnější příklad generuje sloupcový graf. Sloupce jsou široké "
+"2 pixely a oddělené jednopixelovou mezerou. Šířka sloupcových grafů je "
+"vypočítána automaticky, na výšku má graf 13 pixelů. Body se zápornými "
+"hodnotami jsou obarveny červeně namísto výchozí černé."
 
 #. type: Title #
 #, no-wrap
 msgid "usage"
-msgstr ""
+msgstr "Použití"
 
 #. type: Plain text
 msgid ""
 "The form for the data points is \"x,y\", or just \"y\" if the x values don't "
 "matter. Bar graphs can also add \"(color)\" to specify a color for that bar."
 msgstr ""
+"Datové body mají formát „x,y“, případně jenom „y“, pokud na hodnotách x "
+"nezáleží. Sloupcové grafy mohou navíc změnit barvu sloupce přidáním „(barva)“."
 
 #. type: Plain text
 msgid ""
@@ -79,28 +96,32 @@ msgid ""
 "those used by the underlying sparkline library, which is documented in more "
 "detail in [its wiki](http://sparkline.wikispaces.com/usage)."
 msgstr ""
+"Rozpoznány jsou následující parametry. Většina z nich je shodná s parametry "
+"používanými v knihovně sparkline, která je podrobně zdokumentována v "
+"[její wiki](http://sparkline.wikispaces.com/usage)."
 
 #. type: Bullet: '* '
 msgid "`style` - Either \"line\" (the default) or \"bar\"."
-msgstr ""
+msgstr "`style` - Buď „line“ (čárový, výchozí) nebo „bar“ (sloupcový)."
 
 #. type: Bullet: '* '
 msgid "`width` - Width of the graph in pixels. Only needed for line graphs."
-msgstr ""
+msgstr "`width` - Šířka grafu v pixelech. Vyžadováno pouze u čárových grafů."
 
 #. type: Bullet: '* '
 msgid "`height` - Height of the graph in pixels. Defaults to 16."
-msgstr ""
+msgstr "`height` - Výška grafu v pixelech. Výchozí hodnota je 16."
 
 #. type: Bullet: '* '
 msgid "`barwidth` - Width of bars in a bar graph. Default is 1 pixel."
 msgstr ""
+"`barwidth` - Šířka sloupců u sloupcového grafu. Výchozí hodnota je 1 pixel."
 
 #. type: Bullet: '* '
 msgid ""
 "`barspacing` - Spacing between bars in a bar graph, in pixels. Default is 1 "
 "pixel."
-msgstr ""
+msgstr "`barspacing` - Mezery mezi sloupci ve sloupcovém grafu. Výchozí je 1 pixel."
 
 #. type: Bullet: '* '
 msgid ""
@@ -108,12 +129,17 @@ msgid ""
 "calculated automatically, but can be explicitly specified to get the same "
 "values for multiple related graphs."
 msgstr ""
+"`ymin`, `ymax` - Minimální a maximální hodnoty osy Y. Obvykle se počítají "
+"automaticky, ale pokud máte třeba několik podobných grafů, můžete je chtít "
+"zadat ve všech grafech stejné."
 
 #. type: Bullet: '* '
 msgid ""
 "`featurepoint` - Adds a circular marker to a line graph, with optional text. "
 "This can be used to label significant points."
 msgstr ""
+"`featurepoint` - Do čárového grafu přidá kruhovou značku s volitelným textem. "
+"Můžete tak označit a pojmenovat význačné body."
 
 #. type: Plain text
 #, no-wrap
@@ -122,15 +148,18 @@ msgid ""
 "  point: X value, Y value, color name, circle diameter, text (optional),\n"
 "  and text location (optional). Example: `featurepoint=\"3,5,blue,3\"`\n"
 msgstr ""
+"  Hodnotou je čárkami oddělený seznam parametrů definující význačný bod:\n"
+"  hodnota X, hodnota Y, název barvy, průměr kružnice, text (volitelný) a\n"
+"  umístění textu (volitelné). Příklad: `featurepoint=\"3,5,blue,3\"`\n"
 
 #. type: Plain text
 #, no-wrap
 msgid ""
 "  Available values for the text location are: \"top\", \"right\", \"bottom\", and\n"
 "  \"left\".\n"
-msgstr ""
+msgstr "  Možná umístění textu jsou: „top“, „right“, „bottom“ a „left“.\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"
