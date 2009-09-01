@@ -27,6 +27,9 @@ msgid ""
 "then=\"This wiki has searching **enabled**.\"\n"
 "else=\"This wiki has searching **disabled**.\"]]\n"
 msgstr ""
+"[[!if test=\"enabled(search)\"\n"
+"then=\"Esta wiki tiene la búsqueda **habilitada**.\"\n"
+"else=\"Esta wiki tiene la búsqueda **deshabilitada**.\"]]\n"
 
 #. type: Plain text
 msgid ""
@@ -34,37 +37,46 @@ msgid ""
 "you'd expect. There are a few special things you can do to construct more "
 "powerful searches."
 msgstr ""
+"Si la búsqueda está habilitada, puedes introducir el texto a buscar en el campo de búsqueda, tal "
+"y como cabría esperar. Hay además algunas reglas que puedes usar para construir búsquedas más "
+"sofisticadas."
 
 #. type: Bullet: '* '
 msgid "To match a phrase, enclose it in double quotes."
-msgstr ""
+msgstr "Para buscar una frase exacta, ponla entre comillas dobles."
 
 #. type: Bullet: '* '
 msgid "`AND` can be used to search for documents containing two expressions."
-msgstr ""
+msgstr "`AND` se puede usar para buscar documentos que contengan dos expresiones."
 
 #. type: Bullet: '* '
 msgid ""
 "`OR` can be used to search for documents containing either one of two "
 "expressions."
 msgstr ""
+"`OR` se puede usar para buscar documentos que contengan cualquiera de las dos "
+"expresiones."
 
 #. type: Bullet: '* '
 msgid ""
 "Parentheses can be used to build up complicated search expressions. For "
 "example, \"(foo AND bar) OR (me AND you)\""
 msgstr ""
+"Los paréntesis se pueden usar para construir expresiones de búsqueda más complicadas. Por "
+"ejemplo, \"(foo AND bar) OR (me AND you)\""
 
 #. type: Bullet: '* '
 msgid ""
 "Prefix a search term with \"-\" to avoid it from appearing in the results.  "
 "For example, \"-discussion\" will omit \"discussion\"."
 msgstr ""
+"Pon \"-\" antes de un término de búsqueda para evitar que aparezca en los resultados.  "
+"Por ejemplo, \"-discussion\" omitirá \"discussion\"."
 
 #. type: Bullet: '* '
 msgid "To search for a page with a given title, use \"title:foo\"."
-msgstr ""
+msgstr "Para buscar una página con un determinado título, usa \"title:foo\"."
 
 #. type: Bullet: '* '
 msgid "To search for pages that contain a \"bar\" link, use \"link:bar\"."
-msgstr ""
+msgstr "Para buscar páginas que contengan un enlace a \"bar\", usa \"link:bar\"."
