@@ -62,7 +62,7 @@ msgid ""
 "The regular [[ikiwiki/PageSpec]] syntax is expanded with the following "
 "additional tests:"
 msgstr ""
-"La sintaxis normal de [[ikiwiki/PageSpec]] se amplía con los tests adicionales "
+"La sintaxis normal de [[ikiwiki/PageSpec]] se amplía con las comprobaciones adicionales "
 "siguientes:"
 
 #. type: Bullet: '* '
@@ -101,9 +101,9 @@ msgid ""
 "  use `!ispage()` ; if you only want to allow wiki pages to be uploaded\n"
 "  as attachments, use `ispage()`.\n"
 msgstr ""
-"Así, si no quiere permitir que se envíen páginas wiki como archivos adjuntos,\n"
-"utilice `!ispage()` ; si sólo quiere permitir el envío de páginas wiki como \n"
-"archivos adjuntos, utilice `ispage()`.\n"
+"  Así, si no quiere permitir que se envíen páginas wiki como archivos adjuntos,\n"
+"  utilice `!ispage()` ; si sólo quiere permitir el envío de páginas wiki como \n"
+"  archivos adjuntos, utilice `ispage()`.\n"
 
 #. type: Bullet: '* '
 msgid ""
