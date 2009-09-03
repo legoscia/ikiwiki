@@ -45,5 +45,7 @@ msgstr ""
 
 #. type: Plain text
 msgid "Linking to and from a SubPage is explained in [[LinkingRules]]."
-msgstr "La creación de un enlace a y desde una subpágina se explica en [[Reglas para la creación de enlaces|LinkingRules]]."
+msgstr ""
+"La creación de un enlace a y desde una subpágina se explica en [[LinkingRules]] "
+"(Reglas para la creación de enlaces)."
 
