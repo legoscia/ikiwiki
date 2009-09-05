@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki\n"
 "POT-Creation-Date: 2009-08-15 18:30-0300\n"
-"PO-Revision-Date: 2009-08-31 17:59+0200\n"
+"PO-Revision-Date: 2009-09-05 08:43+0200\n"
 "Last-Translator: Philippe Batailler <philippe.batailler@free.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -96,17 +96,13 @@ msgstr ""
 #. type: Bullet: '* '
 msgid ""
 "`name` - A name for the feed. Each feed must have a unique name.  Required."
-msgstr ""
-"`name` - Le nom du flux. Chaque flux doit avoir un nom unique. Paramètre "
-"nécessaire."
+msgstr "`name` - Le nom du flux. Chaque flux doit avoir un nom unique. Paramètre obligatoire."
 
 #. type: Bullet: '* '
 msgid ""
 "`url` - The url to the web page for the feed that's being aggregated.  "
 "Required."
-msgstr ""
-"`url` - L'URL de la page web contenant le flux assemblé. Paramètre "
-"nécessaire."
+msgstr "`url` - L'URL de la page web contenant le flux assemblé. Paramètre obligatoire."
 
 #. type: Bullet: '* '
 msgid ""
@@ -138,10 +134,7 @@ msgstr ""
 msgid ""
 "`expireage` - Expire old items from this feed if they are older than a "
 "specified number of days. Default is to never expire on age."
-msgstr ""
-"`expireage` -  Éliminer les anciens messages du flux si leur ancienneté est "
-"plus grande qu'un nombre donné de jours. Par défaut, aucune élimination ne "
-"se fait sur l'ancienneté."
+msgstr "`expireage` -  Éliminer les anciens messages du flux si leur ancienneté est plus grande qu'un nombre de jours donné. Par défaut, aucune élimination ne se fait sur l'ancienneté."
 
 #. type: Bullet: '* '
 msgid ""
@@ -176,10 +169,7 @@ msgid ""
 "Note that even if you are using subversion or another revision control "
 "system, pages created by aggregation will *not* be checked into revision "
 "control."
-msgstr ""
-"Notez que même si vous utilisez subversion ou un autre système, les pages "
-"créées par assemblage *ne* seront *pas* prises en compte par le système de "
-"contrôle de versions."
+msgstr "Notez que même si vous utilisez subversion ou un autre système de versionnement, les pages créées par assemblage *ne* seront *pas* prises en compte par le système de contrôle de versions."
 
 #. type: Plain text
 #, no-wrap

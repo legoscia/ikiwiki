@@ -1,31 +1,33 @@
-# SOME DESCRIPTIVE TITLE
-# Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Traduction de ikiwiki
+# Copyright (C)2009 Debian French l10n team <debian-l10n-french@lists.debian.org>
+# This file is distributed under the same license as the PACKAGE Ikiwiki.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ikiwiki\n"
 "POT-Creation-Date: 2009-08-15 18:30-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2009-09-05 09:47+0200\n"
+"Last-Translator:  Philippe Batailler <philippe.batailler@free.fr>\n"
+"Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8bits\n"
 
 #. type: Plain text
 msgid ""
 "The `meta` directive is supplied by the [[!iki plugins/meta desc=meta]] "
 "plugin."
 msgstr ""
+"La directive `meta` est fournie par le module d'extension [[!iki plugins/"
+"meta desc=meta]]."
 
 #. type: Plain text
 msgid ""
 "This directive allows inserting arbitrary metadata into the source of a "
 "page.  Enter the metadata as follows:"
 msgstr ""
+"Cette directive permet l'insertion de métadonnées quelconques dans la source "
+"d'une page. Voici comment procéder : "
 
 #. type: Plain text
 #, no-wrap
@@ -33,33 +35,39 @@ msgid ""
 "\t\\[[!meta field=\"value\"]]\n"
 "\t\\[[!meta field=\"value\" param=\"value\" param=\"value\"]]\n"
 msgstr ""
+"\t\\[[!meta field=\"valeur\"]]\n"
+"\t\\[[!meta field=\"valeur\" param=\"valeur\" param=\"valeur\"]]\n"
 
 #. type: Plain text
 msgid ""
 "The first form sets a given field to a given value, while the second form "
 "also specifies some additional sub-parameters."
 msgstr ""
+"La première expression donne une valeur à un champ, tandis que la seconde "
+"définit également des sous-paramètres."
 
 #. type: Plain text
 msgid ""
 "The field values are treated as HTML entity-escaped text, so you can include "
 "a quote in the text by writing `&quot;` and so on."
 msgstr ""
+"La valeur d'un champ est traitée comme du texte codé en HTML. Vous pouvez "
+"inclure un guillemet en écrivant `&quot;` par exemple. "
 
 #. type: Plain text
 msgid "Supported fields:"
-msgstr ""
+msgstr "Champs reconnus :"
 
 #. type: Bullet: '* '
 msgid "title"
-msgstr ""
+msgstr "title"
 
 #. type: Plain text
 #, no-wrap
 msgid ""
 "  Overrides the title of the page, which is generally the same as the\n"
 "  page name.\n"
-msgstr ""
+msgstr "La valeur de ce champ remplace le titre d'une page, qui est en général le nom de la page.\n"
 
 #. type: Plain text
 #, no-wrap
@@ -67,84 +75,84 @@ msgid ""
 "  Note that if the title is overridden, a \"title_overridden\" variable will\n"
 "  be set to a true value in the template; this can be used to format things\n"
 "  differently in this case.\n"
-msgstr ""
+msgstr "Si le titre est remplacé, une variable « title_overridden » est définie avec une valeur *true* dans le modèle de page. On peut se servir de cette variable pour formater le texte différemment.\n"
 
 #. type: Bullet: '* '
 msgid "license"
-msgstr ""
+msgstr "license"
 
 #. type: Plain text
 #, no-wrap
 msgid ""
 "  Specifies a license for the page, for example, \"GPL\". Can contain\n"
 "  WikiLinks and arbitrary markup.\n"
-msgstr ""
+msgstr "Indique la license de la page, par exemple « GPL ». Peut contenir des WikiLinks et des balises quelconques.\n"
 
 #. type: Bullet: '* '
 msgid "copyright"
-msgstr ""
+msgstr "copyright"
 
 #. type: Plain text
 #, no-wrap
 msgid ""
 "  Specifies the copyright of the page, for example, \"Copyright 2007 by\n"
 "  Joey Hess\". Can contain WikiLinks and arbitrary markup.\n"
-msgstr ""
+msgstr "Indique le copyright de la page, par exemple « Copyright 2007 by Joey Hess ». Peut contenir des WikiLinks et des balises quelconques.\n"
 
 #. type: Bullet: '* '
 msgid "author"
-msgstr ""
+msgstr "author"
 
 #. type: Plain text
 #, no-wrap
 msgid "  Specifies the author of a page.\n"
-msgstr ""
+msgstr "L'auteur de la page.\n"
 
 #. type: Bullet: '* '
 msgid "authorurl"
-msgstr ""
+msgstr "authorurl"
 
 #. type: Plain text
 #, no-wrap
 msgid "  Specifies an url for the author of a page.\n"
-msgstr ""
+msgstr "Indique une URL pour l'auteur de la page.\n"
 
 #. type: Bullet: '* '
 msgid "description"
-msgstr ""
+msgstr "description"
 
 #. type: Plain text
 #, no-wrap
 msgid ""
 "  Specifies a \"description\" of the page. You could use this to provide\n"
 "  a summary, for example, to be picked up by the [[map]] directive.\n"
-msgstr ""
+msgstr "Donne une « description » de la page. On peut s'en servir pour donner un résumé, qui sera utilisé par la directive [[map]]\n"
 
 #. type: Bullet: '* '
 msgid "permalink"
-msgstr ""
+msgstr "permalink"
 
 #. type: Plain text
 #, no-wrap
 msgid ""
 "  Specifies a permanent link to the page, if different than the page\n"
 "  generated by ikiwiki.\n"
-msgstr ""
+msgstr "Indique un lien permanent vers la page, si différent de la page créée par ikiwiki.\n"
 
 #. type: Bullet: '* '
 msgid "date"
-msgstr ""
+msgstr "date"
 
 #. type: Plain text
 #, no-wrap
 msgid ""
 "  Specifies the creation date of the page. The date can be entered in\n"
 "  nearly any format, since it's parsed by [[!cpan TimeDate]].\n"
-msgstr ""
+msgstr "Indique la date de création de la page. Tous les formats de date sont reconnus, puisque la valeur de ce champ est analysée par [[!cpan TimeDate]].\n"
 
 #. type: Bullet: '* '
 msgid "stylesheet"
-msgstr ""
+msgstr "stylesheet"
 
 #. type: Plain text
 #, no-wrap
@@ -152,7 +160,7 @@ msgid ""
 "  Adds a stylesheet to a page. The stylesheet is treated as a wiki link to\n"
 "  a `.css` file in the wiki, so it cannot be used to add links to external\n"
 "  stylesheets. Example:\n"
-msgstr ""
+msgstr "Ajoute une feuille de style à la page. La feuille de style est traitée comme un lien wiki vers un fichier `.css` dans le wiki. On ne peut donc pas ajouter de liens vers des feuilles de style externes. Par exemple :\n"
 
 #. type: Plain text
 #, no-wrap
@@ -160,24 +168,26 @@ msgid ""
 "\t\\[[!meta stylesheet=somestyle rel=\"alternate stylesheet\"\n"
 "\ttitle=\"somestyle\"]]\n"
 msgstr ""
+"\t\\[[!meta stylesheet=somestyle rel=\"alternate stylesheet\"\n"
+"\ttitle=\"somestyle\"]]\n"
 
 #. type: Bullet: '* '
 msgid "openid"
-msgstr ""
+msgstr "openid"
 
 #. type: Plain text
 #, no-wrap
 msgid ""
 "  Adds html &lt;link&gt; tags to perform OpenID delegation to an external\n"
 "  OpenID server. This lets you use an ikiwiki page as your OpenID.\n"
-msgstr ""
+msgstr "Ajoute des balises HTML &lt;link&gt; pour réaliser une délégation OpenID à un serveur OpenID externe. Cela permet d'utiliser une page de wiki comme votre identifiant OpenID.\n"
 
 #. type: Plain text
 #, no-wrap
 msgid ""
 "  By default this will delegate for both `openid` and `openid2`. To only\n"
 "  delegate for one, add a parameter such as `delegate=openid`.\n"
-msgstr ""
+msgstr "Par défaut la délégation se fera pour `openid` et `openid2`. Pour n'en choisir qu'un, ajoutez par exemple ce paramètre : `delegate=openid`.\n"
 
 #. type: Plain text
 #, no-wrap
@@ -185,12 +195,12 @@ msgid ""
 "  An optional `xrds-location`\n"
 "  parameter lets you specify the location of any [eXtensible Resource\n"
 "  DescriptorS](http://www.windley.com/archives/2007/05/using_xrds.shtml).\n"
-msgstr ""
+msgstr "Un paramètre facultatif `xrds-location` permet de d'indiquer l'adresse de tout [eXtensible Resource DescriptorS](http://www.windley.com/archives/2007/05/using_xrds.shtml).\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  Example:\n"
-msgstr ""
+msgstr "Exemple :\n"
 
 #. type: Plain text
 #, no-wrap
@@ -199,10 +209,13 @@ msgid ""
 "\tserver=\"http://www.myopenid.com/server\"\n"
 "\txrds-location=\"http://www.myopenid.com/xrds?username=joeyh.myopenid.com\"\"]]\n"
 msgstr ""
+"\t\\\\[[!meta openid=\"http://joeyh.myopenid.com/\"\n"
+"\tserver=\"http://www.myopenid.com/server\"\n"
+"\txrds-location=\"http://www.myopenid.com/xrds?username=joeyh.myopenid.com\"\"]]\n"
 
 #. type: Bullet: '* '
 msgid "link"
-msgstr ""
+msgstr "link"
 
 #. type: Plain text
 #, no-wrap
@@ -210,22 +223,22 @@ msgid ""
 "  Specifies a link to another page. This can be used as a way to make the\n"
 "  wiki treat one page as linking to another without displaying a user-visible\n"
 "  [[ikiwiki/WikiLink]]:\n"
-msgstr ""
+msgstr "Indique un lien vers une autre page. C'est une façon de lier deux pages sans afficher un [[ikiwiki/WikiLink]] qui serait visible par l'utilisateur :\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "       \\[[!meta link=otherpage]]\n"
-msgstr ""
+msgstr "       \\[[!meta link=otherpage]]\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  It can also be used to insert a html &lt;link&gt; tag. For example:\n"
-msgstr ""
+msgstr "On peut aussi s'en servir pour insérer une balise HTML &lt;link&gt;. Par exempl :\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "       \\[[!meta link=\"http://joeyh.myopenid.com/\" rel=\"openid.delegate\"]]\n"
-msgstr ""
+msgstr "       \\[[!meta link=\"http://joeyh.myopenid.com/\" rel=\"openid.delegate\"]]\n"
 
 #. type: Plain text
 #, no-wrap
@@ -233,59 +246,59 @@ msgid ""
 "  However, this latter syntax won't be allowed if the \n"
 "  [[!iki plugins/htmlscrubber desc=htmlscrubber]] plugin is enabled, since it can be used to\n"
 "  insert unsafe content.\n"
-msgstr ""
+msgstr "Cependant cette expression ne sera pas permise si le greffon [[!iki plugins/htmlscrubber desc=htmlscrubber]] est activé, car il permet d'insérer des contenus incertains.\n"
 
 #. type: Bullet: '* '
 msgid "redir"
-msgstr ""
+msgstr "redir"
 
 #. type: Plain text
 #, no-wrap
 msgid "  Causes the page to redirect to another page in the wiki.\n"
-msgstr ""
+msgstr "Rend possible la redirection d'une page vers une autre dans le wiki.\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  \t\\[[!meta redir=otherpage]]\n"
-msgstr ""
+msgstr "  \t\\[[!meta redir=otherpage]]\n"
 
 #. type: Plain text
 #, no-wrap
 msgid ""
 "  Optionally, a delay (in seconds) can be specified. The default is to\n"
 "  redirect without delay.\n"
-msgstr ""
+msgstr "Un délai (en seconde) peut être indiqué. Par défaut, il n'y a pas de délai.\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  It can also be used to redirect to an external url. For example:\n"
-msgstr ""
+msgstr "Une redirection vers une URL externe est aussi possible. Par exemple :\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  \t\\[[!meta redir=\"http://example.com/\"]]\n"
-msgstr ""
+msgstr "  \t\\[[!meta redir=\"http://example.com/\"]]\n"
 
 #. type: Plain text
 #, no-wrap
 msgid ""
 "  For both cases, an anchor to jump to inside the destination page may also be\n"
 "  specified using the common `#ANCHOR` syntax.\n"
-msgstr ""
+msgstr "Dans les deux cas, on peut indiquer une ancre à l'intérieur de la page visée, avec la syntaxe habituelle `#ANCHOR`.\n"
 
 #. type: Bullet: '* '
 msgid "robots"
-msgstr ""
+msgstr "robots"
 
 #. type: Plain text
 #, no-wrap
 msgid "  Causes the robots meta tag to be written:\n"
-msgstr ""
+msgstr "Permet l'écriture de l'étiquette robots :\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "        \\[[!meta robots=\"index, nofollow\"]]\n"
-msgstr ""
+msgstr "        \\[[!meta robots=\"index, nofollow\"]]\n"
 
 #. type: Plain text
 #, no-wrap
@@ -294,16 +307,16 @@ msgid ""
 "  \"nofollow\". Multiple comma-separated values are allowed, but obviously only\n"
 "  some combinations make sense. If there is no robots meta tag, \"index,\n"
 "  follow\" is used as the default.\n"
-msgstr ""
+msgstr "L'attribut peut prendre les valeurs suivantes : \"index\", \"noindex\", \"follow\" et \"nofollow\". On peut indiquer plusieurs valeurs, séparées par une virgule. Seules quelques combinaisons cependant ont du sens. Si l'étiquette robots n'existe pas, \"index, follow\" est utilisée par défaut.\n"
 
 #. type: Plain text
 #, no-wrap
 msgid "  The value is escaped, but its contents are not otherwise checked.\n"
-msgstr ""
+msgstr "La valeur est codée mais son contenu n'est pas vérifié.\n"
 
 #. type: Bullet: '* '
 msgid "guid"
-msgstr ""
+msgstr "guid"
 
 #. type: Plain text
 #, no-wrap
@@ -313,7 +326,7 @@ msgid ""
 "  [[!rfc 4122]]), and it will be used to identify the page's entry in RSS\n"
 "  and Atom feeds. If not given, the default is to use the page's URL as its\n"
 "  guid.\n"
-msgstr ""
+msgstr "Indique l'identificateur unique (*GUID*) d'une page. Cet identificateur doit être un URI, en particuler, il peut être de la forme `urn:uuid:` suivi d'un UUID, comme indique dans le [[!rfc 4122]]). Il permet l'identification d'une page pour un flus RSS ou Atom. S'il n'est pas donné, l'URL de la page est utilisé comme GUID.\n"
 
 #. type: Plain text
 #, no-wrap
@@ -321,11 +334,11 @@ msgid ""
 "  This is mostly useful when a page has moved, to keep the guids for\n"
 "  pages unchanged and avoid_flooding_aggregators\n"
 "  (see [[!iki tips/howto_avoid_flooding_aggregators]]).\n"
-msgstr ""
+msgstr "Sa principale utilisation est de garder inchangés les identificateurs des pages qui ont été déplacées, évitant ainsi l'engorgement des agrégateurs. Consultez [[!iki tips/howto_avoid_flooding_aggregators]]).\n"
 
 #. type: Bullet: '* '
 msgid "updated"
-msgstr ""
+msgstr "updated"
 
 #. type: Plain text
 #, no-wrap
@@ -336,7 +349,7 @@ msgid ""
 "  to add tags, you could set `updated` to be one second later than the original\n"
 "  value. The date/time can be given in any format that\n"
 "  [[!cpan TimeDate]] can understand, just like the `date` field.\n"
-msgstr ""
+msgstr "Indique une date de modification fausse pour une page qui doit être affichée dans les flux RSS ou Atom. Cela permet d'éviter l'engorgement des agrégateurs qui classent les pages par date de modification, comme Planet par exemple. Pour ajouter des étiquettes à un ancien message, vous pouvez mettre une valeur supérieure d'une seconde à l'ancienne valeur. Tous les formats de date reconnus par [[!cpan TimeDate]] sont acceptés, tout comme pour le paramètre `date`.\n"
 
 #. type: Plain text
 msgid ""
@@ -345,8 +358,13 @@ msgid ""
 "won't be allowed if the [[!iki plugins/htmlscrubber desc=htmlscrubber]] "
 "plugin is enabled, since it can be used to insert unsafe content."
 msgstr ""
+"Si le paramètre n'est pas l'un de ceux définis précédemment, les metadonnées "
+"seront écrites sur la page HTML créée sous forme d' en-tête &lt;meta&gt;. "
+"Cependant cette expression ne sera pas permise si le greffon [[!iki plugins/"
+"htmlscrubber desc=htmlscrubber]] est activé, car il permet d'insérer des "
+"contenus incertains."
 
 #. type: Plain text
 #, no-wrap
 msgid "[[!meta robots=\"noindex, follow\"]]\n"
-msgstr ""
+msgstr "[[!meta robots=\"noindex, follow\"]]\n"

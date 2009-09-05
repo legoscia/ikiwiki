@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki\n"
 "POT-Creation-Date: 2009-08-15 18:30-0300\n"
-"PO-Revision-Date: 2009-08-31 17:53+0200\n"
+"PO-Revision-Date: 2009-09-05 08:36+0200\n"
 "Last-Translator: Philippe Batailler <philippe.batailler@free.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -82,7 +82,7 @@ msgid ""
 "the template on new pages, which would then in turn be registered as "
 "templates. If multiple pages are registered as templates for a new page, an "
 "arbitrary one is chosen, so that could get confusing."
-msgstr "Ce n'est pas une bonne idée de mettre la directive `edittemplate` dans la page modèle elle-même, puisque la directive serait alors incluse littéralement dans la page modèle, puis sur les nouvelles pages, qui seraient alors enregistrées comme pages modèle. Si de nombreuses pages sont enregistrées comme modèles pour une page, un modèle est choisi au hasard et tout devient confus. "
+msgstr "Ce n'est pas une bonne idée de mettre la directive `edittemplate` dans la page modèle elle-même. En effet la directive serait alors incluse comme partie du modèle sur les nouvelles pages, qui seraient à leur tour enregistrées comme modèles. Si de nombreuses pages sont enregistrées comme modèles pour une page, un modèle est choisi au hasard et tout devient confus. "
 
 #. type: Plain text
 #, no-wrap
