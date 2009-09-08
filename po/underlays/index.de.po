@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-09-08 14:40-0300\n"
+"POT-Creation-Date: 2009-09-08 16:30-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -221,6 +221,23 @@ msgid ""
 "> Hmm, I don't see the problem when I go to\n"
 "> <http://l10n.ikiwiki.info/ikiwiki/directive/cut/index.da.html>\n"
 "> I am redirected to the English cutpaste page, no 404. --[[Joey]] \n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"> > If you try [French](http://l10n.ikiwiki.info/ikiwiki/directive/cut/index.fr.html)\n"
+"> > or [Czech](http://l10n.ikiwiki.info/ikiwiki/directive/cut/index.cs.html)\n"
+"> > you might get the error. (And the localized version will be\n"
+"> > usually prefered by the browser automatically.)\n"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"> > Aha, the redirect does not lead to\n"
+"> > <http://l10n.ikiwiki.info/directives/ikiwiki/directive/cutpaste/>\n"
+"> > but to <http://l10n.ikiwiki.info/ikiwiki/directive/cutpaste/>\n"
 msgstr ""
 
 #. type: Title ##
