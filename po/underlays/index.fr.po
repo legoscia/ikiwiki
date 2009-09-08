@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-28 02:59-0300\n"
+"POT-Creation-Date: 2009-09-08 03:11-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,6 +174,40 @@ msgid ""
 "Some [[directives|ikiwiki/directive]] don't contain **translatable bits**; "
 "some do. Compare `\\[[!inline pages=\"blog/*\"]]` with `\\[[!inline pages="
 "\"blog/*\" description=\"`**this is my blog**`\"]]`"
+msgstr ""
+
+#. type: Title ##
+#, no-wrap
+msgid "Translation problems"
+msgstr ""
+
+#. type: Title ###
+#, no-wrap
+msgid "redirection"
+msgstr ""
+
+#. type: Plain text
+msgid ""
+"Some pages use redirection (cut, copy, paste, taglink, ...) which translates "
+"to"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "    URL=../../../../ikiwiki/directive/cutpaste/\n"
+msgstr ""
+
+#. type: Plain text
+msgid "on the English page, but to"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid "    URL=../../../../ikiwiki/directive/cutpaste.cs/\n"
+msgstr ""
+
+#. type: Plain text
+msgid "on the Czech page returning an error about nonexistent page"
 msgstr ""
 
 #. type: Title ##
