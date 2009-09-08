@@ -98,6 +98,13 @@ on the Czech page returning an error about nonexistent page
 > > <http://l10n.ikiwiki.info/directives/ikiwiki/directive/cutpaste/>
 > > but to <http://l10n.ikiwiki.info/ikiwiki/directive/cutpaste/>
 
+>>> Ah, ok. Then this should only be a problem on this wiki. The
+>>> pages redirect to '/ikiwiki/directive/cutpaste', and that version
+>>> of the page is the one shipped in an ikiwiki release (not the one
+>>> this site lets you translate), and so is not translated to French/Czech
+>>> yet. So I think this will clear itself up once I add those translations
+>>> to ikiwiki mainline and upgrade to that version. --[[Joey]] 
+
 ## List of pages
 
 Here is a list of all the translatable pages in the basewiki:
