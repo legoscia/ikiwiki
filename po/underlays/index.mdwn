@@ -85,6 +85,10 @@ on the English page, but to
 
 on the Czech page returning an error about nonexistent page
 
+> Hmm, I don't see the problem when I go to
+> <http://l10n.ikiwiki.info/ikiwiki/directive/cut/index.da.html>
+> I am redirected to the English cutpaste page, no 404. --[[Joey]] 
+
 ## List of pages
 
 Here is a list of all the translatable pages in the basewiki:
