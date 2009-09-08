@@ -71,6 +71,20 @@ these steps:
   some do. Compare `\[[!inline pages="blog/*"]]`
   with `\[[!inline pages="blog/*" description="`**this is my blog**`"]]`
 
+## Translation problems
+
+### redirection
+
+Some pages use redirection (cut, copy, paste, taglink, ...) which translates to
+
+    URL=../../../../ikiwiki/directive/cutpaste/
+
+on the English page, but to
+
+    URL=../../../../ikiwiki/directive/cutpaste.cs/
+
+on the Czech page returning an error about nonexistent page
+
 ## List of pages
 
 Here is a list of all the translatable pages in the basewiki:
