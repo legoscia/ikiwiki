@@ -76,7 +76,7 @@ msgid ""
 "Note that you can include wiki markup in the toggleable text, including even "
 "additional toggles, as shown in the above example."
 msgstr ""
-"Ve přepínaném textu můžete používat běžné značkovací příkazy včetně dalších "
+"V přepínaném textu můžete používat běžné značkovací příkazy včetně dalších "
 "direktiv pro přepínání, jak je ukázáno v předchozím příkladu."
 
 #. type: Plain text

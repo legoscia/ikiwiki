@@ -78,7 +78,7 @@ msgid ""
 "cells. For example:"
 msgstr ""
 "Má-li se buňka rozpínat přes více sloupců, přidejte za ni jednu nebo více "
-"prázdných buňek. Například:"
+"prázdných buněk. Například:"
 
 #. type: Plain text
 #, no-wrap

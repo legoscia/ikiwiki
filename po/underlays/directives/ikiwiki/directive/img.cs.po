@@ -61,7 +61,7 @@ msgstr ""
 "Parametr `size` je volitelný, implicitně ponechá obrázek v plné velikosti. "
 "Poměr stran původního obrázku je vždy zachován, i za cenu zmenšení obrázku "
 "oproti zadaným hodnotám. Můžete také zadat pouze šířku nebo výšku a druhá "
-"hodnota bude dopočítána automaticky: „200x“, „x200“."
+"hodnota bude dopočítána automaticky: „200x“ resp. „x200“."
 
 #. type: Plain text
 msgid ""

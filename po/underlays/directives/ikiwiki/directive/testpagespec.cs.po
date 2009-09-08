@@ -27,7 +27,7 @@ msgid ""
 "This directive allows testing a [[ikiwiki/PageSpec]] to see if it matches a "
 "page, and to see the part that matches, or causes the match to fail."
 msgstr ""
-"Tato direkiva umožňuje testovat zadanou [[ikiwiki/PageSpec]] a zjistit, "
+"Tato direktiva umožňuje testovat zadanou [[ikiwiki/PageSpec]] a zjistit, "
 "zda vybere nějakou stránku, díky které části se tak stalo, případně "
 "která část způsobila selhání."
 
