@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki 3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-08 03:11-0300\n"
+"POT-Creation-Date: 2009-09-08 14:40-0300\n"
 "PO-Revision-Date: 2009-07-22 21:28+0200\n"
 "Last-Translator: Jonas Smedegaard <dr@jones.dk>\n"
 "Language-Team: None\n"
@@ -212,6 +212,14 @@ msgstr ""
 
 #. type: Plain text
 msgid "on the Czech page returning an error about nonexistent page"
+msgstr ""
+
+#. type: Plain text
+#, no-wrap
+msgid ""
+"> Hmm, I don't see the problem when I go to\n"
+"> <http://l10n.ikiwiki.info/ikiwiki/directive/cut/index.da.html>\n"
+"> I am redirected to the English cutpaste page, no 404. --[[Joey]] \n"
 msgstr ""
 
 #. type: Title ##
