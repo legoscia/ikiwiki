@@ -89,6 +89,15 @@ on the Czech page returning an error about nonexistent page
 > <http://l10n.ikiwiki.info/ikiwiki/directive/cut/index.da.html>
 > I am redirected to the English cutpaste page, no 404. --[[Joey]] 
 
+> > If you try [French](http://l10n.ikiwiki.info/ikiwiki/directive/cut/index.fr.html)
+> > or [Czech](http://l10n.ikiwiki.info/ikiwiki/directive/cut/index.cs.html)
+> > you might get the error. (And the localized version will be
+> > usually prefered by the browser automatically.)
+
+> > Aha, the redirect does not lead to
+> > <http://l10n.ikiwiki.info/directives/ikiwiki/directive/cutpaste/>
+> > but to <http://l10n.ikiwiki.info/ikiwiki/directive/cutpaste/>
+
 ## List of pages
 
 Here is a list of all the translatable pages in the basewiki:
