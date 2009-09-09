@@ -78,6 +78,9 @@ msgid ""
 "\t\\[[!toggleable id=\"copy\" text=\"[[!paste id=copylongdesc]]\"]]\n"
 "\t\\[[!toggleable id=\"paste\" text=\"[[!paste id=pastelongdesc]]\"]]\n"
 msgstr ""
+"\t\\[[!toggleable id=\"cut\" text=\"[[!paste id=cutlongdesc]]\"]]\n"
+"\t\\[[!toggleable id=\"copy\" text=\"[[!paste id=copylongdesc]]\"]]\n"
+"\t\\[[!toggleable id=\"paste\" text=\"[[!paste id=pastelongdesc]]\"]]\n"
 
 #. type: Plain text
 #, no-wrap
