@@ -46,7 +46,7 @@ msgstr ""
 "Il n'y a qu'un seul paramètre facultatif, `generated`. Toutes les directives "
 "internes et les directives déclarées par les greffons seront listées. Avec "
 "ce paramètre, `listdirectives` listera aussi les directives qui viendront à "
-"étre créées. Par exemple, tous les raccourcis [[shortcuts]] sont des "
+"être créées. Par exemple, tous les raccourcis [[shortcuts]] sont des "
 "directives créées par la directive `shortcut`. Ils seront listés si le "
 "paramètre `generated` est fourni."
 

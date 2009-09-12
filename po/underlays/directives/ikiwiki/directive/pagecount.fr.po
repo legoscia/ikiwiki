@@ -32,7 +32,7 @@ msgstr "\t\\[[!pagecount pages=\"*\"]]\n"
 msgid ""
 "The optional parameter \"pages\" can be a [[ikiwiki/PageSpec]] specifying "
 "the pages to count, default is to count them all."
-msgstr "Le paramètre facultatif \\\"pages\\\" peut être une spécification [[ikiwiki/PageSpec]] indiquant un ensemble de pages à compter. Par défaut toutes les pages du wiki sont comptées."
+msgstr "Le paramètre facultatif \"pages\" peut être une spécification [[ikiwiki/PageSpec]] indiquant un ensemble de pages à compter. Par défaut toutes les pages du wiki sont comptées."
 
 #. type: Plain text
 #, no-wrap
