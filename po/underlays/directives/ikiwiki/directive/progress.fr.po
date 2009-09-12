@@ -39,7 +39,7 @@ msgstr "Le second ensemble est composé de deux spécifications [[ikiwiki/PageSp
 
 #. type: Plain text
 msgid "For example, to show what percentage of pages have discussion pages:"
-msgstr "Par exemple, pour afficher le pourcentage de pages qui possèdent des pages dicussion :"
+msgstr "Par exemple, pour afficher le pourcentage de pages qui possèdent des pages discussion :"
 
 #. type: Plain text
 #, no-wrap

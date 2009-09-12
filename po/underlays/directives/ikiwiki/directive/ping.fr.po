@@ -17,7 +17,7 @@ msgstr ""
 msgid ""
 "The `ping` directive is supplied by the [[!iki plugins/pinger desc=pinger]] "
 "plugin."
-msgstr "La directive `ping` est fournie par le module d'extension [[!iki plugins/pinger desc=pinger]]<."
+msgstr "La directive `ping` est fournie par le module d'extension [[!iki plugins/pinger desc=pinger]]."
 
 #. type: Plain text
 msgid ""
