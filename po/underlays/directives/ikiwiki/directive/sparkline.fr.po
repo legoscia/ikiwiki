@@ -22,11 +22,6 @@ msgstr ""
 "plugins/sparkline desc=sparkline]]."
 
 #. type: Plain text
-#, fuzzy
-#| msgid ""
-#| "This directive allows for embedding sparklines into wiki pages. A "
-#| "sparkline is a small word-size graphic chart, that is designed to be "
-#| "displayes alongside text."
 msgid ""
 "This directive allows for embedding sparklines into wiki pages. A sparkline "
 "is a small word-size graphic chart, that is designed to be displayed "
