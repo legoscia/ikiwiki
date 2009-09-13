@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-28 19:19-0300\n"
+"POT-Creation-Date: 2009-09-13 19:02-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 #. type: Plain text
 msgid ""
 "This directive allows for embedding sparklines into wiki pages. A sparkline "
-"is a small word-size graphic chart, that is designed to be displayes "
+"is a small word-size graphic chart, that is designed to be displayed "
 "alongside text."
 msgstr ""
 
