@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ikiwiki/directives\n"
-"POT-Creation-Date: 2009-08-28 02:49-0300\n"
+"POT-Creation-Date: 2009-09-13 19:21-0300\n"
 "PO-Revision-Date: 2009-09-07 19:09+0200\n"
 "Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
 "Language-Team: Czech <debian-l10n-czech@lists.debian.org>\n"
@@ -23,14 +23,19 @@ msgstr ""
 "desc=sparkline]]."
 
 #. type: Plain text
+#, fuzzy
+#| msgid ""
+#| "This directive allows for embedding sparklines into wiki pages. A "
+#| "sparkline is a small word-size graphic chart, that is designed to be "
+#| "displayes alongside text."
 msgid ""
 "This directive allows for embedding sparklines into wiki pages. A sparkline "
-"is a small word-size graphic chart, that is designed to be displayes "
+"is a small word-size graphic chart, that is designed to be displayed "
 "alongside text."
 msgstr ""
 "Tato direktiva možňuje do wiki vložit sparkline (minigrafy). Sparkline je "
-"malý graf nepřevyšující velikost písma, který je uzpůsoben vložení přímo "
-"do textu"
+"malý graf nepřevyšující velikost písma, který je uzpůsoben vložení přímo do "
+"textu"
 
 #. type: Title #
 #, no-wrap
@@ -72,8 +77,8 @@ msgid ""
 "determined automatically for bar graphs. The points with negative values are "
 "colored red, instead of the default black."
 msgstr ""
-"Tento komplexnější příklad generuje sloupcový graf. Sloupce jsou široké "
-"2 pixely a oddělené jednopixelovou mezerou. Šířka sloupcových grafů je "
+"Tento komplexnější příklad generuje sloupcový graf. Sloupce jsou široké 2 "
+"pixely a oddělené jednopixelovou mezerou. Šířka sloupcových grafů je "
 "vypočítána automaticky, na výšku má graf 13 pixelů. Body se zápornými "
 "hodnotami jsou obarveny červeně namísto výchozí černé."
 
@@ -88,7 +93,8 @@ msgid ""
 "matter. Bar graphs can also add \"(color)\" to specify a color for that bar."
 msgstr ""
 "Datové body mají formát „x,y“, případně jenom „y“, pokud na hodnotách x "
-"nezáleží. Sloupcové grafy mohou navíc změnit barvu sloupce přidáním „(barva)“."
+"nezáleží. Sloupcové grafy mohou navíc změnit barvu sloupce přidáním "
+"„(barva)“."
 
 #. type: Plain text
 msgid ""
@@ -97,8 +103,8 @@ msgid ""
 "detail in [its wiki](http://sparkline.wikispaces.com/usage)."
 msgstr ""
 "Rozpoznány jsou následující parametry. Většina z nich je shodná s parametry "
-"používanými v knihovně sparkline, která je podrobně zdokumentována v "
-"[její wiki](http://sparkline.wikispaces.com/usage)."
+"používanými v knihovně sparkline, která je podrobně zdokumentována v [její "
+"wiki](http://sparkline.wikispaces.com/usage)."
 
 #. type: Bullet: '* '
 msgid "`style` - Either \"line\" (the default) or \"bar\"."
@@ -121,7 +127,8 @@ msgstr ""
 msgid ""
 "`barspacing` - Spacing between bars in a bar graph, in pixels. Default is 1 "
 "pixel."
-msgstr "`barspacing` - Mezery mezi sloupci ve sloupcovém grafu. Výchozí je 1 pixel."
+msgstr ""
+"`barspacing` - Mezery mezi sloupci ve sloupcovém grafu. Výchozí je 1 pixel."
 
 #. type: Bullet: '* '
 msgid ""
@@ -138,8 +145,8 @@ msgid ""
 "`featurepoint` - Adds a circular marker to a line graph, with optional text. "
 "This can be used to label significant points."
 msgstr ""
-"`featurepoint` - Do čárového grafu přidá kruhovou značku s volitelným textem. "
-"Můžete tak označit a pojmenovat význačné body."
+"`featurepoint` - Do čárového grafu přidá kruhovou značku s volitelným "
+"textem. Můžete tak označit a pojmenovat význačné body."
 
 #. type: Plain text
 #, no-wrap
