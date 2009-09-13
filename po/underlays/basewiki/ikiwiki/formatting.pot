@@ -38,7 +38,7 @@ msgstr ""
 
 #. type: Plain text
 msgid ""
-"You can \\**emphasise*\\* or \\*\\***strongly emphasise**\\*\\* text by "
+"You can *\\*emphasise\\** or **\\*\\*strongly emphasise\\*\\*** text by "
 "placing it in single or double asterisks."
 msgstr ""
 

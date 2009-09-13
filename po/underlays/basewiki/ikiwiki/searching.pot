@@ -31,7 +31,7 @@ msgstr ""
 #. type: Plain text
 msgid ""
 "If searching is enabled, you can enter search terms in the search field, as "
-"you'd expect. There are a few special things you can do to constuct more "
+"you'd expect. There are a few special things you can do to construct more "
 "powerful searches."
 msgstr ""
 
