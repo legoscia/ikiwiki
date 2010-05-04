@@ -576,6 +576,7 @@ sub mybestlink ($$) {
 	    && istranslation($page)
 	    &&  !(exists $caller[3] && defined $caller[3]
 		  && ($caller[3] eq "IkiWiki::PageSpec::match_link"))) {
+		# XXX: need to fix this for po_link_to 'current' and 'negotiated'
 		return $res . "." . lang($page);
 	}
 	return $res;
@@ -601,6 +602,11 @@ sub mytargetpage ($$) {
 
 	if (istranslation($page) || istranslatable($page)) {
 		my ($masterpage, $lang) = (masterpage($page), lang($page));
+		if ($masterpage =~ /(.*)[.]$lang$/) {
+			# If the master page has a language code in its filename,
+			# strip it.
+			$masterpage = $1;
+		}
 		if (! $config{usedirs} || $masterpage eq 'index') {
 			return $masterpage . "." . $lang . "." . $ext;
 		}
@@ -756,8 +762,22 @@ sub _istranslation ($) {
 	my ($masterpage, $lang) = ($page =~ /(.*)[.]([a-z]{2})$/);
 	return 0 unless defined $masterpage && defined $lang
 			 && length $masterpage && length $lang
-			 && defined $pagesources{$masterpage}
 			 && defined $config{po_slave_languages}{$lang};
+	if (! defined $pagesources{$masterpage}) {
+		# So there is no master page in the master language.
+		# Let's check if there is a master page in any slave
+		# language.
+		foreach my $slavelang (keys %{$config{po_slave_languages}}) {
+			my $maybemasterfile=$pagesources{$masterpage.$slavelang};
+			if (defined $maybemasterfile
+			    && defined pagetype($maybemasterfile)
+			    && pagetype($maybemasterfile) ne 'po') {
+				$masterpage = $masterpage.$slavelang;
+				last;
+			}
+		}
+	}
+	return 0 unless defined $pagesources{$masterpage};
 
 	return (maybe_add_leading_slash($masterpage, $hasleadingslash), $lang)
 		if istranslatable($masterpage);
@@ -789,6 +809,11 @@ sub lang ($) {
 	if (1 < (my ($masterpage, $lang) = _istranslation($page))) {
 		return $lang;
 	}
+	if ($page =~ /(.*)[.]([a-z]{2})$/) {
+		# The master page might not be written in the master language...
+		my $lang = $2;
+		return $lang if defined $config{po_slave_languages}{$lang};
+	}
 	return $config{po_master_language}{code};
 }
 
@@ -802,8 +827,31 @@ sub otherlanguage ($$) {
 	my $page=shift;
 	my $code=shift;
 
-	return masterpage($page) if $code eq $config{po_master_language}{code};
-	return masterpage($page) . '.' . $code;
+	my ($masterpage, $lang);
+	if (istranslatable($page)) {
+		$masterpage = $page;
+		$lang = lang($masterpage);
+	}
+	else {
+		($masterpage, $lang) = _istranslation($page);
+	}
+
+	if (defined $masterpage) {
+		# Simple case: the page we were handed is written in the
+		# desired language.
+		return $page if $code eq $lang;
+		# If the master page is in the desired language, return it.
+		my $masterpagelang = lang($masterpage);
+		return $masterpage if $code eq $masterpagelang;
+		# If the master page has an explicit language code, replace it.
+		if ($masterpage =~ /(.*)\.$masterpagelang$/) {
+			return $1 . "." . $code;
+		}
+		# Otherwise, just add the language code.
+		return $masterpage . "." . $code;
+	}
+	
+	return $page . "." . $code;
 }
 
 sub otherlanguages ($) {
