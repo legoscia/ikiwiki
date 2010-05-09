@@ -17,7 +17,7 @@ BEGIN {
 	}
 }
 
-use Test::More tests => 65;
+use Test::More tests => 77;
 
 BEGIN { use_ok("IkiWiki"); }
 
@@ -39,7 +39,7 @@ $config{po_slave_languages} = {
 			       es => 'Castellano',
 			       fr => "Français"
 			      };
-$config{po_translatable_pages}='index or test1 or test2 or translatable';
+$config{po_translatable_pages}='index or test1 or test2 or translatable or test4.fr';
 $config{po_link_to}='negotiated';
 IkiWiki::loadplugins();
 IkiWiki::checkconfig();
@@ -56,6 +56,9 @@ $pagesources{'test2.es'}='test2.es.po';
 $pagesources{'test2.fr'}='test2.fr.po';
 $pagesources{'test3'}='test3.mdwn';
 $pagesources{'test3.es'}='test3.es.mdwn';
+$pagesources{'test4.fr'}='test4.fr.mdwn';
+$pagesources{'test4.en'}='test4.en.po';
+$pagesources{'test4.es'}='test4.es.po';
 $pagesources{'translatable'}='translatable.mdwn';
 $pagesources{'translatable.fr'}='translatable.fr.po';
 $pagesources{'translatable.es'}='translatable.es.po';
@@ -69,6 +72,7 @@ writefile('index.mdwn', $config{srcdir}, '[[translatable]] [[nontranslatable]]')
 writefile('test1.mdwn', $config{srcdir}, 'test1 content');
 writefile('test2.mdwn', $config{srcdir}, 'test2 content');
 writefile('test3.mdwn', $config{srcdir}, 'test3 content');
+writefile('test4.fr.mdwn', $config{srcdir}, 'test4 (en français)');
 writefile('translatable.mdwn', $config{srcdir}, '[[nontranslatable]]');
 writefile('nontranslatable.mdwn', $config{srcdir}, '[[/]] [[translatable]]');
 
@@ -89,6 +93,8 @@ ok(IkiWiki::Plugin::po::istranslatable('test2'), "test2 is translatable");
 ok(! IkiWiki::Plugin::po::istranslation('test2'), "test2 is not a translation");
 ok(! IkiWiki::Plugin::po::istranslatable('test3'), "test3 is not translatable");
 ok(! IkiWiki::Plugin::po::istranslation('test3'), "test3 is not a translation");
+ok(IkiWiki::Plugin::po::istranslatable('test4.fr'), "test4.fr is translatable");
+ok(! IkiWiki::Plugin::po::istranslation('test4.fr'), "test4.fr is not a translation");
 }
 
 ### links
@@ -134,6 +140,9 @@ $config{usedirs}=0;
 $msgprefix="targetpage (usedirs=0)";
 is(targetpage('test1', 'html'), 'test1.en.html', "$msgprefix test1");
 is(targetpage('test1.fr', 'html'), 'test1.fr.html', "$msgprefix test1.fr");
+is(targetpage('test4.fr', 'html'), 'test4.fr.html', "$msgprefix test4.fr");
+is(targetpage('test4.en', 'html'), 'test4.en.html', "$msgprefix test4.en");
+is(targetpage('test4.es', 'html'), 'test4.es.html', "$msgprefix test4.es");
 $config{usedirs}=1;
 $msgprefix="targetpage (usedirs=1)";
 is(targetpage('index', 'html'), 'index.en.html', "$msgprefix index");
@@ -142,6 +151,7 @@ is(targetpage('test1', 'html'), 'test1/index.en.html', "$msgprefix test1");
 is(targetpage('test1.fr', 'html'), 'test1/index.fr.html', "$msgprefix test1.fr");
 is(targetpage('test3', 'html'), 'test3/index.html', "$msgprefix test3 (non-translatable page)");
 is(targetpage('test3.es', 'html'), 'test3.es/index.html', "$msgprefix test3.es (non-translatable page)");
+# XXX: test4
 
 ### urlto -> index
 $config{po_link_to}='current';
@@ -175,3 +185,11 @@ $msgprefix="beautify_urlpath (po_link_to=negotiated)";
 is(IkiWiki::beautify_urlpath('test1/index.html'), './test1/', "$msgprefix test1/index.html");
 is(IkiWiki::beautify_urlpath('test1/index.en.html'), './test1/', "$msgprefix test1/index.en.html");
 is(IkiWiki::beautify_urlpath('test1/index.fr.html'), './test1/', "$msgprefix test1/index.fr.html");
+
+### support for master file not being in the master language
+$msgprefix="otherlanguages";
+is(${IkiWiki::Plugin::po::otherlanguages('test1')}{fr}, 'test1.fr', "$msgprefix test1, fr");
+is(${IkiWiki::Plugin::po::otherlanguages('test1')}{en}, undef, "$msgprefix test1, en");
+is(${IkiWiki::Plugin::po::otherlanguages('test4.fr')}{es}, 'test4.es', "$msgprefix test4, es");
+is(${IkiWiki::Plugin::po::otherlanguages('test4.fr')}{en}, 'test4.en', "$msgprefix test4, en");
+is(${IkiWiki::Plugin::po::otherlanguages('test4.fr')}{fr}, undef, "$msgprefix test4, fr");
