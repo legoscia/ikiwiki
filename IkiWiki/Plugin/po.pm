@@ -212,7 +212,7 @@ sub scan (@) {
 				# replace the occurence of $destpage in $links{$page}
 				for (my $i=0; $i<@{$links{$page}}; $i++) {
 					if (@{$links{$page}}[$i] eq $destpage) {
-						@{$links{$page}}[$i] = $destpage . '.' . lang($page);
+						@{$links{$page}}[$i] = otherlanguage($destpage, lang($page));
 						last;
 					}
 				}
@@ -342,7 +342,7 @@ sub renamepages (@) {
 			src => $otherpage,
 			srcfile => $pagesources{$otherpage},
 			dest => otherlanguage($torename{dest}, $lang),
-			destfile => $torename{dest}.".".$lang.".po",
+			destfile => otherlanguage($torename{dest}, $lang).".po",
 			required => 0,
 		};
 	}
@@ -576,8 +576,7 @@ sub mybestlink ($$) {
 	    && istranslation($page)
 	    &&  !(exists $caller[3] && defined $caller[3]
 		  && ($caller[3] eq "IkiWiki::PageSpec::match_link"))) {
-		# XXX: need to fix this for po_link_to 'current' and 'negotiated'
-		return $res . "." . lang($page);
+		return otherlanguage($res, lang($page));
 	}
 	return $res;
 }
@@ -602,13 +601,8 @@ sub mytargetpage ($$) {
 
 	if (istranslation($page) || istranslatable($page)) {
 		my ($masterpage, $lang) = (masterpage($page), lang($page));
-		if ($masterpage =~ /(.*)[.]$lang$/) {
-			# If the master page has a language code in its filename,
-			# strip it.
-			$masterpage = $1;
-		}
 		if (! $config{usedirs} || $masterpage eq 'index') {
-			return $masterpage . "." . $lang . "." . $ext;
+			return otherlanguage($masterpage, $lang) . "." . $ext;
 		}
 		else {
 			return $masterpage . "/index." . $lang . "." . $ext;
@@ -881,8 +875,9 @@ sub pofile ($$) {
 	my $lang=shift;
 
 	(my $name, my $dir, my $suffix) = fileparse($masterfile, qr/\.[^.]*/);
+	my $othername = otherlanguage($name, $lang);
 	$dir='' if $dir eq './';
-	return File::Spec->catpath('', $dir, $name . "." . $lang . ".po");
+	return File::Spec->catpath('', $dir, $othername . ".po");
 }
 
 sub pofiles ($) {
