@@ -880,9 +880,8 @@ sub pofile ($$) {
 	my $lang=shift;
 
 	(my $name, my $dir, my $suffix) = fileparse($masterfile, qr/\.[^.]*/);
-	my $othername = otherlanguage($name, $lang);
 	$dir='' if $dir eq './';
-	return File::Spec->catpath('', $dir, $othername . ".po");
+	return File::Spec->catpath('', $dir, $name . ".pot");
 }
 
 sub pofiles ($) {
