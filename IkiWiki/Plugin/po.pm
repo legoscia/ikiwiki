@@ -601,8 +601,13 @@ sub mytargetpage ($$) {
 
 	if (istranslation($page) || istranslatable($page)) {
 		my ($masterpage, $lang) = (masterpage($page), lang($page));
+		if ($masterpage =~ /(.*)[.]$lang$/) {
+			# If the master page has a language code in its filename,
+			# strip it.
+			$masterpage = $1;
+		}
 		if (! $config{usedirs} || $masterpage eq 'index') {
-			return otherlanguage($masterpage, $lang) . "." . $ext;
+			return $masterpage . "." . $lang . "." . $ext;
 		}
 		else {
 			return $masterpage . "/index." . $lang . "." . $ext;
