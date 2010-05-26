@@ -17,7 +17,7 @@ BEGIN {
 	}
 }
 
-use Test::More tests => 78;
+use Test::More tests => 79;
 
 BEGIN { use_ok("IkiWiki"); }
 
@@ -197,3 +197,4 @@ is(${IkiWiki::Plugin::po::otherlanguages('test4.fr')}{fr}, undef, "$msgprefix te
 ### pofile
 $msgprefix="pofile";
 is(IkiWiki::Plugin::po::pofile('test1.mdwn','fr'), 'test1.fr.po', "$msgprefix test1.mdwn, fr");
+is(IkiWiki::Plugin::po::pofile('test4.mdwn','es'), 'test4.es.po', "$msgprefix test4.mdwn, es");

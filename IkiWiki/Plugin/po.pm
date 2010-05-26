@@ -833,24 +833,25 @@ sub otherlanguage ($$) {
 	}
 	else {
 		($masterpage, $lang) = _istranslation($page);
+
+		if (!$masterpage) {
+			return $page . "." . $code;
+		}
 	}
 
-	if (defined $masterpage) {
-		# Simple case: the page we were handed is written in the
-		# desired language.
-		return $page if $code eq $lang;
-		# If the master page is in the desired language, return it.
-		my $masterpagelang = lang($masterpage);
-		return $masterpage if $code eq $masterpagelang;
-		# If the master page has an explicit language code, replace it.
-		if ($masterpage =~ /(.*)\.$masterpagelang$/) {
-			return $1 . "." . $code;
-		}
-		# Otherwise, just add the language code.
-		return $masterpage . "." . $code;
+	# Simple case: the page we were handed is written in the
+	# desired language.
+	return $page if $code eq $lang;
+	# If the master page is in the desired language, return it.
+	my $masterpagelang = lang($masterpage);
+	return $masterpage if $code eq $masterpagelang;
+	# If the master page has an explicit language code, replace it.
+	if ($masterpage =~ /(.*)\.$masterpagelang$/) {
+		return $1 . "." . $code;
 	}
+	# Otherwise, just add the language code.
+	return $masterpage . "." . $code;
 	
-	return $page . "." . $code;
 }
 
 sub otherlanguages ($) {
