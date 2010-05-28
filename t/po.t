@@ -197,7 +197,7 @@ is(${IkiWiki::Plugin::po::otherlanguages('test4.fr')}{fr}, undef, "$msgprefix te
 ### pofile
 $msgprefix="pofile";
 is(IkiWiki::Plugin::po::pofile('test1.mdwn','fr'), 'test1.fr.po', "$msgprefix test1.mdwn, fr");
-is(IkiWiki::Plugin::po::pofile('test4.mdwn','es'), 'test4.es.po', "$msgprefix test4.mdwn, es");
+is(IkiWiki::Plugin::po::pofile('test4.fr.mdwn','es'), 'test4.es.po', "$msgprefix test4.fr.mdwn, es");
 
 ### pofiles
 $msgprefix="pofiles";
