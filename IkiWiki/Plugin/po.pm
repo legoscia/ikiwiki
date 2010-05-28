@@ -888,8 +888,11 @@ sub pofile ($$) {
 
 sub pofiles ($) {
 	my $masterfile=shift;
+	my $lang = lang($masterfile);
+	my @langs = grep {$_ ne $lang} ($config{po_master_language}{code},
+									keys %{$config{po_slave_languages}});
 
-	return map pofile($masterfile, $_), (keys %{$config{po_slave_languages}});
+	return map pofile($masterfile, $_), @langs;
 }
 
 sub refreshpot ($) {

@@ -17,7 +17,7 @@ BEGIN {
 	}
 }
 
-use Test::More tests => 81;
+use Test::More tests => 82;
 
 BEGIN { use_ok("IkiWiki"); }
 
@@ -203,3 +203,4 @@ is(IkiWiki::Plugin::po::pofile('test4.fr.mdwn','en'), 'test4.en.po', "$msgprefix
 ### pofiles
 $msgprefix="pofiles";
 is_deeply([sort(IkiWiki::Plugin::po::pofiles('test1'))], ['test1.es.po', 'test1.fr.po'], "$msgprefix test1");
+is_deeply([sort(IkiWiki::Plugin::po::pofiles('test4.fr'))], ['test4.en.po', 'test4.es.po'], "$msgprefix test4");
