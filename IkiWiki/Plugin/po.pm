@@ -888,7 +888,7 @@ sub pofile ($$) {
 
 sub pofiles ($) {
 	my $masterfile=shift;
-	my $lang = lang($masterfile);
+	my $lang = lang(pagename($masterfile));
 	my @langs = grep {$_ ne $lang} ($config{po_master_language}{code},
 									keys %{$config{po_slave_languages}});
 
