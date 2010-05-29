@@ -601,7 +601,8 @@ sub mytargetpage ($$) {
 
 	if (istranslation($page) || istranslatable($page)) {
 		my ($masterpage, $lang) = (masterpage($page), lang($page));
-		if ($masterpage =~ /(.*)[.]$lang$/) {
+		my $masterpagelang = lang($masterpage);
+		if ($masterpage =~ /(.*)[.]$masterpagelang$/) {
 			# If the master page has a language code in its filename,
 			# strip it.
 			$masterpage = $1;
@@ -761,17 +762,19 @@ sub _istranslation ($) {
 	my ($masterpage, $lang) = ($page =~ /(.*)[.]([a-z]{2})$/);
 	return 0 unless defined $masterpage && defined $lang
 			 && length $masterpage && length $lang
-			 && defined $config{po_slave_languages}{$lang};
+			 && ($lang eq $config{po_master_language}{code}
+				 || defined $config{po_slave_languages}{$lang});
 	if (! defined $pagesources{$masterpage}) {
 		# So there is no master page in the master language.
 		# Let's check if there is a master page in any slave
 		# language.
 		foreach my $slavelang (keys %{$config{po_slave_languages}}) {
-			my $maybemasterfile=$pagesources{$masterpage.$slavelang};
+			my $maybemasterpage=$masterpage.".".$slavelang;
+			my $maybemasterfile=$pagesources{$maybemasterpage};
 			if (defined $maybemasterfile
 			    && defined pagetype($maybemasterfile)
 			    && pagetype($maybemasterfile) ne 'po') {
-				$masterpage = $masterpage.$slavelang;
+				$masterpage = $maybemasterpage;
 				last;
 			}
 		}
