@@ -17,7 +17,7 @@ BEGIN {
 	}
 }
 
-use Test::More tests => 86;
+use Test::More tests => 89;
 
 BEGIN { use_ok("IkiWiki"); }
 
@@ -153,7 +153,9 @@ is(targetpage('test1', 'html'), 'test1/index.en.html', "$msgprefix test1");
 is(targetpage('test1.fr', 'html'), 'test1/index.fr.html', "$msgprefix test1.fr");
 is(targetpage('test3', 'html'), 'test3/index.html', "$msgprefix test3 (non-translatable page)");
 is(targetpage('test3.es', 'html'), 'test3.es/index.html', "$msgprefix test3.es (non-translatable page)");
-# XXX: test4
+is(targetpage('test4.fr', 'html'), 'test4/index.fr.html', "$msgprefix test4.fr");
+is(targetpage('test4.en', 'html'), 'test4/index.en.html', "$msgprefix test4.en");
+is(targetpage('test4.es', 'html'), 'test4/index.es.html', "$msgprefix test4.es");
 
 ### urlto -> index
 $config{po_link_to}='current';
