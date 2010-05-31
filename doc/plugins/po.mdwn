@@ -33,6 +33,13 @@ Example: `bla/page.fr.po` is the PO "message catalog" used to
 translate `bla/page.mdwn` into French; if `usedirs` is enabled, it is
 rendered as `bla/page/index.fr.html`, else as `bla/page.fr.html`
 
+You can also write your master page in one of the "slave" languages by
+putting a dot and the language code at the end of its name.  So if you
+create the page `bla/page.fr.mdwn`, the message catalog
+`bla/page.en.po` will be used to translate the page from French to
+English (assuming that French is one of the slave languages, and that
+English is either the master language or one of the slave languages).
+
 (In)Compatibility
 =================
 
