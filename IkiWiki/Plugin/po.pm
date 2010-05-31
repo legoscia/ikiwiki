@@ -1287,4 +1287,20 @@ sub match_currentlang ($$;@) {
 	}
 }
 
+sub match_nottranslated($;@) {
+	my $page=shift;
+
+	if (IkiWiki::Plugin::po::istranslation($page)) {
+		if (IkiWiki::Plugin::po::percenttranslated($page) eq "0") {
+			return IkiWiki::SuccessReason->new("is a translation page and is not yet translated");
+		}
+		else {
+			return IkiWiki::FailReason->new("is a translation page but is at least partly translated");
+		}
+	}
+	else {
+		return IkiWiki::FailReason->new("is not a translation page");
+	}
+}
+
 1

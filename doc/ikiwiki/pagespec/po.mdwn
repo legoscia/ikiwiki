@@ -11,6 +11,7 @@ wiki:
   specified as a ISO639-1 (two-letter) language code.
 * "`currentlang()`" - tests whether a page is written in the same
   language as the current page.
+* "`nottranslated()`" - tests whether a page is less than 1% translated.
 
 Note that every non-po page is considered to be written in
 `po_master_language`, as specified in `ikiwiki.setup`.
