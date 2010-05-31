@@ -113,6 +113,15 @@ negotiated preferred language, *i.e.* `foo/page/`.
 * if the web server does not support Content Negotiation, setting
   `po_link_to` to `negotiated` will produce a unusable website.
 
+Display links to untranslated versions
+--------------------------------------
+
+Every translatable or translated page has links to its versions in
+other languages, with translation percentage.  By default, all
+versions are listed, even those that are 0% translated.  If
+`po_display_untranslated_versions` is set to 0, only those versions
+that are at least 1% translated will be listed.
+
 Server support
 ==============
 
@@ -170,6 +179,8 @@ variables are available inside the loop (for every page in):
 * `LANGUAGE` - language name (as defined in `po_slave_languages`)
 * `MASTER` - is true (1) if, and only if the page is a "master" page
 * `PERCENT` - for "slave" pages, is set to the translation completeness, in percents
+
+See also `po_display_untranslated_versions` above.
 
 ### Display the current translation status
 

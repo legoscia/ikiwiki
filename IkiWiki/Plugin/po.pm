@@ -124,6 +124,13 @@ sub getsetup () {
 			safe => 1,
 			rebuild => 1,
 		},
+		po_display_untranslated_versions => {
+			type => "boolean",
+			default => 1,
+			description => "display link to other language version with 0% translation?",
+			safe => 1,
+			rebuild => 1,
+		},
 }
 
 sub checkconfig () {
@@ -156,6 +163,11 @@ sub checkconfig () {
 	elsif ($config{po_link_to} eq "negotiated" && ! $config{usedirs}) {
 		warn(gettext('po_link_to=negotiated requires usedirs to be enabled, falling back to po_link_to=default'));
 		$config{po_link_to}='default';
+	}
+
+	if (! exists $config{po_display_untranslated_versions} ||
+		! defined $config{po_display_untranslated_versions}) {
+		$config{po_display_untranslated_versions} = 1;
 	}
 
 	push @{$config{wiki_file_prune_regexps}}, qr/\.pot$/;
@@ -1035,11 +1047,13 @@ sub otherlanguagesloop ($) {
 			};
 		}
 		elsif (istranslation($otherpage)) {
+			my $percent = percenttranslated($otherpage);
+			next if $percent eq "0" && ! $config{po_display_untranslated_versions};
 			push @ret, {
 				url => urlto_with_orig_beautiful_urlpath($otherpage, $page),
 				code => $lang,
 				language => languagename($lang),
-				percent => percenttranslated($otherpage),
+				percent => $percent,
 			}
 		}
 	}
