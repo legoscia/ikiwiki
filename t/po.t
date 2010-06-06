@@ -17,7 +17,7 @@ BEGIN {
 	}
 }
 
-use Test::More tests => 89;
+use Test::More tests => 96;
 
 BEGIN { use_ok("IkiWiki"); }
 
@@ -39,7 +39,7 @@ $config{po_slave_languages} = {
 			       es => 'Castellano',
 			       fr => "Français"
 			      };
-$config{po_translatable_pages}='index or test1 or test2 or translatable or test4.fr';
+$config{po_translatable_pages}='index or test1 or test2 or translatable or test4.fr or subdir/*';
 $config{po_link_to}='negotiated';
 IkiWiki::loadplugins();
 IkiWiki::checkconfig();
@@ -63,6 +63,9 @@ $pagesources{'translatable'}='translatable.mdwn';
 $pagesources{'translatable.fr'}='translatable.fr.po';
 $pagesources{'translatable.es'}='translatable.es.po';
 $pagesources{'nontranslatable'}='nontranslatable.mdwn';
+$pagesources{'subdir/test5.es'}='subdir/test5.es.mdwn';
+$pagesources{'subdir/test5.en'}='subdir/test5.es.en.po';
+$pagesources{'subdir/test5.fr'}='subdir/test5.es.fr.po';
 foreach my $page (keys %pagesources) {
     $IkiWiki::pagecase{lc $page}=$page;
 }
@@ -75,6 +78,7 @@ writefile('test3.mdwn', $config{srcdir}, 'test3 content');
 writefile('test4.fr.mdwn', $config{srcdir}, 'test4 (en français)');
 writefile('translatable.mdwn', $config{srcdir}, '[[nontranslatable]]');
 writefile('nontranslatable.mdwn', $config{srcdir}, '[[/]] [[translatable]]');
+writefile('subdir/test5.es.mdwn', $config{srcdir}, 'test5 (en castellano)');
 
 ### istranslatable/istranslation
 # we run these tests twice because memoization attempts made them
@@ -97,6 +101,9 @@ ok(IkiWiki::Plugin::po::istranslatable('test4.fr'), "test4.fr is translatable");
 ok(! IkiWiki::Plugin::po::istranslation('test4.fr'), "test4.fr is not a translation");
 ok(IkiWiki::Plugin::po::istranslation('test4.en'), "test4.en is a translation");
 ok(IkiWiki::Plugin::po::istranslation('test4.es'), "test4.es is a translation");
+ok(IkiWiki::Plugin::po::istranslatable('subdir/test5.es'), "subdir/test5.es is translatable");
+ok(IkiWiki::Plugin::po::istranslation('subdir/test5.fr'), "subdir/test5.fr is a translation");
+ok(IkiWiki::Plugin::po::istranslation('subdir/test5.en'), "subdir/test5.en is a translation");
 }
 
 ### links
@@ -208,3 +215,5 @@ is(IkiWiki::Plugin::po::pofile('test4.fr.mdwn','en'), 'test4.en.po', "$msgprefix
 $msgprefix="pofiles";
 is_deeply([sort(IkiWiki::Plugin::po::pofiles('test1.mdwn'))], ['test1.es.po', 'test1.fr.po'], "$msgprefix test1");
 is_deeply([sort(IkiWiki::Plugin::po::pofiles('test4.fr.mdwn'))], ['test4.en.po', 'test4.es.po'], "$msgprefix test4");
+is_deeply([sort(IkiWiki::Plugin::po::pofiles('subdir/test5.es.mdwn'))],
+		  ['subdir/test5.en.po', 'subdir/test5.fr.po'], "$msgprefix subdir/test5");

@@ -896,9 +896,16 @@ sub pofile ($$) {
 	my $lang=shift;
 
 	(my $name, my $dir, my $suffix) = fileparse($masterfile, qr/\.[^.]*/);
-	my $othername = otherlanguage($name, $lang);
+	# If the name ends with a dot and one of the slave language codes,
+	# we need to strip the code before adding another one.
+	foreach my $langsuffix (keys %{$config{po_slave_languages}}) {
+		if ($name =~ /(.*)\.$langsuffix$/) {
+			$name = $1;
+			last;
+		}
+	}
 	$dir='' if $dir eq './';
-	return File::Spec->catpath('', $dir, $othername . ".po");
+	return File::Spec->catpath('', $dir, $name . "." . $lang . ".po");
 }
 
 sub pofiles ($) {
