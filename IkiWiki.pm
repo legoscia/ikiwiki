@@ -12,9 +12,9 @@ use open qw{:utf8 :std};
 
 use vars qw{%config %links %oldlinks %pagemtime %pagectime %pagecase
 	%pagestate %wikistate %renderedfiles %oldrenderedfiles
-	%pagesources %destsources %depends %depends_simple @mass_depends 
-	%hooks %forcerebuild %loaded_plugins %typedlinks %oldtypedlinks
-	%autofiles};
+	%pagesources %delpagesources %destsources %depends %depends_simple
+	@mass_depends %hooks %forcerebuild %loaded_plugins %typedlinks
+	%oldtypedlinks %autofiles};
 
 use Exporter q{import};
 our @EXPORT = qw(hook debug error htmlpage template template_depends
@@ -441,6 +441,13 @@ sub getsetup () {
 		safe => 0,
 		rebuild => 0,
 	},
+	wrapper_background_command => {
+		type => "internal",
+		default => '',
+		description => "background shell command to run",
+		safe => 0,
+		rebuild => 0,
+	},
 	gettime => {
 		type => "internal",
 		description => "running in gettime mode",
@@ -592,10 +599,11 @@ sub loadplugins () {
 	return 1;
 }
 
-sub loadplugin ($) {
+sub loadplugin ($;$) {
 	my $plugin=shift;
+	my $force=shift;
 
-	return if grep { $_ eq $plugin} @{$config{disable_plugins}};
+	return if ! $force && grep { $_ eq $plugin} @{$config{disable_plugins}};
 
 	foreach my $dir (defined $config{libdir} ? possibly_foolish_untaint($config{libdir}) : undef,
 	                 "$installdir/lib/ikiwiki") {
@@ -709,7 +717,7 @@ sub pagename ($) {
 
 	my $type=pagetype($file);
 	my $page=$file;
- 	$page=~s/\Q.$type\E*$//
+	$page=~s/\Q.$type\E*$//
 		if defined $type && !$hooks{htmlize}{$type}{keepextension}
 			&& !$hooks{htmlize}{$type}{noextension};
 	if ($config{indexpages} && $page=~/(.*)\/index$/) {
@@ -815,6 +823,17 @@ sub prep_writefile ($$) {
 		if (-l "$destdir/$test") {
 			error("cannot write to a symlink ($test)");
 		}
+		if (-f _ && $test ne $file) {
+			# Remove conflicting file.
+			foreach my $p (keys %renderedfiles, keys %oldrenderedfiles) {
+				foreach my $f (@{$renderedfiles{$p}}, @{$oldrenderedfiles{$p}}) {
+					if ($f eq $test) {
+						unlink("$destdir/$test");
+						last;
+					}
+				}
+			}
+		}
 		$test=dirname($test);
 	}
 
@@ -868,10 +887,36 @@ sub will_render ($$;$) {
 	my $dest=shift;
 	my $clear=shift;
 
-	# Important security check.
+	# Important security check for independently created files.
 	if (-e "$config{destdir}/$dest" && ! $config{rebuild} &&
 	    ! grep { $_ eq $dest } (@{$renderedfiles{$page}}, @{$oldrenderedfiles{$page}}, @{$wikistate{editpage}{previews}})) {
-		error("$config{destdir}/$dest independently created, not overwriting with version from $page");
+		my $from_other_page=0;
+	    	# Expensive, but rarely runs.
+		foreach my $p (keys %renderedfiles, keys %oldrenderedfiles) {
+			if (grep {
+				$_ eq $dest ||
+				dirname($_) eq $dest
+			    } @{$renderedfiles{$p}}, @{$oldrenderedfiles{$p}}) {
+				$from_other_page=1;
+				last;
+			}
+		}
+
+		error("$config{destdir}/$dest independently created, not overwriting with version from $page")
+			unless $from_other_page;
+	}
+
+	# If $dest exists as a directory, remove conflicting files in it
+	# rendered from other pages.
+	if (-d _) {
+		foreach my $p (keys %renderedfiles, keys %oldrenderedfiles) {
+			foreach my $f (@{$renderedfiles{$p}}, @{$oldrenderedfiles{$p}}) {
+				if (dirname($f) eq $dest) {
+					unlink("$config{destdir}/$f");
+					rmdir(dirname("$config{destdir}/$f"));
+				}
+			}
+		}
 	}
 
 	if (! $clear || $cleared{$page}) {
@@ -1004,7 +1049,7 @@ sub displaytime ($;$$) {
 	my $time=formattime($_[0], $_[1]);
 	if ($config{html5}) {
 		return '<time datetime="'.date_3339($_[0]).'"'.
-			($_[2] ? ' pubdate' : '').
+			($_[2] ? ' pubdate="pubdate"' : '').
 			'>'.$time.'</time>';
 	}
 	else {
@@ -1073,6 +1118,15 @@ sub urlto ($$;$) {
 	return beautify_urlpath($link);
 }
 
+sub isselflink ($$) {
+	# Plugins can override this function to support special types
+	# of selflinks.
+	my $page=shift;
+	my $link=shift;
+
+	return $page eq $link;
+}
+
 sub htmllink ($$$;@) {
 	my $lpage=shift; # the page doing the linking
 	my $page=shift; # the page that will contain the link (different for inline)
@@ -1098,7 +1152,7 @@ sub htmllink ($$$;@) {
 	}
 	
 	return "<span class=\"selflink\">$linktext</span>"
-		if length $bestlink && $page eq $bestlink &&
+		if length $bestlink && isselflink($page, $bestlink) &&
 		   ! defined $opts{anchor};
 	
 	if (! $destsources{$bestlink}) {
@@ -1401,10 +1455,6 @@ sub filter ($$$) {
 	return $content;
 }
 
-sub indexlink () {
-	return "<a href=\"$config{url}\">$config{wikiname}</a>";
-}
-
 sub check_canedit ($$$;$) {
 	my $page=shift;
 	my $q=shift;
@@ -1468,6 +1518,69 @@ sub check_content (@) {
 	});
 	return defined $ok ? $ok : 1;
 }
+
+sub check_canchange (@) {
+	my %params = @_;
+	my $cgi = $params{cgi};
+	my $session = $params{session};
+	my @changes = @{$params{changes}};
+
+	my %newfiles;
+	foreach my $change (@changes) {
+		# This untaint is safe because we check file_pruned and
+		# wiki_file_regexp.
+		my ($file)=$change->{file}=~/$config{wiki_file_regexp}/;
+		$file=possibly_foolish_untaint($file);
+		if (! defined $file || ! length $file ||
+		    file_pruned($file)) {
+			error(gettext("bad file name %s"), $file);
+		}
+
+		my $type=pagetype($file);
+		my $page=pagename($file) if defined $type;
+
+		if ($change->{action} eq 'add') {
+			$newfiles{$file}=1;
+		}
+
+		if ($change->{action} eq 'change' ||
+		    $change->{action} eq 'add') {
+			if (defined $page) {
+				check_canedit($page, $cgi, $session);
+				next;
+			}
+			else {
+				if (IkiWiki::Plugin::attachment->can("check_canattach")) {
+					IkiWiki::Plugin::attachment::check_canattach($session, $file, $change->{path});
+					check_canedit($file, $cgi, $session);
+					next;
+				}
+			}
+		}
+		elsif ($change->{action} eq 'remove') {
+			# check_canremove tests to see if the file is present
+			# on disk. This will fail when a single commit adds a
+			# file and then removes it again. Avoid the problem
+			# by not testing the removal in such pairs of changes.
+			# (The add is still tested, just to make sure that
+			# no data is added to the repo that a web edit
+			# could not add.)
+			next if $newfiles{$file};
+
+			if (IkiWiki::Plugin::remove->can("check_canremove")) {
+				IkiWiki::Plugin::remove::check_canremove(defined $page ? $page : $file, $cgi, $session);
+				check_canedit(defined $page ? $page : $file, $cgi, $session);
+				next;
+			}
+		}
+		else {
+			error "unknown action ".$change->{action};
+		}
+
+		error sprintf(gettext("you are not allowed to change %s"), $file);
+	}
+}
+
 
 my $wikilock;
 
@@ -1546,6 +1659,12 @@ sub loadindex () {
 	if (exists $index->{version} && ! ref $index->{version}) {
 		$pages=$index->{page};
 		%wikistate=%{$index->{state}};
+		# Handle plugins that got disabled by loading a new setup.
+		if (exists $config{setupfile}) {
+			require IkiWiki::Setup;
+			IkiWiki::Setup::disabled_plugins(
+				grep { ! $loaded_plugins{$_} } keys %wikistate);
+		}
 	}
 	else {
 		$pages=$index;
@@ -1613,11 +1732,7 @@ sub loadindex () {
 sub saveindex () {
 	run_hooks(savestate => sub { shift->() });
 
-	my %hookids;
-	foreach my $type (keys %hooks) {
-		$hookids{$_}=1 foreach keys %{$hooks{$type}};
-	}
-	my @hookids=keys %hookids;
+	my @plugins=keys %loaded_plugins;
 
 	if (! -d $config{wikistatedir}) {
 		mkdir($config{wikistatedir});
@@ -1651,7 +1766,7 @@ sub saveindex () {
 		}
 
 		if (exists $pagestate{$page}) {
-			foreach my $id (@hookids) {
+			foreach my $id (@plugins) {
 				foreach my $key (keys %{$pagestate{$page}{$id}}) {
 					$index{page}{$src}{state}{$id}{$key}=$pagestate{$page}{$id}{$key};
 				}
@@ -1660,7 +1775,8 @@ sub saveindex () {
 	}
 
 	$index{state}={};
-	foreach my $id (@hookids) {
+	foreach my $id (@plugins) {
+		$index{state}{$id}={}; # used to detect disabled plugins
 		foreach my $key (keys %{$wikistate{$id}}) {
 			$index{state}{$id}{$key}=$wikistate{$id}{$key};
 		}
@@ -1680,12 +1796,15 @@ sub template_file ($) {
 	my $name=shift;
 	
 	my $tpage=($name =~ s/^\///) ? $name : "templates/$name";
+	my $template;
 	if ($name !~ /\.tmpl$/ && exists $pagesources{$tpage}) {
-		$tpage=$pagesources{$tpage};
+		$template=srcfile($pagesources{$tpage}, 1);
 		$name.=".tmpl";
 	}
+	else {
+		$template=srcfile($tpage, 1);
+	}
 
-	my $template=srcfile($tpage, 1);
 	if (defined $template) {
 		return $template, $tpage, 1 if wantarray;
 		return $template;
@@ -1713,12 +1832,14 @@ sub template_depends ($$;@) {
 	my $page=shift;
 	
 	my ($filename, $tpage, $untrusted)=template_file($name);
+	if (! defined $filename) {
+		error(sprintf(gettext("template %s not found"), $name))
+	}
+
 	if (defined $page && defined $tpage) {
 		add_depends($page, $tpage);
 	}
-
-	return unless defined $filename;
-
+	
 	my @opts=(
 		filter => sub {
 			my $text_ref = shift;
@@ -1742,22 +1863,57 @@ sub template ($;@) {
 
 sub misctemplate ($$;@) {
 	my $title=shift;
-	my $pagebody=shift;
+	my $content=shift;
+	my %params=@_;
 	
-	my $template=template("misc.tmpl");
+	my $template=template("page.tmpl");
+
+	my $page="";
+	if (exists $params{page}) {
+		$page=delete $params{page};
+	}
+	run_hooks(pagetemplate => sub {
+		shift->(
+			page => $page,
+			destpage => $page,
+			template => $template,
+		);
+	});
+	templateactions($template, "");
+
 	$template->param(
+		dynamic => 1,
 		title => $title,
-		indexlink => indexlink(),
 		wikiname => $config{wikiname},
-		pagebody => $pagebody,
+		content => $content,
 		baseurl => baseurl(),
 		html5 => $config{html5},
-		@_,
+		%params,
 	);
-	run_hooks(pagetemplate => sub {
-		shift->(page => "", destpage => "", template => $template);
-	});
+	
 	return $template->output;
+}
+
+sub templateactions ($$) {
+	my $template=shift;
+	my $page=shift;
+
+	my $have_actions=0;
+	my @actions;
+	run_hooks(pageactions => sub {
+		push @actions, map { { action => $_ } } 
+			grep { defined } shift->(page => $page);
+	});
+	$template->param(actions => \@actions);
+
+	if ($config{cgiurl} && exists $hooks{auth}) {
+		$template->param(prefsurl => cgiurl(do => "prefs"));
+		$have_actions=1;
+	}
+
+	if ($have_actions || @actions) {
+		$template->param(have_actions => 1);
+	}
 }
 
 sub hook (@) {
@@ -1808,11 +1964,11 @@ sub rcs_prepedit ($) {
 	$hooks{rcs}{rcs_prepedit}{call}->(@_);
 }
 
-sub rcs_commit ($$$;$$) {
+sub rcs_commit (@) {
 	$hooks{rcs}{rcs_commit}{call}->(@_);
 }
 
-sub rcs_commit_staged ($$$) {
+sub rcs_commit_staged (@) {
 	$hooks{rcs}{rcs_commit_staged}{call}->(@_);
 }
 
@@ -2311,10 +2467,16 @@ sub derel ($$) {
 	my $path=shift;
 	my $from=shift;
 
-	if ($path =~ m!^\./!) {
-		$from=~s#/?[^/]+$## if defined $from;
-		$path=~s#^\./##;
-		$path="$from/$path" if defined $from && length $from;
+	if ($path =~ m!^\.(/|$)!) {
+		if ($1) {
+			$from=~s#/?[^/]+$## if defined $from;
+			$path=~s#^\./##;
+			$path="$from/$path" if defined $from && length $from;
+		}
+		else {
+			$path = $from;
+			$path = "" unless defined $path;
+		}
 	}
 
 	return $path;
@@ -2329,11 +2491,7 @@ sub match_glob ($$;@) {
 
 	my $regexp=IkiWiki::glob2re($glob);
 	if ($page=~/^$regexp$/i) {
-		if ($params{onlypage} &&
-		    ! defined IkiWiki::pagetype($IkiWiki::pagesources{$page})) {
-			return IkiWiki::FailReason->new("$page is not a page");
-		}
-		elsif (! IkiWiki::isinternal($page) || $params{internal}) {
+		if (! IkiWiki::isinternal($page) || $params{internal}) {
 			return IkiWiki::SuccessReason->new("$glob matches $page");
 		}
 		else {
@@ -2346,11 +2504,22 @@ sub match_glob ($$;@) {
 }
 
 sub match_internal ($$;@) {
-	return match_glob($_[0], $_[1], @_, internal => 1)
+	return match_glob(shift, shift, @_, internal => 1)
 }
 
 sub match_page ($$;@) {
-	return match_glob($_[0], $_[1], @_, onlypage => 1)
+	my $page=shift;
+	my $match=match_glob($page, shift, @_);
+	if ($match) {
+		my $source=exists $IkiWiki::pagesources{$page} ?
+			$IkiWiki::pagesources{$page} :
+			$IkiWiki::delpagesources{$page};
+		my $type=defined $source ? IkiWiki::pagetype($source) : undef;
+		if (! defined $type) {	
+			return IkiWiki::FailReason->new("$page is not a page");
+		}
+	}
+	return $match;
 }
 
 sub match_link ($$;@) {
@@ -2371,18 +2540,20 @@ sub match_link ($$;@) {
 		unless $links && @{$links};
 	my $bestlink = IkiWiki::bestlink($from, $link);
 	foreach my $p (@{$links}) {
+		next unless (! defined $linktype || exists $IkiWiki::typedlinks{$page}{$linktype}{$p});
+
 		if (length $bestlink) {
-			if ((!defined $linktype || exists $IkiWiki::typedlinks{$page}{$linktype}{$p}) && $bestlink eq IkiWiki::bestlink($page, $p)) {
+			if ($bestlink eq IkiWiki::bestlink($page, $p)) {
 				return IkiWiki::SuccessReason->new("$page links to $link$qualifier", $page => $IkiWiki::DEPEND_LINKS, "" => 1)
 			}
 		}
 		else {
-			if ((!defined $linktype || exists $IkiWiki::typedlinks{$page}{$linktype}{$p}) && match_glob($p, $link, %params)) {
+			if (match_glob($p, $link, %params)) {
 				return IkiWiki::SuccessReason->new("$page links to page $p$qualifier, matching $link", $page => $IkiWiki::DEPEND_LINKS, "" => 1)
 			}
 			my ($p_rel)=$p=~/^\/?(.*)/;
 			$link=~s/^\///;
-			if ((!defined $linktype || exists $IkiWiki::typedlinks{$page}{$linktype}{$p_rel}) && match_glob($p_rel, $link, %params)) {
+			if (match_glob($p_rel, $link, %params)) {
 				return IkiWiki::SuccessReason->new("$page links to page $p_rel$qualifier, matching $link", $page => $IkiWiki::DEPEND_LINKS, "" => 1)
 			}
 		}
@@ -2437,7 +2608,12 @@ sub match_created_after ($$;@) {
 }
 
 sub match_creation_day ($$;@) {
-	if ((gmtime($IkiWiki::pagectime{shift()}))[3] == shift) {
+	my $page=shift;
+	my $d=shift;
+	if ($d !~ /^\d+$/) {
+		return IkiWiki::ErrorReason->new("invalid day $d");
+	}
+	if ((localtime($IkiWiki::pagectime{$page}))[3] == $d) {
 		return IkiWiki::SuccessReason->new('creation_day matched');
 	}
 	else {
@@ -2446,7 +2622,12 @@ sub match_creation_day ($$;@) {
 }
 
 sub match_creation_month ($$;@) {
-	if ((gmtime($IkiWiki::pagectime{shift()}))[4] + 1 == shift) {
+	my $page=shift;
+	my $m=shift;
+	if ($m !~ /^\d+$/) {
+		return IkiWiki::ErrorReason->new("invalid month $m");
+	}
+	if ((localtime($IkiWiki::pagectime{$page}))[4] + 1 == $m) {
 		return IkiWiki::SuccessReason->new('creation_month matched');
 	}
 	else {
@@ -2455,7 +2636,12 @@ sub match_creation_month ($$;@) {
 }
 
 sub match_creation_year ($$;@) {
-	if ((gmtime($IkiWiki::pagectime{shift()}))[5] + 1900 == shift) {
+	my $page=shift;
+	my $y=shift;
+	if ($y !~ /^\d+$/) {
+		return IkiWiki::ErrorReason->new("invalid year $y");
+	}
+	if ((localtime($IkiWiki::pagectime{$page}))[5] + 1900 == $y) {
 		return IkiWiki::SuccessReason->new('creation_year matched');
 	}
 	else {

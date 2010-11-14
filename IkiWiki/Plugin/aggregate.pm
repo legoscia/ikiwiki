@@ -210,6 +210,8 @@ sub needsbuild (@) {
 			markunseen($feed->{sourcepage});
 		}
 	}
+
+	return $needsbuild;
 }
 
 sub preprocess (@) {
@@ -298,7 +300,7 @@ sub loadstate () {
 	return if $state_loaded;
 	$state_loaded=1;
 	if (-e "$config{wikistatedir}/aggregate") {
-		open(IN, "$config{wikistatedir}/aggregate") ||
+		open(IN, "<", "$config{wikistatedir}/aggregate") ||
 			die "$config{wikistatedir}/aggregate: $!";
 		while (<IN>) {
 			$_=IkiWiki::possibly_foolish_untaint($_);
@@ -335,7 +337,7 @@ sub savestate () {
 	garbage_collect();
 	my $newfile="$config{wikistatedir}/aggregate.new";
 	my $cleanup = sub { unlink($newfile) };
-	open (OUT, ">$newfile") || error("open $newfile: $!", $cleanup);
+	open (OUT, ">", $newfile) || error("open $newfile: $!", $cleanup);
 	foreach my $data (values %feeds, values %guids) {
 		my @line;
 		foreach my $field (keys %$data) {
@@ -356,6 +358,20 @@ sub savestate () {
 	close OUT || error("save $newfile: $!", $cleanup);
 	rename($newfile, "$config{wikistatedir}/aggregate") ||
 		error("rename $newfile: $!", $cleanup);
+
+	my $timestamp=undef;
+	foreach my $feed (keys %feeds) {
+		my $t=$feeds{$feed}->{lastupdate}+$feeds{$feed}->{updateinterval};
+		if (! defined $timestamp || $timestamp > $t) {
+			$timestamp=$t;
+		}
+	}
+	$newfile=~s/\.new$/time/;
+	open (OUT, ">", $newfile) || error("open $newfile: $!", $cleanup);
+	if (defined $timestamp) {
+		print OUT $timestamp."\n";
+	}
+	close OUT || error("save $newfile: $!", $cleanup);
 }
 
 sub garbage_collect () {
@@ -628,7 +644,14 @@ sub add_page (@) {
 	$guid->{md5}=$digest;
 
 	# Create the page.
-	my $template=template($feed->{template}, blind_cache => 1);
+	my $template;
+	eval {
+		$template=template($feed->{template}, blind_cache => 1);
+	};
+	if ($@) {
+		print STDERR gettext("failed to process template:")." $@";
+		return;
+	}
 	$template->param(title => $params{title})
 		if defined $params{title} && length($params{title});
 	$template->param(content => wikiescape(htmlabs($params{content},

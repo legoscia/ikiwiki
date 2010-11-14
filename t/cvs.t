@@ -8,10 +8,13 @@ BEGIN {
 	chomp $cvs;
 	my $cvsps=`which cvsps`;
 	chomp $cvsps;
-	if (! -x $cvs || ! -x $cvsps || ! mkdir($dir)) {
+	if (! -x $cvs || ! -x $cvsps) {
 		eval q{
-			use Test::More skip_all => "cvs or cvsps not available or could not make test dir"
+			use Test::More skip_all => "cvs or cvsps not available"
 		}
+	}
+	if (! mkdir($dir)) {
+		die $@;
 	}
 	foreach my $module ('File::ReadBackwards', 'File::MimeInfo') {
 		eval qq{use $module};
@@ -46,7 +49,11 @@ system "cvs -d $cvsrepo co -d $config{srcdir} ikiwiki >/dev/null";
 my $test1 = readfile("t/test1.mdwn");
 writefile('test1.mdwn', $config{srcdir}, $test1);
 IkiWiki::rcs_add("test1.mdwn");
-IkiWiki::rcs_commit("test1.mdwn", "Added the first page", "moo");
+IkiWiki::rcs_commit(
+	files => "test1.mdwn",
+	message => "Added the first page",
+	token => "moo"
+);
 
 my @changes;
 @changes = IkiWiki::rcs_recentchanges(3);

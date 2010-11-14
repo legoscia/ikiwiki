@@ -126,26 +126,26 @@ sub rcs_prepedit ($) {
 	return "";
 }
 
-sub rcs_commit ($$$;$$) {
-	my ($file, $message, $rcstoken, $user, $ipaddr) = @_;
+sub rcs_commit (@) {
+	my %params=@_;
 
-	if (defined $user) {
-		$user = IkiWiki::possibly_foolish_untaint($user);
-	}
-	elsif (defined $ipaddr) {
-		$user = "Anonymous from ".IkiWiki::possibly_foolish_untaint($ipaddr);
-	}
-	else {
-		$user = "Anonymous";
+	my $user="Anonymous";
+	if (defined $params{session}) {
+		if (defined $params{session}->param("name")) {
+			$user = $params{session}->param("name");
+		}
+		elsif (defined $params{session}->remote_addr()) {
+			$user = "Anonymous from ".$params{session}->remote_addr();
+		}
 	}
 
-	$message = IkiWiki::possibly_foolish_untaint($message);
-	if (! length $message) {
-		$message = "no message given";
+	if (! length $params{message}) {
+		$params{message} = "no message given";
 	}
 
 	my @cmdline = ("hg", "-q", "-R", $config{srcdir}, "commit", 
-	               "-m", $message, "-u", $user);
+	               "-m", IkiWiki::possibly_foolish_untaint($params{message}),
+	               "-u", IkiWiki::possibly_foolish_untaint($user));
 	if (system(@cmdline) != 0) {
 		warn "'@cmdline' failed: $!";
 	}
@@ -153,10 +153,10 @@ sub rcs_commit ($$$;$$) {
 	return undef; # success
 }
 
-sub rcs_commit_staged ($$$) {
+sub rcs_commit_staged (@) {
 	# Commits all staged changes. Changes can be staged using rcs_add,
 	# rcs_remove, and rcs_rename.
-	my ($message, $user, $ipaddr)=@_;
+	my %params=@_;
 	
 	error("rcs_commit_staged not implemented for mercurial"); # TODO
 }
@@ -236,15 +236,13 @@ sub rcs_diff ($) {
 sub rcs_getctime ($) {
 	my ($file) = @_;
 
-	# XXX filename passes through the shell here, should try to avoid
-	# that just in case
 	my @cmdline = ("hg", "-R", $config{srcdir}, "log", "-v",
 		"--style", "default", "$config{srcdir}/$file");
-	open (my $out, "@cmdline |");
+	open (my $out, "-|", @cmdline);
 
-	my @log = mercurial_log($out);
+	my @log = (mercurial_log($out));
 
-	if (length @log < 1) {
+	if (@log < 1) {
 		return 0;
 	}
 

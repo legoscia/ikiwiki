@@ -1,3 +1,30 @@
+ikiwiki (3.20100515) unstable; urgency=low
+
+  There are two significant changes to the page.tmpl template in this version.
+  If you have a locally modified version of that template, you will need to
+  update it at least to contain the following in the HTML <head>:
+
+    <TMPL_IF DYNAMIC>
+    <TMPL_IF FORCEBASEURL><base href="<TMPL_VAR FORCEBASEURL>" /><TMPL_ELSE>
+    <TMPL_IF BASEURL><base href="<TMPL_VAR BASEURL>" /></TMPL_IF>
+    </TMPL_IF>
+    </TMPL_IF>
+
+  Also, the footer should be wrapped in <TMPL_UNLESS DYNAMIC> ... </TMPL_UNLESS>
+  
+  There is a new "comment()" pagespec, that can be used to match a
+  comment on a page. It is recommended it be used instead of the old
+  method of using a pagespec such as "internal(comment_*)" to match
+  things that looked like comments. The old pagespec will now also match
+  comments that are held for moderation; likely not what you want.
+
+  There have also been some changes to the style.css in this version,
+  particularly to support the new openid selector. If you have a modified
+  version, of style.css, updating it (or moving it to local.css) is
+  recommended.
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 05 May 2010 21:47:08 -0400
+
 ikiwiki (3.20100427) unstable; urgency=low
 
   This version of ikiwiki has a lot of changes that you need to know about.
@@ -10,7 +37,7 @@ ikiwiki (3.20100427) unstable; urgency=low
   extension is not recommended, as that allows anyone to change
   a wiki's templates.
 
-  The --getctime switch is renamed to --gettimes, and it also gets the 
+  The --getctime switch is renamed to --gettime, and it also gets the 
   file modification time. And it's a lot faster (when using git). But
   the really important change is, you don't have to remember to use this
   switch. Now ikiwiki will do it when it needs to.

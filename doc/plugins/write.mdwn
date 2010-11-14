@@ -39,7 +39,7 @@ built.
 Now that it knows what pages it needs to build, ikiwiki runs two
 compile passes. First, it runs `scan` hooks, which collect metadata about
 the pages. Then it runs a page rendering pipeline, by calling in turn these
-hooks: `filter`, `preprocess`, `linkify`, `htmlize`, `postscan`,
+hooks: `filter`, `preprocess`, `linkify`, `htmlize`, `indexhtml`,
 `pagetemplate`, `sanitize`, `format`.
 
 After all necessary pages are built, it calls the `change` hook. Finally,
@@ -177,10 +177,15 @@ function is passed no values.
 
 	hook(type => "needsbuild", id => "foo", call => \&needsbuild);
 
-This allows a plugin to manipulate the list of files that need to be
-built when the wiki is refreshed. The function is passed a reference to an
-array of files that will be rebuilt, and can modify the array, either
-adding or removing files from it.
+This allows a plugin to observe or even manipulate the list of files that
+need to be built when the wiki is refreshed. 
+
+As its first parameter, the function is passed a reference to an array of
+files that will be built. It should return an array reference that is a
+modified version of its input. It can add or remove files from it.
+
+The second parameter passed to the function is a reference to an array of
+files that have been deleted.
 
 ### scan
 
@@ -198,8 +203,8 @@ value is ignored.
 
 	hook(type => "filter", id => "foo", call => \&filter);
 
-Runs on the raw source of a page, before anything else touches it, and can
-make arbitrary changes. The function is passed named parameters "page",
+Runs on the full raw source of a page, before anything else touches it, and
+can make arbitrary changes. The function is passed named parameters "page",
 "destpage", and "content". It should return the filtered content.
 
 ### preprocess
@@ -282,16 +287,16 @@ like `Makefile` that have no extension.
 If `hook` is passed an optional "longname" parameter, this value is used
 when prompting a user to choose a page type on the edit page form.
 
-### postscan
+### indexhtml
 
-	hook(type => "postscan", id => "foo", call => \&postscan);
+	hook(type => "indexhtml", id => "foo", call => \&indexhtml);
 
 This hook is called once the page has been converted to html (but before
 the generated html is put in a template). The most common use is to
 update search indexes. Added in ikiwiki 2.54.
 
-The function is passed named parameters "page" and "content". Its return
-value is ignored.
+The function is passed named parameters "page", "destpage", and "content".
+Its return value is ignored.
 
 ### pagetemplate
 
@@ -595,7 +600,17 @@ describes the plugin as a whole. For example:
 	hook(type => "genwrapper", id => "foo", call => \&genwrapper);
 
 This hook is used to inject C code (which it returns) into the `main`
-function of the ikiwiki wrapper when it is being generated.
+function of the ikiwiki wrapper when it is being generated. 
+
+The code runs before anything else -- in particular it runs before
+the suid wrapper has sanitized its environment.
+
+### disable
+
+	hook(type => "disable", id => "foo", call => \&disable);
+
+This hook is only run when a previously enabled plugin gets disabled
+during ikiwiki setup. Plugins can use this to perform cleanups.
 
 ## Exported variables
 
@@ -724,6 +739,8 @@ which it is safe to let wiki users edit. Enable it by passing a filename
 with no ".tmpl" extension. Template pages are normally looked for in
 the templates/ directory. If the page name starts with "/", a page
 elsewhere in the wiki can be used.
+
+If the template is not found, or contains a syntax error, an error is thrown.
 
 ### `template_depends($$;@)`
 
@@ -1051,16 +1068,20 @@ token, that will be passed into `rcs_commit` when committing. For example,
 it might return the current revision ID of the file, and use that
 information later when merging changes.
 
-#### `rcs_commit($$$;$$)`
+#### `rcs_commit(@)`
 
-Passed a file, message, token (from `rcs_prepedit`), user, and ip address.
+Passed named parameters: `file`, `message`, `token` (from `rcs_prepedit`),
+and `session` (optional).
+
 Should try to commit the file. Returns `undef` on *success* and a version
 of the page with the rcs's conflict markers on failure.
 
-#### `rcs_commit_staged($$$)`
+#### `rcs_commit_staged(@)`
 
-Passed a message, user, and ip address. Should commit all staged changes.
-Returns undef on success, and an error message on failure.
+Passed named parameters: `message`, and `session` (optional).
+
+Should commit all staged changes. Returns undef on success, and an
+error message on failure.
 
 Changes can be staged by calls to `rcs_add`, `rcs_remove`, and
 `rcs_rename`.
@@ -1103,7 +1124,9 @@ The data structure returned for each change is:
 
 	{
 		rev => # the RCSs id for this commit
-		user => # name of user who made the change,
+		user => # user who made the change (may be an openid),
+		nickname => # short name for user (optional; not an openid),
+		
 		committype => # either "web" or the name of the rcs,
 		when => # time when the change was made,
 		message => [
@@ -1131,8 +1154,6 @@ context, and the whole diff in scalar context.
 This is used to get the page creation time for a file from the RCS, by looking
 it up in the history.
 
-It's ok if this is not implemented, and throws an error.
-
 If the RCS cannot determine a ctime for the file, return 0.
 
 #### `rcs_getmtime($)`
@@ -1153,9 +1174,9 @@ sense to implement for all RCSs.
 
 It should examine the incoming changes, and do any sanity 
 checks that are appropriate for the RCS to limit changes to safe file adds,
-removes, and changes. If something bad is found, it should exit
-nonzero, to abort the push. Otherwise, it should return a list of
-files that were changed, in the form:
+removes, and changes. If something bad is found, it should die, to abort
+the push. Otherwise, it should return a list of files that were changed,
+in the form:
 
 	{
 		file => # name of file that was changed
@@ -1167,6 +1188,28 @@ files that were changed, in the form:
 
 The list will then be checked to make sure that each change is one that
 is allowed to be made via the web interface.
+
+#### `rcs_preprevert($)`
+
+This is called by the revert web interface. It is passed a RCS-specific
+change ID, and should determine what the effects would be of reverting
+that change, and return the same data structure as `rcs_receive`.
+
+Like `rcs_receive`, it should do whatever sanity checks are appropriate
+for the RCS to limit changes to safe changes, and die if a change would
+be unsafe to revert.
+
+#### `rcs_revert($)`
+
+This is called by the revert web interface. It is passed a named
+parameter rev that is the RCS-specific change ID to revert.
+
+It should try to revert the specified rev, and leave the reversion staged
+so `rcs_commit_staged` will complete it. It should return undef on _success_
+and an error message on failure.
+
+This hook and `rcs_preprevert` are optional, if not implemented, no revert
+web interface will be available.
 
 ### PageSpec plugins
 

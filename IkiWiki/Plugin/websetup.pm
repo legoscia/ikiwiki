@@ -219,7 +219,8 @@ sub showfields ($$$@) {
 				options => [ [ 1 => $description ] ],
 				fieldset => $section,
 			);
-			if (! $form->submitted) {
+			if (! $form->submitted ||
+			    ($info{advanced} && $form->submitted eq 'Advanced Mode')) {
 				$form->field(name => $name, value => $value);
 			}
 		}
@@ -253,12 +254,8 @@ sub enable_plugin ($) {
 sub disable_plugin ($) {
 	my $plugin=shift;
 
-	if (grep { $_ eq $plugin } @{$config{add_plugins}}) {
-		$config{add_plugins}=[grep { $_ ne $plugin } @{$config{add_plugins}}];
-	}
-	else {
-		push @{$config{disable_plugins}}, $plugin;
-	}
+	$config{add_plugins}=[grep { $_ ne $plugin } @{$config{add_plugins}}];
+	push @{$config{disable_plugins}}, $plugin;
 }
 
 sub showform ($$) {
@@ -293,12 +290,13 @@ sub showform ($$) {
 		],
 		action => $config{cgiurl},
 		template => {type => 'div'},
-		stylesheet => IkiWiki::baseurl()."style.css",
+		stylesheet => 1,
 	);
 	
 	$form->field(name => "do", type => "hidden", value => "setup",
 		force => 1);
 	$form->field(name => "rebuild_asked", type => "hidden");
+	$form->field(name => "showadvanced", type => "hidden");
 
 	if ($form->submitted eq 'Basic Mode') {
 		$form->field(name => "showadvanced", type => "hidden", 
@@ -450,8 +448,8 @@ sub showform ($$) {
 			IkiWiki::unlockwiki();
 
 			# Print the top part of a standard misctemplate,
-			# then show the rebuild or refresh.
-			my $divider="xxx";
+			# then show the rebuild or refresh, live.
+			my $divider="\0";
 			my $html=IkiWiki::misctemplate("setup", $divider);
 			IkiWiki::printheader($session);
 			my ($head, $tail)=split($divider, $html, 2);

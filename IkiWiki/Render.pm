@@ -62,8 +62,8 @@ sub genpage ($$) {
 	my $page=shift;
 	my $content=shift;
 	
-	run_hooks(postscan => sub {
-		shift->(page => $page, content => $content);
+	run_hooks(indexhtml => sub {
+		shift->(page => $page, destpage => $page, content => $content);
 	});
 
 	my $templatefile;
@@ -84,19 +84,14 @@ sub genpage ($$) {
 		$template=template('page.tmpl', 
 			blind_cache => 1);
 	}
-	my $actions=0;
 
+	my $actions=0;
 	if (length $config{cgiurl}) {
 		if (IkiWiki->can("cgi_editpage")) {
 			$template->param(editurl => cgiurl(do => "edit", page => $page));
 			$actions++;
 		}
-		if (exists $hooks{auth}) {
-			$template->param(prefsurl => cgiurl(do => "prefs"));
-			$actions++;
-		}
 	}
-		
 	if (defined $config{historyurl} && length $config{historyurl}) {
 		my $u=$config{historyurl};
 		$u=~s/\[\[file\]\]/$pagesources{$page}/g;
@@ -111,17 +106,10 @@ sub genpage ($$) {
 			$actions++;
 		}
 	}
-
-	my @actions;
-	run_hooks(pageactions => sub {
-		push @actions, map { { action => $_ } } 
-			grep { defined } shift->(page => $page);
-	});
-	$template->param(actions => \@actions);
-
-	if ($actions || @actions) {
+	if ($actions) {
 		$template->param(have_actions => 1);
 	}
+	templateactions($template, $page);
 
 	my @backlinks=sort { $a->{page} cmp $b->{page} } backlinks($page);
 	my ($backlinks, $more_backlinks);
@@ -186,15 +174,15 @@ sub scan ($) {
 		}
 		delete $typedlinks{$page};
 
+		# Preprocess in scan-only mode.
+		preprocess($page, $page, $content, 1);
+
 		run_hooks(scan => sub {
 			shift->(
 				page => $page,
 				content => $content,
 			);
 		});
-
-		# Preprocess in scan-only mode.
-		preprocess($page, $page, $content, 1);
 	}
 	else {
 		will_render($file, $file, 1);
@@ -304,12 +292,17 @@ sub find_src_files () {
 	eval q{use File::Find};
 	error($@) if $@;
 
-	my ($page, $dir, $underlay);
+	eval q{use Cwd};
+	die $@ if $@;
+	my $origdir=getcwd();
+	my $abssrcdir=Cwd::abs_path($config{srcdir});
+
+	my ($page, $underlay);
 	my $helper=sub {
 		my $file=decode_utf8($_);
 
 		return if -l $file || -d _;
-		$file=~s/^\Q$dir\E\/?//;
+		$file=~s/^\.\///;
 		return if ! length $file;
 		$page = pagename($file);
 		if (! exists $pagesources{$page} &&
@@ -321,11 +314,12 @@ sub find_src_files () {
 		my ($f) = $file =~ /$config{wiki_file_regexp}/; # untaint
 		if (! defined $f) {
 			warn(sprintf(gettext("skipping bad filename %s"), $file)."\n");
+			return;
 		}
 	
 		if ($underlay) {
 			# avoid underlaydir override attacks; see security.mdwn
-			if (! -l "$config{srcdir}/$f" && ! -e _) {
+			if (! -l "$abssrcdir/$f" && ! -e _) {
 				if (! $pages{$page}) {
 					push @files, $f;
 					$pages{$page}=1;
@@ -341,17 +335,24 @@ sub find_src_files () {
 		}
 	};
 
+	chdir($config{srcdir}) || die "chdir $config{srcdir}: $!";
 	find({
 		no_chdir => 1,
 		wanted => $helper,
-	}, $dir=$config{srcdir});
+	}, '.');
+	chdir($origdir) || die "chdir $origdir: $!";
+
 	$underlay=1;
 	foreach (@{$config{underlaydirs}}, $config{underlaydir}) {
-		find({
-			no_chdir => 1,
-			wanted => $helper,
-		}, $dir=$_);
+		if (chdir($_)) {
+			find({
+				no_chdir => 1,
+				wanted => $helper,
+			}, '.');
+			chdir($origdir) || die "chdir: $!";
+		}
 	};
+
 	return \@files, \%pages;
 }
 
@@ -364,6 +365,35 @@ sub find_new_files ($) {
 
 	foreach my $file (@$files) {
 		my $page=pagename($file);
+
+		if ($config{rcs} && $config{gettime} &&
+		    -e "$config{srcdir}/$file") {
+			if (! $times_noted) {
+				debug(sprintf(gettext("querying %s for file creation and modification times.."), $config{rcs}));
+				$times_noted=1;
+			}
+
+			eval {
+				my $ctime=rcs_getctime($file);
+				if ($ctime > 0) {
+					$pagectime{$page}=$ctime;
+				}
+			};
+			if ($@) {
+				print STDERR $@;
+			}
+			my $mtime;
+			eval {
+				$mtime=rcs_getmtime($file);
+			};
+			if ($@) {
+				print STDERR $@;
+			}
+			elsif ($mtime > 0) {
+				utime($mtime, $mtime, "$config{srcdir}/$file");
+			}
+		}
+
 		if (exists $pagesources{$page} && $pagesources{$page} ne $file) {
 			# the page has changed its type
 			$forcerebuild{$page}=1;
@@ -373,34 +403,8 @@ sub find_new_files ($) {
 			if (isinternal($page)) {
 				push @internal_new, $file;
 			}
-			elsif ($config{rcs}) {
+			else {
 				push @new, $file;
-				if ($config{gettime} && -e "$config{srcdir}/$file") {
-					if (! $times_noted) {
-						debug(sprintf(gettext("querying %s for file creation and modification times.."), $config{rcs}));
-						$times_noted=1;
-					}
-
-					eval {
-						my $ctime=rcs_getctime("$config{srcdir}/$file");
-						if ($ctime > 0) {
-							$pagectime{$page}=$ctime;
-						}
-					};
-					if ($@) {
-						print STDERR $@;
-					}
-					my $mtime;
-					eval {
-						$mtime=rcs_getmtime("$config{srcdir}/$file");
-					};
-					if ($@) {
-						print STDERR $@;
-					}
-					elsif ($mtime > 0) {
-						utime($mtime, $mtime, "$config{srcdir}/$file");
-					}
-				}
 			}
 			$pagecase{lc $page}=$page;
 			if (! exists $pagectime{$page}) {
@@ -453,6 +457,7 @@ sub remove_del (@) {
 		}
 	
 		delete $pagecase{lc $page};
+		$delpagesources{$page}=$pagesources{$page};
 		delete $pagesources{$page};
 	}
 }
@@ -640,7 +645,7 @@ sub render_dependent ($$$$$$$) {
 				# only consider internal files
 				# if the page explicitly depends
 				# on such files
-				my $internal_dep=$dep =~ /internal\(/;
+				my $internal_dep=$dep =~ /(?:internal|comment|comment_pending)\(/;
 
 				my $in=sub {
 					my $list=shift;
@@ -754,7 +759,10 @@ sub refresh () {
 	my ($new, $internal_new)=find_new_files($files);
 	my ($del, $internal_del)=find_del_files($pages);
 	my ($changed, $internal_changed)=find_changed($files);
-	run_hooks(needsbuild => sub { shift->($changed) });
+	run_hooks(needsbuild => sub {
+		my $ret=shift->($changed, [@$del, @$internal_del]);
+		$changed=$ret if ref $ret eq 'ARRAY';
+	});
 	my $oldlink_targets=calculate_old_links($changed, $del);
 
 	foreach my $file (@$changed) {
@@ -799,8 +807,8 @@ sub refresh () {
 	render_backlinks($backlinkchanged);
 	remove_unrendered();
 
-	if (@$del) {
-		run_hooks(delete => sub { shift->(@$del) });
+	if (@$del || @$internal_del) {
+		run_hooks(delete => sub { shift->(@$del, @$internal_del) });
 	}
 	if (%rendered) {
 		run_hooks(change => sub { shift->(keys %rendered) });

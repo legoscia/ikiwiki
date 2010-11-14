@@ -42,9 +42,6 @@ sub check_canremove ($$$) {
 		error(sprintf(gettext("%s is not a file"), $file));
 	}
 	
-	# Must be editable.
-	IkiWiki::check_canedit($page, $q, $session);
-
 	# If a user can't upload an attachment, don't let them delete it.
 	# This is sorta overkill, but better safe than sorry.
 	if (! defined pagetype($pagesources{$page})) {
@@ -74,6 +71,7 @@ sub check_canremove ($$$) {
 			}
 		}
 	});
+	return defined $canremove ? $canremove : 1;
 }
 
 sub formbuilder_setup (@) {
@@ -103,10 +101,12 @@ sub confirmation_form ($$) {
 		javascript => 0,
 		params => $q,
 		action => $config{cgiurl},
-		stylesheet => IkiWiki::baseurl()."style.css",
+		stylesheet => 1,
 		fields => [qw{do page}],
 	);
 	
+	$f->field(name => "sid", type => "hidden", value => $session->id,
+		force => 1);
 	$f->field(name => "do", type => "hidden", value => "remove", force => 1);
 
 	return $f, ["Remove", "Cancel"];
@@ -119,6 +119,7 @@ sub removal_confirm ($$@) {
 	my @pages=@_;
 
 	foreach my $page (@pages) {
+		IkiWiki::check_canedit($page, $q, $session);
 		check_canremove($page, $q, $session);
 	}
 
@@ -188,12 +189,15 @@ sub sessioncgi ($$) {
 			postremove($session);
 		}
 		elsif ($form->submitted eq 'Remove' && $form->validate) {
+			IkiWiki::checksessionexpiry($q, $session, $q->param('sid'));
+
 			my @pages=$form->field("page");
 	
 			# Validate removal by checking that the page exists,
 			# and that the user is allowed to edit(/remove) it.
 			my @files;
 			foreach my $page (@pages) {
+				IkiWiki::check_canedit($page, $q, $session);
 				check_canremove($page, $q, $session);
 				
 				# This untaint is safe because of the
@@ -209,8 +213,10 @@ sub sessioncgi ($$) {
 				foreach my $file (@files) {
 					IkiWiki::rcs_remove($file);
 				}
-				IkiWiki::rcs_commit_staged(gettext("removed"),
-					$session->param("name"), $ENV{REMOTE_ADDR});
+				IkiWiki::rcs_commit_staged(
+					message => gettext("removed"),
+					session => $session,
+				);
 				IkiWiki::enable_commit_hook();
 				IkiWiki::rcs_update();
 			}

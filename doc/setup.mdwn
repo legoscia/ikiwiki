@@ -22,6 +22,8 @@ Or, set up a blog with ikiwiki, run this command instead.
 
 	% ikiwiki -setup /etc/ikiwiki/auto-blog.setup
 
+`librpc-xml-perl` and `python-docutils` dependencies are needed.
+
 Either way, it will ask you a couple of questions.
 
 	What will the wiki be named? foo
@@ -47,7 +49,7 @@ Now you can go to the url it told you, and edit pages in your new wiki
 using the web interface.
 
 (If the web interface doesn't seem to allow editing or login, you may
-need to configure [[configure_the_web_server|tips/dot_cgi]].)
+need to [[configure_the_web_server|tips/dot_cgi]].)
 
 ## Checkout and edit wiki source
 
@@ -68,6 +70,7 @@ source. (Remember to replace "foo" with the real directory name.)
 	cvs -d `pwd`/foo get -P ikiwiki
 	bzr clone foo foo.src
 	hg clone foo foo.src
+	darcs get foo.darcs foo.src
 	# TODO monotone, tla
 
 Now to edit pages by hand, go into the directory you checked out (ie,
@@ -102,6 +105,12 @@ After making changes to this file, you need to tell ikiwiki to use it:
 
 	% ikiwiki -setup foo.setup
 
+Alternatively, you can ask ikiwiki to change settings in the file for you:
+
+	% ikiwiki -changesetup foo.setup -plugin goodstuff
+
+See [[usage]] for more options.
+
 ## Customizing file locations
 
 As a wiki compiler, ikiwiki builds a wiki from files in a source directory,
@@ -123,7 +132,7 @@ old location won't work, and the easiest way to deal with this is to delete
 them and re-checkout from the new repository location.
    
 	% rm -rf foo
-	% git clone /src/git/foo.git
+	% git clone /srv/git/foo.git
 
 Finally, edit the setup file. Modify the settings for `srcdir`, `destdir`,
 `url`, `cgiurl`, `cgi_wrapper`, `git_wrapper`, etc to reflect where

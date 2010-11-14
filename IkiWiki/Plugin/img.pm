@@ -39,7 +39,7 @@ sub preprocess (@) {
 		}
 	}
 
-	if (! exists $params{size}) {
+	if (! exists $params{size} || ! length $params{size}) {
 		$params{size}='full';
 	}
 
@@ -115,16 +115,14 @@ sub preprocess (@) {
 				$im = Image::Magick->new;
 				$r = $im->Read($outfile);
 				error sprintf(gettext("failed to read %s: %s"), $outfile, $r) if $r;
-		
-				$dwidth = $im->Get("width");
-				$dheight = $im->Get("height");
 			}
 			else {
 				($dwidth, $dheight)=($w, $h);
 				$r = $im->Resize(geometry => "${w}x${h}");
 				error sprintf(gettext("failed to resize: %s"), $r) if $r;
 
-				# don't actually write file in preview mode
+				# don't actually write resized file in preview mode;
+				# rely on width and height settings
 				if (! $params{preview}) {
 					my @blob = $im->ImageToBlob();
 					writefile($imglink, $config{destdir}, $blob[0], 1);
@@ -133,6 +131,9 @@ sub preprocess (@) {
 					$imglink = $file;
 				}
 			}
+			
+			$dwidth = $im->Get("width") unless defined $dwidth;
+			$dheight = $im->Get("height") unless defined $dheight;
 		}
 	}
 	else {
@@ -155,14 +156,22 @@ sub preprocess (@) {
 		$imgurl="$config{url}/$imglink";
 	}
 
+	if (! exists $params{class}) {
+		$params{class}="img";
+	}
+
+	my $attrs='';
+	foreach my $attr (qw{alt title class id hspace vspace}) {
+		if (exists $params{$attr}) {
+			$attrs.=" $attr=\"$params{$attr}\"";
+		}
+	}
+	
 	my $imgtag='<img src="'.$imgurl.
 		'" width="'.$dwidth.
 		'" height="'.$dheight.'"'.
-		(exists $params{alt} ? ' alt="'.$params{alt}.'"' : '').
-		(exists $params{title} ? ' title="'.$params{title}.'"' : '').
-		(exists $params{class} ? ' class="'.$params{class}.'"' : '').
+		$attrs.
 		(exists $params{align} && ! exists $params{caption} ? ' align="'.$params{align}.'"' : '').
-		(exists $params{id} ? ' id="'.$params{id}.'"' : '').
 		' />';
 
 	my $link;

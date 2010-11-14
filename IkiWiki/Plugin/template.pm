@@ -41,20 +41,16 @@ sub preprocess (@) {
 			blind_cache => 1);
 	};
 	if ($@) {
-		error gettext("failed to process template:")." $@";
-	}
-	if (! $template) {
-		error sprintf(gettext("%s not found"),
+		error sprintf(gettext("failed to process template %s"),
 			htmllink($params{page}, $params{destpage},
-				"/templates/$params{id}"))
+				"/templates/$params{id}"))." $@";
 	}
 
 	$params{basename}=IkiWiki::basename($params{page});
 
 	foreach my $param (keys %params) {
 		my $value=IkiWiki::preprocess($params{page}, $params{destpage},
-		          IkiWiki::filter($params{page}, $params{destpage},
-		          $params{$param}), $scan);
+		          $params{$param}, $scan);
 		if ($template->query(name => $param)) {
 			my $htmlvalue=IkiWiki::htmlize($params{page}, $params{destpage},
 					pagetype($pagesources{$params{page}}),
@@ -69,8 +65,7 @@ sub preprocess (@) {
 	}
 
 	return IkiWiki::preprocess($params{page}, $params{destpage},
-	       IkiWiki::filter($params{page}, $params{destpage},
-	       $template->output), $scan);
+	       $template->output, $scan);
 }
 
 1

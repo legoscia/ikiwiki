@@ -33,6 +33,7 @@ sub load ($;$) {
 		if ($1) {
 			error sprintf(gettext("cannot load %s in safe mode"), $file)
 				if $safemode;
+			no warnings;
 			eval IkiWiki::possibly_foolish_untaint($content);
 			error("$file: ".$@) if $@;
 		}
@@ -49,10 +50,8 @@ sub load ($;$) {
 
 sub dump ($) {
 	my $file=IkiWiki::possibly_foolish_untaint(shift);
-	
-	eval qq{require IkiWiki::Setup::$config{setuptype}};
-	error $@ if $@;
-	my @dump="IkiWiki::Setup::$config{setuptype}"->gendump(
+
+	my @header=(
 		"Setup file for ikiwiki.",
 		"",
 		"Passing this to ikiwiki --setup will make ikiwiki generate",
@@ -61,9 +60,24 @@ sub dump ($) {
 		"Remember to re-run ikiwiki --setup any time you edit this file.",
 	);
 
-	open (OUT, ">", $file) || die "$file: $!";
-	print OUT "$_\n" foreach @dump;
-	close OUT;
+	# Fork because dumping setup requires loading all plugins.
+	my $pid=fork();
+	if ($pid == 0) {
+		eval qq{require IkiWiki::Setup::$config{setuptype}};
+		error $@ if $@;
+		my @dump="IkiWiki::Setup::$config{setuptype}"->gendump(@header);
+	
+		open (OUT, ">", $file) || die "$file: $!";
+		print OUT "$_\n" foreach @dump;
+		close OUT;
+
+		exit 0;
+	}
+	else {
+		waitpid $pid, 0;
+		exit($? >> 8) if $? >> 8;
+		exit(1) if $?;
+	}
 }
 
 sub merge ($) {
@@ -110,6 +124,27 @@ sub merge ($) {
 	}
 }
 
+sub disabled_plugins (@) {
+	# Handles running disable hooks of plugins that were enabled
+	# previously, but got disabled when a new setup file was loaded.
+	if (exists $config{setupfile} && @_) {
+		# Fork a child to load the disabled plugins.
+		my $pid=fork();
+		if ($pid == 0) {
+			foreach my $plugin (@_) {
+				eval { IkiWiki::loadplugin($plugin, 1) };
+				if (exists $IkiWiki::hooks{disable}{$plugin}{call}) {
+					eval { $IkiWiki::hooks{disable}{$plugin}{call}->() };
+				}
+			}
+			exit(0);
+		}
+		else {
+			waitpid $pid, 0;
+		}
+	}
+}
+
 sub getsetup () {
 	# Gets all available setup data from all plugins. Returns an
 	# ordered list of [plugin, setup] pairs.
@@ -120,13 +155,15 @@ sub getsetup () {
         $config{syslog}=undef;
 
 	# Load all plugins, so that all setup options are available.
+	my %original_loaded_plugins=%IkiWiki::loaded_plugins;
 	my @plugins=IkiWiki::listplugins();
 	foreach my $plugin (@plugins) {
-		eval { IkiWiki::loadplugin($plugin) };
+		eval { IkiWiki::loadplugin($plugin, 1) };
 		if (exists $IkiWiki::hooks{checkconfig}{$plugin}{call}) {
 			my @s=eval { $IkiWiki::hooks{checkconfig}{$plugin}{call}->() };
 		}
 	}
+	%IkiWiki::loaded_plugins=%original_loaded_plugins;
 	
 	my %sections;
 	foreach my $plugin (@plugins) {

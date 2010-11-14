@@ -122,10 +122,10 @@ sub preprocess (@) {
 
 	# Use the sha1 of the php code that generates the sparkline as
 	# the base for its filename.
-	eval q{use Digest::SHA1};
+	eval q{use Digest::SHA};
         error($@) if $@;
 	my $fn=$params{page}."/sparkline-".
-		IkiWiki::possibly_foolish_untaint(Digest::SHA1::sha1_hex($php)).
+		IkiWiki::possibly_foolish_untaint(Digest::SHA::sha1_hex($php)).
 		".png";
 	will_render($params{page}, $fn);
 
@@ -158,7 +158,8 @@ sub preprocess (@) {
 			writefile($fn, $config{destdir}, $png, 1);
 		}
 		else {
-			# can't write the file, so embed it in a data uri
+			# in preview mode, embed the image in a data uri
+			# to avoid temp file clutter
 			eval q{use MIME::Base64};
 		        error($@) if $@;
 			return "<img src=\"data:image/png;base64,".

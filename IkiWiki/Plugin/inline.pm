@@ -336,10 +336,7 @@ sub preprocess_inline (@) {
 					blind_cache => 1);
 			};
 			if ($@) {
-				error gettext("failed to process template:")." $@";
-			}
-			if (! $template) {
-				error sprintf(gettext("template %s not found"), $params{template}.".tmpl");
+				error sprintf(gettext("failed to process template %s"), $params{template}.".tmpl").": $@";
 			}
 		}
 		my $needcontent=$raw || (!($archive && $quick) && $template->query(name => 'content'));
@@ -476,6 +473,13 @@ sub get_inline_content ($$) {
 		       filter($page, $destpage,
 		       readfile(srcfile($file))))));
 		$nested--;
+		if (isinternal($page)) {
+			# make inlined text of internal pages searchable
+			run_hooks(indexhtml => sub {
+				shift->(page => $page, destpage => $page,
+					content => $ret);
+			});
+		}
 	}
 	
 	if ($cached_destpage ne $destpage) {

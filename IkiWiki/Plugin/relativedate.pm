@@ -27,7 +27,7 @@ sub format (@) {
         my %params=@_;
 
 	if (! ($params{content}=~s!^(<body[^>]*>)!$1.include_javascript($params{page})!em)) {
-		# no </body> tag, probably in preview mode
+		# no <body> tag, probably in preview mode
 		$params{content}=include_javascript($params{page}, 1).$params{content};
 	}
 	return $params{content};
@@ -49,17 +49,20 @@ sub mydisplaytime ($;$$) {
 	my $pubdate=shift;
 
 	# This needs to be in a form that can be parsed by javascript.
-	# Being fairly human readable is also nice, as it will be exposed
-	# as the title if javascript is not available.
+	# (Being fairly human readable is also nice, as it will be exposed
+	# as the title if javascript is not available.)
+	my $lc_time=POSIX::setlocale(&POSIX::LC_TIME);
+	POSIX::setlocale(&POSIX::LC_TIME, "C");
 	my $gmtime=decode_utf8(POSIX::strftime("%a, %d %b %Y %H:%M:%S %z",
 			localtime($time)));
+	POSIX::setlocale(&POSIX::LC_TIME, $lc_time);
 
 	my $mid=' class="relativedate" title="'.$gmtime.'">'.
 		IkiWiki::formattime($time, $format);
 
 	if ($config{html5}) {
 		return '<time datetime="'.IkiWiki::date_3339($time).'"'.
-			($pubdate ? ' pubdate' : '').$mid.'</time>';
+			($pubdate ? ' pubdate="pubdate"' : '').$mid.'</time>';
 	}
 	else {
 		return '<span'.$mid.'</span>';

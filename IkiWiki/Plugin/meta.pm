@@ -37,6 +37,7 @@ sub needsbuild (@) {
 			}
 		}
 	}
+	return $needsbuild;
 }
 
 sub scrub ($$) {
@@ -197,8 +198,12 @@ sub preprocess (@) {
 				'" rel="openid2.local_id" />' if $delegate ne 1;
 		}
 		if (exists $params{"xrds-location"} && safeurl($params{"xrds-location"})) {
-			push @{$metaheaders{$page}}, '<meta http-equiv="X-XRDS-Location"'.
-				'content="'.encode_entities($params{"xrds-location"}).'" />';
+			# force url absolute
+			eval q{use URI};
+			error($@) if $@;
+			my $url=URI->new_abs($params{"xrds-location"}, $config{url});
+			push @{$metaheaders{$page}}, '<meta http-equiv="X-XRDS-Location" '.
+				'content="'.encode_entities($url).'" />';
 		}
 	}
 	elsif ($key eq 'redir') {
@@ -253,12 +258,20 @@ sub preprocess (@) {
 			' content="'.encode_entities($value).'" />';
 	}
 	elsif ($key eq 'description') {
-		push @{$metaheaders{$page}}, '<meta name="'.encode_entities($key).
+		push @{$metaheaders{$page}}, '<meta name="'.
+			encode_entities($key).
 			'" content="'.encode_entities($value).'" />';
 	}
+	elsif ($key eq 'name') {
+		push @{$metaheaders{$page}}, scrub('<meta '.$key.'="'.
+			encode_entities($value).
+			join(' ', map { "$_=\"$params{$_}\"" } keys %params).
+			' />', $destpage);
+	}
 	else {
-		push @{$metaheaders{$page}}, scrub('<meta name="'.encode_entities($key).
-			'" content="'.encode_entities($value).'" />', $destpage);
+		push @{$metaheaders{$page}}, scrub('<meta name="'.
+			encode_entities($key).'" content="'.
+			encode_entities($value).'" />', $destpage);
 	}
 
 	return "";

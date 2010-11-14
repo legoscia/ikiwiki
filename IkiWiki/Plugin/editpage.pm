@@ -64,7 +64,7 @@ sub cgi_editpage ($$) {
 
 	decode_cgi_utf8($q);
 
-	my @fields=qw(do rcsinfo subpage from page type editcontent comments);
+	my @fields=qw(do rcsinfo subpage from page type editcontent editmessage);
 	my @buttons=("Save Page", "Preview", "Cancel");
 	eval q{use CGI::FormBuilder};
 	error($@) if $@;
@@ -144,16 +144,16 @@ sub cgi_editpage ($$) {
 	$form->field(name => "subpage", type => 'hidden');
 	$form->field(name => "page", value => $page, force => 1);
 	$form->field(name => "type", value => $type, force => 1);
-	$form->field(name => "comments", type => "text", size => 80);
+	$form->field(name => "editmessage", type => "text", size => 80);
 	$form->field(name => "editcontent", type => "textarea", rows => 20,
 		cols => 80);
 	$form->tmpl_param("can_commit", $config{rcs});
-	$form->tmpl_param("indexlink", indexlink());
 	$form->tmpl_param("helponformattinglink",
 		htmllink($page, $page, "ikiwiki/formatting",
 			noimageinline => 1,
 			linktext => "FormattingHelp"));
 	
+	my $previewing=0;
 	if ($form->submitted eq "Cancel") {
 		if ($form->field("do") eq "create" && defined $from) {
 			redirect($q, urlto($from, undef, 1));
@@ -167,11 +167,11 @@ sub cgi_editpage ($$) {
 		exit;
 	}
 	elsif ($form->submitted eq "Preview") {
+		$previewing=1;
+
 		my $new=not exists $pagesources{$page};
-		if ($new) {
-			# temporarily record its type
-			$pagesources{$page}=$page.".".$type;
-		}
+		# temporarily record its type
+		$pagesources{$page}=$page.".".$type if $new;
 		my %wasrendered=map { $_ => 1 } @{$renderedfiles{$page}};
 
 		my $content=$form->field('editcontent');
@@ -196,18 +196,17 @@ sub cgi_editpage ($$) {
 		});
 		$form->tmpl_param("page_preview", $preview);
 		
-		if ($new) {
-			delete $pagesources{$page};
-		}
-
 		# Previewing may have created files on disk.
 		# Keep a list of these to be deleted later.
 		my %previews = map { $_ => 1 } @{$wikistate{editpage}{previews}};
 		foreach my $f (@{$renderedfiles{$page}}) {
 			$previews{$f}=1 unless $wasrendered{$f};
 		}
+
+		# Throw out any other state changes made during previewing,
+		# and save the previews list.
+		loadindex();
 		@{$wikistate{editpage}{previews}} = keys %previews;
-		$renderedfiles{$page}=[keys %wasrendered];
 		saveindex();
 	}
 	elsif ($form->submitted eq "Save Page") {
@@ -256,7 +255,7 @@ sub cgi_editpage ($$) {
 			if (! @page_locs) {
 				# hmm, someone else made the page in the
 				# meantime?
-				if ($form->submitted eq "Preview") {
+				if ($previewing) {
 					# let them go ahead with the edit
 					# and resolve the conflict at save
 					# time
@@ -313,7 +312,8 @@ sub cgi_editpage ($$) {
 			$form->title(sprintf(gettext("editing %s"), pagetitle($page)));
 		}
 		
-		showform($form, \@buttons, $session, $q, forcebaseurl => $baseurl);
+		showform($form, \@buttons, $session, $q,
+			forcebaseurl => $baseurl, page => $page);
 	}
 	else {
 		# save page
@@ -330,7 +330,8 @@ sub cgi_editpage ($$) {
 			$form->field(name => "page", type => 'hidden');
 			$form->field(name => "type", type => 'hidden');
 			$form->title(sprintf(gettext("editing %s"), $page));
-			showform($form, \@buttons, $session, $q, forcebaseurl => $baseurl);
+			showform($form, \@buttons, $session, $q,
+				forcebaseurl => $baseurl, page => $page);
 			exit;
 		}
 		elsif ($form->field("do") eq "create" && $exists) {
@@ -344,14 +345,15 @@ sub cgi_editpage ($$) {
 				value => readfile("$config{srcdir}/$file").
 				         "\n\n\n".$form->field("editcontent"),
 				force => 1);
-			showform($form, \@buttons, $session, $q, forcebaseurl => $baseurl);
+			showform($form, \@buttons, $session, $q,
+				forcebaseurl => $baseurl, page => $page);
 			exit;
 		}
 			
 		my $message="";
-		if (defined $form->field('comments') &&
-		    length $form->field('comments')) {
-			$message=$form->field('comments');
+		if (defined $form->field('editmessage') &&
+		    length $form->field('editmessage')) {
+			$message=$form->field('editmessage');
 		}
 		
 		my $content=$form->field('editcontent');
@@ -385,7 +387,7 @@ sub cgi_editpage ($$) {
 			$form->field(name => "type", type => 'hidden');
 			$form->title(sprintf(gettext("editing %s"), $page));
 			showform($form, \@buttons, $session, $q,
-				forcebaseurl => $baseurl);
+				forcebaseurl => $baseurl, page => $page);
 			exit;
 		}
 		
@@ -399,9 +401,12 @@ sub cgi_editpage ($$) {
 			# signaling to it that it should not try to
 			# do anything.
 			disable_commit_hook();
-			$conflict=rcs_commit($file, $message,
-				$form->field("rcsinfo"),
-				$session->param("name"), $ENV{REMOTE_ADDR});
+			$conflict=rcs_commit(
+				file => $file,
+				message => $message,
+				token => $form->field("rcsinfo"),
+				session => $session,
+			);
 			enable_commit_hook();
 			rcs_update();
 		}
@@ -424,7 +429,7 @@ sub cgi_editpage ($$) {
 			$form->field(name => "type", type => 'hidden');
 			$form->title(sprintf(gettext("editing %s"), $page));
 			showform($form, \@buttons, $session, $q,
-				forcebaseurl => $baseurl);
+				forcebaseurl => $baseurl, page => $page);
 		}
 		else {
 			# The trailing question mark tries to avoid broken

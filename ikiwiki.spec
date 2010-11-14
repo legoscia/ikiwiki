@@ -1,5 +1,5 @@
 Name:           ikiwiki
-Version: 3.20100501
+Version: 3.20101023
 Release:        1%{?dist}
 Summary:        A wiki compiler
 
@@ -31,7 +31,6 @@ Requires:       perl(HTML::Scrubber)
 Requires:       perl(XML::Simple)
 Requires:       perl(CGI::FormBuilder)
 Requires:       perl(CGI::Session)
-Requires:       perl(Digest::SHA1)
 
 Requires:       python-docutils
 

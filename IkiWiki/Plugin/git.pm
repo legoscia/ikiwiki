@@ -9,7 +9,7 @@ use open qw{:utf8 :std};
 
 my $sha1_pattern     = qr/[0-9a-fA-F]{40}/; # pattern to validate Git sha1sums
 my $dummy_commit_msg = 'dummy commit';      # message to skip in recent changes
-my $no_chdir=0;
+my $git_dir=undef;
 
 sub import {
 	hook(type => "checkconfig", id => "git", call => \&checkconfig);
@@ -27,6 +27,8 @@ sub import {
 	hook(type => "rcs", id => "rcs_getctime", call => \&rcs_getctime);
 	hook(type => "rcs", id => "rcs_getmtime", call => \&rcs_getmtime);
 	hook(type => "rcs", id => "rcs_receive", call => \&rcs_receive);
+	hook(type => "rcs", id => "rcs_preprevert", call => \&rcs_preprevert);
+	hook(type => "rcs", id => "rcs_revert", call => \&rcs_revert);
 }
 
 sub checkconfig () {
@@ -41,11 +43,14 @@ sub checkconfig () {
 		push @{$config{wrappers}}, {
 			wrapper => $config{git_wrapper},
 			wrappermode => (defined $config{git_wrappermode} ? $config{git_wrappermode} : "06755"),
+			wrapper_background_command => $config{git_wrapper_background_command},
 		};
 	}
 
 	if (defined $config{git_test_receive_wrapper} &&
-	    length $config{git_test_receive_wrapper}) {
+	    length $config{git_test_receive_wrapper} &&
+	    defined $config{untrusted_committers} &&
+	    @{$config{untrusted_committers}}) {
 		push @{$config{wrappers}}, {
 			test_receive => 1,
 			wrapper => $config{git_test_receive_wrapper},
@@ -78,6 +83,13 @@ sub getsetup () {
 			safe => 0, # file
 			rebuild => 0,
 		},
+		git_wrapper_background_command => {
+			type => "string",
+			example => "git push github",
+			description => "shell command for git_wrapper to run, in the background",
+			safe => 0, # command
+			rebuild => 0,
+		},
 		git_wrappermode => {
 			type => "string",
 			example => '06755',
@@ -101,7 +113,7 @@ sub getsetup () {
 		},
 		historyurl => {
 			type => "string",
-			example => "http://git.example.com/gitweb.cgi?p=wiki.git;a=history;f=[[file]]",
+			example => "http://git.example.com/gitweb.cgi?p=wiki.git;a=history;f=[[file]];hb=HEAD",
 			description => "gitweb url to show file history ([[file]] substituted)",
 			safe => 1,
 			rebuild => 1,
@@ -152,9 +164,13 @@ sub safe_git (&@) {
 	if (!$pid) {
 		# In child.
 		# Git commands want to be in wc.
-		if (! $no_chdir) {
+		if (! defined $git_dir) {
 			chdir $config{srcdir}
-			    or error("Cannot chdir to $config{srcdir}: $!");
+			    or error("cannot chdir to $config{srcdir}: $!");
+		}
+		else {
+			chdir $git_dir
+			    or error("cannot chdir to $git_dir: $!");
 		}
 		exec @cmdline or error("Cannot exec '@cmdline': $!");
 	}
@@ -280,11 +296,35 @@ sub merge_past ($$$) {
 	return $conflict;
 }
 
-sub parse_diff_tree ($@) {
+{
+my $prefix;
+sub decode_git_file ($) {
+	my $file=shift;
+
+	# git does not output utf-8 filenames, but instead
+	# double-quotes them with the utf-8 characters
+	# escaped as \nnn\nnn.
+	if ($file =~ m/^"(.*)"$/) {
+		($file=$1) =~ s/\\([0-7]{1,3})/chr(oct($1))/eg;
+	}
+
+	# strip prefix if in a subdir
+	if (! defined $prefix) {
+		($prefix) = run_or_die('git', 'rev-parse', '--show-prefix');
+		if (! defined $prefix) {
+			$prefix="";
+		}
+	}
+	$file =~ s/^\Q$prefix\E//;
+
+	return decode("utf8", $file);
+}
+}
+
+sub parse_diff_tree ($) {
 	# Parse the raw diff tree chunk and return the info hash.
 	# See git-diff-tree(1) for the syntax.
-
-	my ($prefix, $dt_ref) = @_;
+	my $dt_ref = shift;
 
 	# End of stream?
 	return if !defined @{ $dt_ref } ||
@@ -318,8 +358,9 @@ sub parse_diff_tree ($@) {
 			$ci{ "${who}_epoch" } = $epoch;
 			$ci{ "${who}_tz"    } = $tz;
 
-			if ($name =~ m/^[^<]+\s+<([^@>]+)/) {
-				$ci{"${who}_username"} = $1;
+			if ($name =~ m/^([^<]+)\s+<([^@>]+)/) {
+				$ci{"${who}_name"} = $1;
+				$ci{"${who}_username"} = $2;
 			}
 			elsif ($name =~ m/^([^<]+)\s+<>$/) {
 				$ci{"${who}_username"} = $1;
@@ -367,16 +408,9 @@ sub parse_diff_tree ($@) {
 			my $sha1_to = shift(@tmp);
 			my $status = shift(@tmp);
 
-			# git does not output utf-8 filenames, but instead
-			# double-quotes them with the utf-8 characters
-			# escaped as \nnn\nnn.
-			if ($file =~ m/^"(.*)"$/) {
-				($file=$1) =~ s/\\([0-7]{1,3})/chr(oct($1))/eg;
-			}
-			$file =~ s/^\Q$prefix\E//;
 			if (length $file) {
 				push @{ $ci{'details'} }, {
-					'file'      => decode("utf8", $file),
+					'file'      => decode_git_file($file),
 					'sha1_from' => $sha1_from[0],
 					'sha1_to'   => $sha1_to,
 					'mode_from' => $mode_from[0],
@@ -403,10 +437,9 @@ sub git_commit_info ($;$) {
 	my @raw_lines = run_or_die('git', 'log', @opts,
 		'--pretty=raw', '--raw', '--abbrev=40', '--always', '-c',
 		'-r', $sha1, '--', '.');
-	my ($prefix) = run_or_die('git', 'rev-parse', '--show-prefix');
 
 	my @ci;
-	while (my $parsed = parse_diff_tree(($prefix or ""), \@raw_lines)) {
+	while (my $parsed = parse_diff_tree(\@raw_lines)) {
 		push @ci, $parsed;
 	}
 
@@ -435,7 +468,7 @@ sub rcs_update () {
 	# Update working directory.
 
 	if (length $config{gitorigin_branch}) {
-		run_or_cry('git', 'pull', $config{gitorigin_branch});
+		run_or_cry('git', 'pull', '--prune', $config{gitorigin_branch});
 	}
 }
 
@@ -447,43 +480,62 @@ sub rcs_prepedit ($) {
 	return git_sha1($file);
 }
 
-sub rcs_commit ($$$;$$) {
+sub rcs_commit (@) {
 	# Try to commit the page; returns undef on _success_ and
 	# a version of the page with the rcs's conflict markers on
 	# failure.
-
-	my ($file, $message, $rcstoken, $user, $ipaddr) = @_;
+	my %params=@_;
 
 	# Check to see if the page has been changed by someone else since
 	# rcs_prepedit was called.
-	my $cur    = git_sha1($file);
-	my ($prev) = $rcstoken =~ /^($sha1_pattern)$/; # untaint
+	my $cur    = git_sha1($params{file});
+	my ($prev) = $params{token} =~ /^($sha1_pattern)$/; # untaint
 
 	if (defined $cur && defined $prev && $cur ne $prev) {
-		my $conflict = merge_past($prev, $file, $dummy_commit_msg);
+		my $conflict = merge_past($prev, $params{file}, $dummy_commit_msg);
 		return $conflict if defined $conflict;
 	}
 
-	rcs_add($file);	
-	return rcs_commit_staged($message, $user, $ipaddr);
+	rcs_add($params{file});
+	return rcs_commit_staged(
+		message => $params{message},
+		session => $params{session},
+	);
 }
 
-sub rcs_commit_staged ($$$) {
+sub rcs_commit_staged (@) {
 	# Commits all staged changes. Changes can be staged using rcs_add,
 	# rcs_remove, and rcs_rename.
-	my ($message, $user, $ipaddr)=@_;
-
-	# Set the commit author and email to the web committer.
+	my %params=@_;
+	
 	my %env=%ENV;
-	if (defined $user || defined $ipaddr) {
-		my $u=encode_utf8(defined $user ? $user : $ipaddr);
-		$ENV{GIT_AUTHOR_NAME}=$u;
-		$ENV{GIT_AUTHOR_EMAIL}="$u\@web";
+
+	if (defined $params{session}) {
+		# Set the commit author and email based on web session info.
+		my $u;
+		if (defined $params{session}->param("name")) {
+			$u=$params{session}->param("name");
+		}
+		elsif (defined $params{session}->remote_addr()) {
+			$u=$params{session}->remote_addr();
+		}
+		if (defined $u) {
+			$u=encode_utf8($u);
+			$ENV{GIT_AUTHOR_NAME}=$u;
+		}
+		if (defined $params{session}->param("nickname")) {
+			$u=encode_utf8($params{session}->param("nickname"));
+			$u=~s/\s+/_/g;
+			$u=~s/[^-_0-9[:alnum:]]+//g;
+		}
+		if (defined $u) {
+			$ENV{GIT_AUTHOR_EMAIL}="$u\@web";
+		}
 	}
 
-	$message = IkiWiki::possibly_foolish_untaint($message);
+	$params{message} = IkiWiki::possibly_foolish_untaint($params{message});
 	my @opts;
-	if ($message !~ /\S/) {
+	if ($params{message} !~ /\S/) {
 		# Force git to allow empty commit messages.
 		# (If this version of git supports it.)
 		my ($version)=`git --version` =~ /git version (.*)/;
@@ -491,13 +543,13 @@ sub rcs_commit_staged ($$$) {
 			push @opts, '--cleanup=verbatim';
 		}
 		else {
-			$message.=".";
+			$params{message}.=".";
 		}
 	}
 	push @opts, '-q';
 	# git commit returns non-zero if file has not been really changed.
 	# so we should ignore its exit status (hence run_or_non).
-	if (run_or_non('git', 'commit', @opts, '-m', $message)) {
+	if (run_or_non('git', 'commit', @opts, '-m', $params{message})) {
 		if (length $config{gitorigin_branch}) {
 			run_or_cry('git', 'push', $config{gitorigin_branch});
 		}
@@ -574,7 +626,16 @@ sub rcs_recentchanges ($) {
 
 		my $user=$ci->{'author_username'};
 		my $web_commit = ($ci->{'author'} =~ /\@web>/);
-		
+		my $nickname;
+
+		# Set nickname only if a non-url author_username is available,
+		# and author_name is an url.
+		if ($user !~ /:\/\// && defined $ci->{'author_name'} &&
+		    $ci->{'author_name'} =~ /:\/\//) {
+			$nickname=$user;
+			$user=$ci->{'author_name'};
+		}
+
 		# compatability code for old web commit messages
 		if (! $web_commit &&
 		      defined $messages[0] &&
@@ -587,6 +648,7 @@ sub rcs_recentchanges ($) {
 		push @rets, {
 			rev        => $sha1,
 			user       => $user,
+			nickname   => $nickname,
 			committype => $web_commit ? "web" : "git",
 			when       => $when,
 			message    => [@messages],
@@ -623,13 +685,10 @@ sub findtimes ($$) {
 	my $file=shift;
 	my $id=shift; # 0 = mtime ; 1 = ctime
 
-	# Remove srcdir prefix
-	$file =~ s/^\Q$config{srcdir}\E\/?//;
-
 	if (! keys %time_cache) {
 		my $date;
 		foreach my $line (run_or_die('git', 'log',
-				'--pretty=format:%ct',
+				'--pretty=format:%at',
 				'--name-only', '--relative')) {
 			if (! defined $date && $line =~ /^(\d+)$/) {
 				$date=$line;
@@ -638,10 +697,12 @@ sub findtimes ($$) {
 				$date=undef;
 			}
 			else {
-				if (! $time_cache{$line}) {
-					$time_cache{$line}[0]=$date; # mtime
+				my $f=decode_git_file($line);
+
+				if (! $time_cache{$f}) {
+					$time_cache{$f}[0]=$date; # mtime
 				}
-				$time_cache{$line}[1]=$date; # ctime
+				$time_cache{$f}[1]=$date; # ctime
 			}
 		}
 	}
@@ -663,10 +724,15 @@ sub rcs_getmtime ($) {
 	return findtimes($file, 0);
 }
 
-sub rcs_receive () {
+{
+my $ret;
+sub git_find_root {
 	# The wiki may not be the only thing in the git repo.
 	# Determine if it is in a subdirectory by examining the srcdir,
 	# and its parents, looking for the .git directory.
+
+	return @$ret if defined $ret;
+	
 	my $subdir="";
 	my $dir=$config{srcdir};
 	while (! -d "$dir/.git") {
@@ -677,83 +743,139 @@ sub rcs_receive () {
 		}
 	}
 
+	$ret=[$subdir, $dir];
+	return @$ret;
+}
+
+}
+
+sub git_parse_changes {
+	my @changes = @_;
+
+	my ($subdir, $rootdir) = git_find_root();
+	my @rets;
+	foreach my $ci (@changes) {
+		foreach my $detail (@{ $ci->{'details'} }) {
+			my $file = $detail->{'file'};
+
+			# check that all changed files are in the subdir
+			if (length $subdir &&
+			    ! ($file =~ s/^\Q$subdir\E//)) {
+				error sprintf(gettext("you are not allowed to change %s"), $file);
+			}
+
+			my ($action, $mode, $path);
+			if ($detail->{'status'} =~ /^[M]+\d*$/) {
+				$action="change";
+				$mode=$detail->{'mode_to'};
+			}
+			elsif ($detail->{'status'} =~ /^[AM]+\d*$/) {
+				$action="add";
+				$mode=$detail->{'mode_to'};
+			}
+			elsif ($detail->{'status'} =~ /^[DAM]+\d*/) {
+				$action="remove";
+				$mode=$detail->{'mode_from'};
+			}
+			else {
+				error "unknown status ".$detail->{'status'};
+			}
+
+			# test that the file mode is ok
+			if ($mode !~ /^100[64][64][64]$/) {
+				error sprintf(gettext("you cannot act on a file with mode %s"), $mode);
+			}
+			if ($action eq "change") {
+				if ($detail->{'mode_from'} ne $detail->{'mode_to'}) {
+					error gettext("you are not allowed to change file modes");
+				}
+			}
+
+			# extract attachment to temp file
+			if (($action eq 'add' || $action eq 'change') &&
+			    ! pagetype($file)) {
+				eval q{use File::Temp};
+				die $@ if $@;
+				my $fh;
+				($fh, $path)=File::Temp::tempfile("XXXXXXXXXX", UNLINK => 1);
+				my $cmd = "cd $git_dir && ".
+				          "git show $detail->{sha1_to} > '$path'";
+				if (system($cmd) != 0) {
+					error("failed writing temp file '$path'.");
+				}
+			}
+
+			push @rets, {
+				file => $file,
+				action => $action,
+				path => $path,
+			};
+		}
+	}
+
+	return @rets;
+}
+
+sub rcs_receive () {
 	my @rets;
 	while (<>) {
 		chomp;
 		my ($oldrev, $newrev, $refname) = split(' ', $_, 3);
-		
+
 		# only allow changes to gitmaster_branch
 		if ($refname !~ /^refs\/heads\/\Q$config{gitmaster_branch}\E$/) {
 			error sprintf(gettext("you are not allowed to change %s"), $refname);
 		}
-		
+
 		# Avoid chdir when running git here, because the changes
 		# are in the master git repo, not the srcdir repo.
-		# The pre-recieve hook already puts us in the right place.
-		$no_chdir=1;
-		my @changes=git_commit_info($oldrev."..".$newrev);
-		$no_chdir=0;
-
-		foreach my $ci (@changes) {
-			foreach my $detail (@{ $ci->{'details'} }) {
-				my $file = $detail->{'file'};
-
-				# check that all changed files are in the
-				# subdir
-				if (length $subdir &&
-				    ! ($file =~ s/^\Q$subdir\E//)) {
-					error sprintf(gettext("you are not allowed to change %s"), $file);
-				}
-
-				my ($action, $mode, $path);
-				if ($detail->{'status'} =~ /^[M]+\d*$/) {
-					$action="change";
-					$mode=$detail->{'mode_to'};
-				}
-				elsif ($detail->{'status'} =~ /^[AM]+\d*$/) {
-					$action="add";
-					$mode=$detail->{'mode_to'};
-				}
-				elsif ($detail->{'status'} =~ /^[DAM]+\d*/) {
-					$action="remove";
-					$mode=$detail->{'mode_from'};
-				}
-				else {
-					error "unknown status ".$detail->{'status'};
-				}
-				
-				# test that the file mode is ok
-				if ($mode !~ /^100[64][64][64]$/) {
-					error sprintf(gettext("you cannot act on a file with mode %s"), $mode);
-				}
-				if ($action eq "change") {
-					if ($detail->{'mode_from'} ne $detail->{'mode_to'}) {
-						error gettext("you are not allowed to change file modes");
-					}
-				}
-				
-				# extract attachment to temp file
-				if (($action eq 'add' || $action eq 'change') &&
-				     ! pagetype($file)) {
-					eval q{use File::Temp};
-					die $@ if $@;
-					my $fh;
-					($fh, $path)=File::Temp::tempfile("XXXXXXXXXX", UNLINK => 1);
-					if (system("git show ".$detail->{sha1_to}." > '$path'") != 0) {
-						error("failed writing temp file");
-					}
-				}
-
-				push @rets, {
-					file => $file,
-					action => $action,
-					path => $path,
-				};
-			}
-		}
+		# (Also, if a subdir is involved, we don't want to chdir to
+		# it and only see changes in it.)
+		# The pre-receive hook already puts us in the right place.
+		$git_dir=".";
+		push @rets, git_parse_changes(git_commit_info($oldrev."..".$newrev));
+		$git_dir=undef;
 	}
 
 	return reverse @rets;
+}
+
+sub rcs_preprevert ($) {
+	my $rev=shift;
+	my ($sha1) = $rev =~ /^($sha1_pattern)$/; # untaint
+
+	# Examine changes from root of git repo, not from any subdir,
+	# in order to see all changes.
+	my ($subdir, $rootdir) = git_find_root();
+	$git_dir=$rootdir;
+	my @commits=git_commit_info($sha1, 1);
+	$git_dir=undef;
+
+	if (! @commits) {
+		error "unknown commit"; # just in case
+	}
+
+	# git revert will fail on merge commits. Add a nice message.
+	if (exists $commits[0]->{parents} &&
+	    @{$commits[0]->{parents}} > 1) {
+		error gettext("you are not allowed to revert a merge");
+	}
+
+	return git_parse_changes(@commits);
+}
+
+sub rcs_revert ($) {
+	# Try to revert the given rev; returns undef on _success_.
+	my $rev = shift;
+	my ($sha1) = $rev =~ /^($sha1_pattern)$/; # untaint
+
+	if (run_or_non('git', 'revert', '--no-commit', $sha1)) {
+		return undef;
+	}
+	else {
+		run_or_die('git', 'reset', '--hard');
+		return sprintf(gettext("Failed to revert commit %s"), $sha1);
+	}
 }
 
 1

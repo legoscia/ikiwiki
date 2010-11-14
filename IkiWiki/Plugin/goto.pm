@@ -7,6 +7,7 @@ use IkiWiki 3.00;
 
 sub import {
 	hook(type => "cgi", id => 'goto',  call => \&cgi);
+	hook(type => "getsetup", id => 'goto',  call => \&getsetup);
 }
 
 sub getsetup () {
@@ -41,16 +42,17 @@ sub cgi_goto ($;$) {
 
 	IkiWiki::loadindex();
 
-	# If the page is internal (like a comment), see if it has a
-	# permalink. Comments do.
-	if (IkiWiki::isinternal($page) &&
-	    defined $pagestate{$page}{meta}{permalink}) {
-	    	IkiWiki::redirect($q, $pagestate{$page}{meta}{permalink});
+	my $link;
+	if (! IkiWiki::isinternal($page)) {
+		$link = bestlink("", $page);
+	}
+	elsif (defined $pagestate{$page}{meta}{permalink}) {
+		# Can only redirect to an internal page if it has a
+		# permalink.
+		IkiWiki::redirect($q, $pagestate{$page}{meta}{permalink});
 	}
 
-	my $link = bestlink("", $page);
-
-	if (! length $link) {
+	if (! defined $link || ! length $link) {
 		IkiWiki::cgi_custom_failure(
 			$q,
 			"404 Not Found",

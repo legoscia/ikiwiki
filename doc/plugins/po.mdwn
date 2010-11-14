@@ -56,15 +56,15 @@ Supported languages
 `po_master_language` is used to set the "master" language in
 `ikiwiki.setup`, such as:
 
-        po_master_language => { 'code' => 'en', 'name' => 'English' }
+        po_master_language => 'en|English'
 
 `po_slave_languages` is used to set the list of supported "slave"
 languages, such as:
 
-        po_slave_languages => { 'fr' => 'Français',
-                                'es' => 'Español',
-                                'de' => 'Deutsch',
-        }
+        po_slave_languages => [ 'fr|Français',
+                                'es|Español',
+                                'de|Deutsch',
+        ]
 
 Decide which pages are translatable
 -----------------------------------
@@ -133,12 +133,13 @@ serve any page in the client's preferred language, if available.
 
 Add 'Options MultiViews' to the wiki directory's configuration in Apache.
 
-When `usedirs` is enabled, one has to set `DirectoryIndex index` for
-the wiki context.
+When `usedirs` is enabled, you should also set `DirectoryIndex index`.
 
-Setting `DefaultLanguage LL` (replace `LL` with your default MIME
-language code) for the wiki context can help to ensure
-`bla/page/index.en.html` is served as `Content-Language: LL`.
+These settings are also recommended, in order to avoid serving up rss files
+as index pages:
+
+	AddType application/rss+xml;qs=0.8 .rss
+	AddType application/atom+xml;qs=0.8 .atom
 
 For details, see [Apache's documentation](http://httpd.apache.org/docs/2.2/content-negotiation.html).
 
@@ -146,7 +147,7 @@ lighttpd
 --------
 
 Recent versions of lighttpd should be able to use
-`$HTTP["language"]` to configure the translatted pages to be served.
+`$HTTP["language"]` to configure the translated pages to be served.
 
 See [Lighttpd Issue](http://redmine.lighttpd.net/issues/show/1119)
 
@@ -216,7 +217,7 @@ enabled, "slave" pages therefore link to the "master" page's
 discussion page.
 
 Likewise, "slave" pages are not supposed to have sub-pages;
-[[WikiLinks|wikilink]] that appear on a "slave" page therefore link to
+[[WikiLinks|ikiwiki/wikilink]] that appear on a "slave" page therefore link to
 the master page's sub-pages.
 
 Translating
@@ -231,16 +232,16 @@ preferred `$EDITOR`, without needing to be online.
 Markup languages support
 ------------------------
 
-[[Markdown|mdwn]] is well supported. Some other markup languages supported
-by ikiwiki mostly work, but some pieces of syntax are not rendered
-correctly on the slave pages:
+[[Markdown|mdwn]] and [[html]] are well supported. Some other markup
+languages supported by ikiwiki mostly work, but some pieces of syntax
+are not rendered correctly on the slave pages:
 
 * [[reStructuredText|rst]]: anonymous hyperlinks and internal
   cross-references
 * [[wikitext]]: conversion of newlines to paragraphs
 * [[creole]]: verbatim text is wrapped, tables are broken
-* [[html]] and LaTeX: not supported yet; the dedicated po4a modules
-  could be used to support them, but they would need a security audit
+* LaTeX: not supported yet; the dedicated po4a module
+  could be used to support it, but it would need a security audit
 * other markup languages have not been tested.
 
 Security
@@ -253,95 +254,14 @@ When using po4a older than 0.35, it is recommended to uninstall
 `Text::WrapI18N` (Debian package `libtext-wrapi18n-perl`), in order to
 avoid a potential denial of service.
 
+BUGS
+====
+
+[[!inline pages="bugs/po:* and !bugs/done and !link(bugs/done) and !bugs/*/*"
+feeds=no actions=no archive=yes show=0]]
+
 TODO
 ====
 
-Better links
-------------
-
-Once the fix to
-[[bugs/pagetitle_function_does_not_respect_meta_titles]] from
-[[intrigeri]]'s `meta` branch is merged into ikiwiki upstream, the
-generated links' text will be optionally based on the page titles set
-with the [[meta|plugins/meta]] plugin, and will thus be translatable.
-It will also allow displaying the translation status in links to slave
-pages. Both were implemented, and reverted in commit
-ea753782b222bf4ba2fb4683b6363afdd9055b64, which should be reverted
-once [[intrigeri]]'s `meta` branch is merged.
-
-An integration branch, called `meta-po`, merges [[intrigeri]]'s `po`
-and `meta` branches, and thus has this additional features.
-
-Language display order
-----------------------
-
-Jonas pointed out that one might want to control the order that links to
-other languages are listed, for various reasons. Currently, there is no
-order, as `po_slave_languages` is a hash. It would need to be converted
-to an array to support this. (If twere done, twere best done quickly.)
---[[Joey]] 
-
-Pagespecs
----------
-
-I was suprised that, when using the map directive, a pagespec of "*"
-listed all the translated pages as well as regular pages. That can 
-make a big difference to an existing wiki when po is turned on,
-and seems generally not wanted.
-(OTOH, you do want to match translated pages by
-default when locking pages.) --[[Joey]]
-
-Edit links on untranslated pages
---------------------------------
-
-If a page is not translated yet, the "translated" version of it
-displays wikilinks to other, existing (but not yet translated?)
-pages as edit links, as if those pages do not exist. 
-
-That's really confusing, especially as clicking such a link
-brings up an edit form to create a new, english page.
-
-This is with po_link_to=current or negotiated. With default, it doesn't
-happen.. 
-
-Also, this may only happen if the page being linked to is coming from an
-underlay, and the underlays lack translation to a given language.
---[[Joey]] 
-
-Double commits of po files
---------------------------
-
-When adding a new english page, the po files are created, committed,
-and then committed again. The second commit makes this change:
-
-	-"Content-Type: text/plain; charset=utf-8\n"
-	-"Content-Transfer-Encoding: ENCODING"
-	+"Content-Type: text/plain; charset=UTF-8\n"
-	+"Content-Transfer-Encoding: ENCODING\n"
-
-Same thing happens when a change to an existing page triggers a po file
-update. --[[Joey]] 
-
-Ugly messages with empty files
-------------------------------
-
-If there are empty .mdwn files, the po plugin displays some ugly messages.
-
-Translation of directives
--------------------------
-
-If a translated page contains a directive, it may expand to some english
-text, or text in whatever single language ikiwiki is configured to "speak".
-
-Maybe there could be a way to switch ikiwiki to speaking another language
-when building a non-english page? Then the directives would get translated.
-
-(We also will need this in order to use translated templates, when they are
-available.)
-
-Documentation
--------------
-
-Maybe write separate documentation depending on the people it targets:
-translators, wiki administrators, hackers. This plugin may be complex
-enough to deserve this.
+[[!inline pages="todo/po:* and !todo/done and !link(todo/done) and !todo/*/*"
+feeds=no actions=no archive=yes show=0]]
