@@ -148,8 +148,9 @@ $check_commit_hook
 $envsave
 	newenviron[i++]="HOME=$ENV{HOME}";
 	newenviron[i++]="PATH=$ENV{PATH}";
+	newenviron[i++]="TZ=$ENV{TZ}";
+	newenviron[i++]="LANG=$ENV{LANG}}";
 	newenviron[i++]="WRAPPED_OPTIONS=$configstring";
-	newenviron[i++]="LC_CTYPE=en_US.utf8";
 
 #ifdef __TINYC__
 	/* old tcc versions do not support modifying environ directly */
