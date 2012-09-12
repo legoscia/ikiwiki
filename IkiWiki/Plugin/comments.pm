@@ -9,7 +9,6 @@ use warnings;
 use strict;
 use IkiWiki 3.00;
 use Encode;
-use POSIX qw(strftime);
 
 use constant PREVIEW => "Preview";
 use constant POST_COMMENT => "Post comment";
@@ -21,7 +20,8 @@ my %commentstate;
 sub import {
 	hook(type => "checkconfig", id => 'comments',  call => \&checkconfig);
 	hook(type => "getsetup", id => 'comments',  call => \&getsetup);
-	hook(type => "preprocess", id => 'comment', call => \&preprocess);
+	hook(type => "preprocess", id => 'comment', call => \&preprocess,
+		scan => 1);
 	hook(type => "preprocess", id => 'commentmoderation', call => \&preprocess_moderation);
 	# here for backwards compatability with old comments
 	hook(type => "preprocess", id => '_comment', call => \&preprocess);
@@ -143,22 +143,27 @@ sub preprocess {
 	}
 	$content =~ s/\\"/"/g;
 
-	if ($config{comments_allowdirectives}) {
-		$content = IkiWiki::preprocess($page, $params{destpage},
-			$content);
+	if (defined wantarray) {
+		if ($config{comments_allowdirectives}) {
+			$content = IkiWiki::preprocess($page, $params{destpage},
+				$content);
+		}
+
+		# no need to bother with htmlize if it's just HTML
+		$content = IkiWiki::htmlize($page, $params{destpage}, $format, $content)
+			if defined $format;
+
+		IkiWiki::run_hooks(sanitize => sub {
+			$content = shift->(
+				page => $page,
+				destpage => $params{destpage},
+				content => $content,
+			);
+		});
 	}
-
-	# no need to bother with htmlize if it's just HTML
-	$content = IkiWiki::htmlize($page, $params{destpage}, $format, $content)
-		if defined $format;
-
-	IkiWiki::run_hooks(sanitize => sub {
-		$content = shift->(
-			page => $page,
-			destpage => $params{destpage},
-			content => $content,
-		);
-	});
+	else {
+		IkiWiki::preprocess($page, $params{destpage}, $content, 1);
+	}
 
 	# set metadata, possibly overriding [[!meta]] directives from the
 	# comment itself
@@ -200,6 +205,7 @@ sub preprocess {
 	$commentstate{$page}{commentip} = $commentip;
 	$commentstate{$page}{commentauthor} = $commentauthor;
 	$commentstate{$page}{commentauthorurl} = $commentauthorurl;
+	$commentstate{$page}{commentauthoravatar} = $params{avatar};
 	if (! defined $pagestate{$page}{meta}{author}) {
 		$pagestate{$page}{meta}{author} = $commentauthor;
 	}
@@ -216,7 +222,7 @@ sub preprocess {
 			my $url=$params{url};
 
 			eval q{use URI::Heuristic}; 
-		  	if (! $@) {
+			if (! $@) {
 				$url=URI::Heuristic::uf_uristr($url);
 			}
 
@@ -237,7 +243,7 @@ sub preprocess {
 	}
 
 	if ($params{page} =~ m/\/\Q$config{comments_pagename}\E\d+_/) {
-		$pagestate{$page}{meta}{permalink} = urlto(IkiWiki::dirname($params{page}), undef, 1).
+		$pagestate{$page}{meta}{permalink} = urlto(IkiWiki::dirname($params{page})).
 			"#".page_to_id($params{page});
 	}
 
@@ -295,13 +301,14 @@ sub editcomment ($$) {
 
 	my @buttons = (POST_COMMENT, PREVIEW, CANCEL);
 	my $form = CGI::FormBuilder->new(
-		fields => [qw{do sid page subject editcontent type author url}],
+		fields => [qw{do sid page subject editcontent type author
+			email url subscribe anonsubscribe}],
 		charset => 'utf-8',
 		method => 'POST',
 		required => [qw{editcontent}],
 		javascript => 0,
 		params => $cgi,
-		action => $config{cgiurl},
+		action => IkiWiki::cgiurl(),
 		header => 0,
 		table => 0,
 		template => { template('editcomment.tmpl') },
@@ -340,17 +347,34 @@ sub editcomment ($$) {
 	$form->field(name => "type", value => $type, force => 1,
 		type => 'select', options => \@page_types);
 
-	$form->tmpl_param(username => $session->param('name'));
+	my $username=$session->param('name');
+	$form->tmpl_param(username => $username);
+		
+	$form->field(name => "subscribe", type => 'hidden');
+	$form->field(name => "anonsubscribe", type => 'hidden');
+	if (IkiWiki::Plugin::notifyemail->can("subscribe")) {
+		if (defined $username) {
+			$form->field(name => "subscribe", type => "checkbox",
+				options => [gettext("email replies to me")]);
+		}
+		elsif (IkiWiki::Plugin::passwordauth->can("anonuser")) {
+			$form->field(name => "anonsubscribe", type => "checkbox",
+				options => [gettext("email replies to me")]);
+		}
+	}
 
 	if ($config{comments_allowauthor} and
 	    ! defined $session->param('name')) {
 		$form->tmpl_param(allowauthor => 1);
 		$form->field(name => 'author', type => 'text', size => '40');
+		$form->field(name => 'email', type => 'text', size => '40');
 		$form->field(name => 'url', type => 'text', size => '40');
 	}
 	else {
 		$form->tmpl_param(allowauthor => 0);
 		$form->field(name => 'author', type => 'hidden', value => '',
+			force => 1);
+		$form->field(name => 'email', type => 'hidden', value => '',
 			force => 1);
 		$form->field(name => 'url', type => 'hidden', value => '',
 			force => 1);
@@ -364,18 +388,16 @@ sub editcomment ($$) {
 	}
 
 	# The untaint is OK (as in editpage) because we're about to pass
-	# it to file_pruned anyway
-	my $page = $form->field('page');
+	# it to file_pruned and wiki_file_regexp anyway.
+	my ($page) = $form->field('page')=~/$config{wiki_file_regexp}/;
 	$page = IkiWiki::possibly_foolish_untaint($page);
 	if (! defined $page || ! length $page ||
 		IkiWiki::file_pruned($page)) {
 		error(gettext("bad page name"));
 	}
 
-	my $baseurl = urlto($page, undef, 1);
-
 	$form->title(sprintf(gettext("commenting on %s"),
-			IkiWiki::pagetitle($page)));
+			IkiWiki::pagetitle(IkiWiki::basename($page))));
 
 	$form->tmpl_param('helponformattinglink',
 		htmllink($page, $page, 'ikiwiki/formatting',
@@ -385,8 +407,7 @@ sub editcomment ($$) {
 
 	if ($form->submitted eq CANCEL) {
 		# bounce back to the page they wanted to comment on, and exit.
-		# CANCEL need not be considered in future
-		IkiWiki::redirect($cgi, urlto($page, undef, 1));
+		IkiWiki::redirect($cgi, urlto($page));
 		exit;
 	}
 
@@ -422,10 +443,7 @@ sub editcomment ($$) {
 		$content .= " nickname=\"$nickname\"\n";
 	}
 	elsif (defined $session->remote_addr()) {
-		my $ip = $session->remote_addr();
-		if ($ip =~ m/^([.0-9]+)$/) {
-			$content .= " ip=\"$1\"\n";
-		}
+		$content .= " ip=\"".$session->remote_addr()."\"\n";
 	}
 
 	if ($config{comments_allowauthor}) {
@@ -441,6 +459,12 @@ sub editcomment ($$) {
 		}
 	}
 
+	my $avatar=getavatar($session->param('name'));
+	if (defined $avatar && length $avatar) {
+		$avatar =~ s/"/&quot;/g;
+		$content .= " avatar=\"$avatar\"\n";
+	}
+
 	my $subject = $form->field('subject');
 	if (defined $subject && length $subject) {
 		$subject =~ s/"/&quot;/g;
@@ -450,7 +474,7 @@ sub editcomment ($$) {
 	}
 	$content .= " subject=\"$subject\"\n";
 
-	$content .= " date=\"" . decode_utf8(strftime('%Y-%m-%dT%H:%M:%SZ', gmtime)) . "\"\n";
+	$content .= " date=\"" . strftime_utf8('%Y-%m-%dT%H:%M:%SZ', gmtime) . "\"\n";
 
 	my $editcontent = $form->field('editcontent');
 	$editcontent="" if ! defined $editcontent;
@@ -481,6 +505,20 @@ sub editcomment ($$) {
 
 	if ($form->submitted eq POST_COMMENT && $form->validate) {
 		IkiWiki::checksessionexpiry($cgi, $session);
+
+		if (IkiWiki::Plugin::notifyemail->can("subscribe")) {
+			my $subspec="comment($page)";
+			if (defined $username &&
+			    length $form->field("subscribe")) {
+				IkiWiki::Plugin::notifyemail::subscribe(
+					$username, $subspec);
+			}
+			elsif (length $form->field("email") &&
+			       length $form->field("anonsubscribe")) {
+				IkiWiki::Plugin::notifyemail::anonsubscribe(
+					$form->field("email"), $subspec);
+			}
+		}
 		
 		$postcomment=1;
 		my $ok=IkiWiki::check_content(content => $form->field('editcontent'),
@@ -507,7 +545,7 @@ sub editcomment ($$) {
 			IkiWiki::saveindex();
 
 			IkiWiki::printheader($session);
-			print IkiWiki::misctemplate(gettext(gettext("comment stored for moderation")),
+			print IkiWiki::cgitemplate($cgi, gettext(gettext("comment stored for moderation")),
 				"<p>".
 				gettext("Your comment will be posted after moderator review").
 				"</p>");
@@ -552,17 +590,43 @@ sub editcomment ($$) {
 		# Jump to the new comment on the page.
 		# The trailing question mark tries to avoid broken
 		# caches and get the most recent version of the page.
-		IkiWiki::redirect($cgi, urlto($page, undef, 1).
+		IkiWiki::redirect($cgi, urlto($page).
 			"?updated#".page_to_id($location));
 
 	}
 	else {
-		IkiWiki::showform ($form, \@buttons, $session, $cgi,
-			forcebaseurl => $baseurl, page => $page);
+		IkiWiki::showform($form, \@buttons, $session, $cgi,
+			page => $page);
 	}
 
 	exit;
 }
+
+sub getavatar ($) {
+	my $user=shift;
+	return undef unless defined $user;
+
+	my $avatar;
+	eval q{use Libravatar::URL};
+	if (! $@) {
+		my $oiduser = eval { IkiWiki::openiduser($user) };
+		my $https=defined $config{url} && $config{url}=~/^https:/;
+
+		if (defined $oiduser) {
+			eval {
+				$avatar = libravatar_url(openid => $user, https => $https);
+			}
+		}
+		if (! defined $avatar &&
+		    (my $email = IkiWiki::userinfo_get($user, 'email'))) {
+			eval {
+				$avatar = libravatar_url(email => $email, https => $https);
+			}
+		}
+	}
+	return $avatar;
+}
+
 
 sub commentmoderation ($$) {
 	my $cgi=shift;
@@ -598,9 +662,11 @@ sub commentmoderation ($$) {
 
 				my $page=IkiWiki::dirname($f);
 				my $file="$config{srcdir}/$f";
+				my $filedir=$config{srcdir};
 				if (! -e $file) {
 					# old location
 					$file="$config{wikistatedir}/comments_pending/".$f;
+					$filedir="$config{wikistatedir}/comments_pending";
 				}
 
 				if ($action eq 'Accept') {
@@ -615,7 +681,7 @@ sub commentmoderation ($$) {
 				}
 
 				require IkiWiki::Render;
-				IkiWiki::prune($file);
+				IkiWiki::prune($file, $filedir);
 			}
 		}
 
@@ -656,13 +722,14 @@ sub commentmoderation ($$) {
 	$template->param(
 		sid => $session->id,
 		comments => \@comments,
+		cgiurl => IkiWiki::cgiurl(),
 	);
 	IkiWiki::printheader($session);
 	my $out=$template->output;
 	IkiWiki::run_hooks(format => sub {
 		$out = shift->(page => "", content => $out);
 	});
-	print IkiWiki::misctemplate(gettext("comment moderation"), $out);
+	print IkiWiki::cgitemplate($cgi, gettext("comment moderation"), $out);
 	exit;
 }
 
@@ -727,6 +794,10 @@ sub previewcomment ($$$) {
 	my $page=shift;
 	my $time=shift;
 
+	# Previewing a comment should implicitly enable comment posting mode.
+	my $oldpostcomment=$postcomment;
+	$postcomment=1;
+
 	my $preview = IkiWiki::htmlize($location, $page, '_comment',
 			IkiWiki::linkify($location, $page,
 			IkiWiki::preprocess($location, $page,
@@ -745,16 +816,16 @@ sub previewcomment ($$$) {
 
 	$template->param(have_actions => 0);
 
+	$postcomment=$oldpostcomment;
+
 	return $template->output;
 }
 
 sub commentsshown ($) {
 	my $page=shift;
 
-	return ! pagespec_match($page, "comment(*)",
-	                        location => $page) &&
-	       pagespec_match($page, $config{comments_pagespec},
-	                      location => $page);
+	return pagespec_match($page, $config{comments_pagespec},
+		location => $page);
 }
 
 sub commentsopen ($) {
@@ -781,7 +852,7 @@ sub pagetemplate (@) {
 		my $comments = undef;
 		if ($shown) {
 			$comments = IkiWiki::preprocess_inline(
-				pages => "comment($page)",
+				pages => "comment($page) and !comment($page/*)",
 				template => 'comment',
 				show => 0,
 				reverse => 'yes',
@@ -804,14 +875,14 @@ sub pagetemplate (@) {
 	if ($shown) {
 		if ($template->query(name => 'commentsurl')) {
 			$template->param(commentsurl =>
-				urlto($page, undef, 1).'#comments');
+				urlto($page).'#comments');
 		}
 
 		if ($template->query(name => 'atomcommentsurl') && $config{usedirs}) {
 			# This will 404 until there are some comments, but I
 			# think that's probably OK...
 			$template->param(atomcommentsurl =>
-				urlto($page, undef, 1).'comments.atom');
+				urlto($page).'comments.atom');
 		}
 
 		if ($template->query(name => 'commentslink')) {
@@ -870,6 +941,11 @@ sub pagetemplate (@) {
 	if ($template->query(name => 'commentauthorurl')) {
 		$template->param(commentauthorurl =>
 			$commentstate{$page}{commentauthorurl});
+	}
+
+	if ($template->query(name => 'commentauthoravatar')) {
+		$template->param(commentauthoravatar =>
+			$commentstate{$page}{commentauthoravatar});
 	}
 
 	if ($template->query(name => 'removeurl') &&
@@ -941,14 +1017,16 @@ sub match_comment ($$;@) {
 	my $page = shift;
 	my $glob = shift;
 
-	# To see if it's a comment, check the source file type.
-	# Deal with comments that were just deleted.
-	my $source=exists $IkiWiki::pagesources{$page} ?
-		$IkiWiki::pagesources{$page} :
-		$IkiWiki::delpagesources{$page};
-	my $type=defined $source ? IkiWiki::pagetype($source) : undef;
-	if (! defined $type || $type ne "_comment") {
-		return IkiWiki::FailReason->new("$page is not a comment");
+	if (! $postcomment) {
+		# To see if it's a comment, check the source file type.
+		# Deal with comments that were just deleted.
+		my $source=exists $IkiWiki::pagesources{$page} ?
+			$IkiWiki::pagesources{$page} :
+			$IkiWiki::delpagesources{$page};
+		my $type=defined $source ? IkiWiki::pagetype($source) : undef;
+		if (! defined $type || $type ne "_comment") {
+			return IkiWiki::FailReason->new("$page is not a comment");
+		}
 	}
 
 	return match_glob($page, "$glob/*", internal => 1, @_);

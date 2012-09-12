@@ -14,6 +14,9 @@ sub import {
 	hook(type => "delete", id => "search", call => \&delete);
 	hook(type => "cgi", id => "search", call => \&cgi);
 	hook(type => "disable", id => "search", call => \&disable);
+	hook(type => "needsbuild", id => "search", call => \&needsbuild);
+		
+	eval q{ use Search::Xapian }; # load early to work around #622591
 }
 
 sub getsetup () {
@@ -58,7 +61,7 @@ sub pagetemplate (@) {
 	if ($template->query(name => "searchform")) {
 		if (! defined $form) {
 			my $searchform = template("searchform.tmpl", blind_cache => 1);
-			$searchform->param(searchaction => $config{cgiurl});
+			$searchform->param(searchaction => IkiWiki::cgiurl());
 			$searchform->param(html5 => $config{html5});
 			$form=$searchform->output;
 		}
@@ -176,7 +179,7 @@ sub cgi ($) {
 		# only works for GET requests
 		chdir("$config{wikistatedir}/xapian") || error("chdir: $!");
 		$ENV{OMEGA_CONFIG_FILE}="./omega.conf";
-		$ENV{CGIURL}=$config{cgiurl},
+		$ENV{CGIURL}=IkiWiki::cgiurl();
 		IkiWiki::loadindex();
 		$ENV{HELPLINK}=htmllink("", "", "ikiwiki/searching",
 			noimageinline => 1, linktext => "Help");
@@ -189,7 +192,8 @@ sub pageterm ($) {
 
 	# 240 is the number used by omindex to decide when to hash an
 	# overlong term. This does not use a compatible hash method though.
-	if (length $page > 240) {
+	eval q{use Encode};
+	if (length encode_utf8($page) > 240) {
 		eval q{use Digest::SHA};
 		if ($@) {
 			debug("search: ".sprintf(gettext("need Digest::SHA to index %s"), $page)) if $@;
@@ -226,24 +230,37 @@ sub setupfiles () {
 		writefile("omega.conf", $config{wikistatedir}."/xapian",
 			"database_dir .\n".
 			"template_dir ./templates\n");
-		
-		# Avoid omega interpreting anything in the misctemplate
-		# as an omegascript command.
-		my $misctemplate=IkiWiki::misctemplate(gettext("search"), "\0",
-			searchform => "", # avoid showing the small search form
-		);
-		eval q{use HTML::Entities};
-		error $@ if $@;
-		$misctemplate=encode_entities($misctemplate, '\$');
-
-		my $querytemplate=readfile(IkiWiki::template_file("searchquery.tmpl"));
-		$misctemplate=~s/\0/$querytemplate/;
-
-		writefile("query", $config{wikistatedir}."/xapian/templates",
-			$misctemplate);
+		omega_template();	
 		$setup=1;
 	}
 }
+}
+
+sub needsbuild {
+	my $list=shift;
+	if (grep {
+		$_ eq "templates/page.tmpl" ||
+		$_ eq "templates/searchquery.tmpl"
+	} @$list) {
+		omega_template();
+	}
+}
+
+sub omega_template {
+	# Avoid omega interpreting anything in the cgitemplate
+	# as an omegascript command.
+	eval q{use IkiWiki::CGI};
+	my $template=IkiWiki::cgitemplate(undef, gettext("search"), "\0",
+		searchform => "", # avoid showing the small search form
+	);
+	eval q{use HTML::Entities};
+	error $@ if $@;
+	$template=encode_entities($template, '\$');
+
+	my $querytemplate=readfile(IkiWiki::template_file("searchquery.tmpl"));
+	$template=~s/\0/$querytemplate/;
+	writefile("query", $config{wikistatedir}."/xapian/templates",
+		$template);
 }
 
 sub disable () {

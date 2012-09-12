@@ -7,8 +7,10 @@ use IkiWiki;
 use Monotone;
 use Date::Parse qw(str2time);
 use Date::Format qw(time2str);
+use URI::Escape q{uri_escape_utf8};
 
 my $sha1_pattern = qr/[0-9a-fA-F]{40}/; # pattern to validate sha1sums
+my $mtn_version = undef;
 
 sub import {
 	hook(type => "checkconfig", id => "monotone", call => \&checkconfig);
@@ -40,20 +42,19 @@ sub checkconfig () {
 		exec("mtn", "version") || error("mtn version failed to run");
 	}
 
-	my $version=undef;
 	while (<MTN>) {
-		if (/^monotone (\d+\.\d+) /) {
-			$version=$1;
+		if (/^monotone (\d+\.\d+)(?:(?:\.\d+){0,2}|dev)? /) {
+			$mtn_version=$1;
 		}
 	}
 
 	close MTN || debug("mtn version exited $?");
 
-	if (!defined($version)) {
+	if (!defined($mtn_version)) {
 		error("Cannot determine monotone version");
 	}
-	if ($version < 0.38) {
-		error("Monotone version too old, is $version but required 0.38");
+	if ($mtn_version < 0.38) {
+		error("Monotone version too old, is $mtn_version but required 0.38");
 	}
 
 	if (defined $config{mtn_wrapper} && length $config{mtn_wrapper}) {
@@ -593,7 +594,8 @@ sub rcs_recentchanges ($) {
 				my $diffurl=$config{diffurl};
 				$diffurl=~s/\[\[r1\]\]/$parent/g;
 				$diffurl=~s/\[\[r2\]\]/$rev/g;
-				$diffurl=~s/\[\[file\]\]/$file/g;
+				my $efile = uri_escape_utf8($file);
+				$diffurl=~s/\[\[file\]\]/$efile/g;
 				push @pages, {
 					page => pagename($file),
 					diffurl => $diffurl,
@@ -621,8 +623,9 @@ sub rcs_recentchanges ($) {
 	return @ret;
 }
 
-sub rcs_diff ($) {
+sub rcs_diff ($;$) {
 	my $rev=shift;
+	my $maxlines=shift;
 	my ($sha1) = $rev =~ /^($sha1_pattern)$/; # untaint
 	
 	chdir $config{srcdir}
@@ -633,7 +636,11 @@ sub rcs_diff ($) {
 		exec("mtn", "diff", "--root=$config{mtnrootdir}", "-r", "p:".$sha1, "-r", $sha1) || error("mtn diff $sha1 failed to run");
 	}
 
-	my (@lines) = <MTNDIFF>;
+	my @lines;
+	while (my $line=<MTNDIFF>) {
+		last if defined $maxlines && @lines == $maxlines;
+		push @lines, $line;
+	}
 
 	close MTNDIFF || debug("mtn diff $sha1 exited $?");
 
@@ -657,9 +664,11 @@ sub rcs_getctime ($) {
 		     "--brief", $file) || error("mtn log $file failed to run");
 	}
 
+	my $prevRev;
 	my $firstRev;
 	while (<MTNLOG>) {
 		if (/^($sha1_pattern)/) {
+			$prevRev=$firstRev;
 			$firstRev=$1;
 		}
 	}
@@ -673,6 +682,17 @@ sub rcs_getctime ($) {
 	my $automator = Monotone->new();
 	$automator->open(undef, $config{mtnrootdir});
 
+	# mtn 0.48 has a bug that makes it list the creation of parent
+	# directories as last (first) log entry...  So when we're dealing
+	# with that version, let's check that the file we're looking for
+	# is actually part of the last (first) revision.  Otherwise, pick
+	# the one before (after) that one.
+	if ($mtn_version == 0.48) {
+		my $changes = [get_changed_files($automator, $firstRev)];
+		if (! exists {map { $_ => 1 } @$changes}->{$file}) {
+			$firstRev = $prevRev;
+		}
+	}
 	my $certs = [read_certs($automator, $firstRev)];
 
 	$automator->close();
@@ -698,7 +718,55 @@ sub rcs_getctime ($) {
 }
 
 sub rcs_getmtime ($) {
-	error "rcs_getmtime is not implemented for monotone\n"; # TODO
+	my $file=shift;
+
+	chdir $config{srcdir}
+	    or error("Cannot chdir to $config{srcdir}: $!");
+
+	my $child = open(MTNLOG, "-|");
+	if (! $child) {
+		exec("mtn", "log", "--root=$config{mtnrootdir}", "--no-graph",
+		     "--brief", $file) || error("mtn log $file failed to run");
+	}
+
+	my $lastRev = "";
+	while (<MTNLOG>) {
+		if (/^($sha1_pattern)/ && $lastRev eq "") {
+			$lastRev=$1;
+		}
+	}
+	close MTNLOG || debug("mtn log $file exited $?");
+
+	if (! defined $lastRev) {
+		debug "failed to parse mtn log for $file";
+		return 0;
+	}
+
+	my $automator = Monotone->new();
+	$automator->open(undef, $config{mtnrootdir});
+
+	my $certs = [read_certs($automator, $lastRev)];
+
+	$automator->close();
+
+	my $date;
+
+	foreach my $cert (@$certs) {
+		if ($cert->{signature} eq "ok" && $cert->{trust} eq "trusted") {
+			if ($cert->{name} eq "date") {
+				$date = $cert->{value};
+			}
+		}
+	}
+
+	if (! defined $date) {
+		debug "failed to find date cert for revision $lastRev when looking for creation time of $file";
+		return 0;
+	}
+
+	$date=str2time($date, 'UTC');
+	debug("found mtime ".localtime($date)." for $file");
+	return $date;
 }
 
 1

@@ -23,7 +23,6 @@ use File::Copy;
 use File::Spec;
 use File::Temp;
 use Memoize;
-use UNIVERSAL;
 
 my ($master_language_code, $master_language_name);
 my %translations;
@@ -31,6 +30,7 @@ my @origneedsbuild;
 my %origsubs;
 my @slavelanguages; # language codes ordered as in config po_slave_languages
 my %slavelanguages; # language code to name lookup
+my $language_code_pattern = '[a-zA-Z]+(?:_[a-zA-Z]+)?';
 
 memoize("istranslatable");
 memoize("_istranslation");
@@ -38,7 +38,8 @@ memoize("percenttranslated");
 
 sub import {
 	hook(type => "getsetup", id => "po", call => \&getsetup);
-	hook(type => "checkconfig", id => "po", call => \&checkconfig);
+	hook(type => "checkconfig", id => "po", call => \&checkconfig,
+		last => 1);
 	hook(type => "needsbuild", id => "po", call => \&needsbuild);
 	hook(type => "scan", id => "po", call => \&scan, last => 1);
 	hook(type => "filter", id => "po", call => \&filter);
@@ -46,7 +47,7 @@ sub import {
 	hook(type => "pagetemplate", id => "po", call => \&pagetemplate, last => 1);
 	hook(type => "rename", id => "po", call => \&renamepages, first => 1);
 	hook(type => "delete", id => "po", call => \&mydelete);
-	hook(type => "change", id => "po", call => \&change);
+	hook(type => "rendered", id => "po", call => \&rendered);
 	hook(type => "checkcontent", id => "po", call => \&checkcontent);
 	hook(type => "canremove", id => "po", call => \&canremove);
 	hook(type => "canrename", id => "po", call => \&canrename);
@@ -65,8 +66,11 @@ sub import {
 		inject(name => "IkiWiki::urlto", call => \&myurlto);
 		$origsubs{'cgiurl'}=\&IkiWiki::cgiurl;
 		inject(name => "IkiWiki::cgiurl", call => \&mycgiurl);
-		$origsubs{'rootpage'}=\&IkiWiki::rootpage;
-		inject(name => "IkiWiki::rootpage", call => \&myrootpage);
+		if (IkiWiki->can('rootpage')) {
+			$origsubs{'rootpage'}=\&IkiWiki::rootpage;
+			inject(name => "IkiWiki::rootpage", call => \&myrootpage)
+				if defined $origsubs{'rootpage'};
+		}
 		$origsubs{'isselflink'}=\&IkiWiki::isselflink;
 		inject(name => "IkiWiki::isselflink", call => \&myisselflink);
 	}
@@ -350,6 +354,13 @@ sub pagetemplate (@) {
 	if ($template->query(name => "istranslatable")) {
 		$template->param(istranslatable => istranslatable($page));
 	}
+	my $lang_code = istranslation($page) ? lang($page) : $master_language_code;
+	if ($template->query(name => "lang_code")) {
+		$template->param(lang_code => $lang_code);
+	}
+	if ($template->query(name => "lang_name")) {
+		$template->param(lang_name => languagename($lang_code));
+	}
 	if ($template->query(name => "HOMEPAGEURL")) {
 		$template->param(homepageurl => homepageurl($page));
 	}
@@ -379,7 +390,8 @@ sub pagetemplate (@) {
 	    && $masterpage eq "index") {
 		$template->param('parentlinks' => []);
 	}
-	if (ishomepage($page) && $template->query(name => "title")) {
+	if (ishomepage($page) && $template->query(name => "title")
+	    && !$template->param("title_overridden")) {
 		$template->param(title => $config{wikiname});
 	}
 }
@@ -427,7 +439,7 @@ sub mydelete (@) {
 	map { deletetranslations($_) } grep istranslatablefile($_), @deleted;
 }
 
-sub change (@) {
+sub rendered (@) {
 	my @rendered=@_;
 
 	my $updated_po_files=0;
@@ -631,9 +643,10 @@ sub mybeautify_urlpath ($) {
 	return $res;
 }
 
-sub mytargetpage ($$) {
+sub mytargetpage ($$;$) {
 	my $page=shift;
 	my $ext=shift;
+	my $filename=shift;
 
 	if (istranslation($page) || istranslatable($page)) {
 		my ($masterpage, $lang) = (masterpage($page), lang($page));
@@ -643,17 +656,20 @@ sub mytargetpage ($$) {
 			# strip it.
 			$masterpage = $1;
 		}
-		if (! $config{usedirs} || $masterpage eq 'index') {
+		if (defined $filename) {
+			return $masterpage . "/" . $filename . "." . $lang . "." . $ext;
+		}
+		elsif (! $config{usedirs} || $masterpage eq 'index') {
 			return $masterpage . "." . $lang . "." . $ext;
 		}
 		else {
 			return $masterpage . "/index." . $lang . "." . $ext;
 		}
 	}
-	return $origsubs{'targetpage'}->($page, $ext);
+	return $origsubs{'targetpage'}->($page, $ext, $filename);
 }
 
-sub myurlto ($$;$) {
+sub myurlto ($;$$) {
 	my $to=shift;
 	my $from=shift;
 	my $absolute=shift;
@@ -662,7 +678,12 @@ sub myurlto ($$;$) {
 	if (! length $to
 	    && $config{po_link_to} eq "current"
 	    && istranslatable('index')) {
-		return IkiWiki::beautify_urlpath(IkiWiki::baseurl($from) . "index." . lang($from) . ".$config{htmlext}");
+		if (defined $from) {
+			return IkiWiki::beautify_urlpath(IkiWiki::baseurl($from) . "index." . lang($from) . ".$config{htmlext}");
+		}
+		else {
+			return $origsubs{'urlto'}->($to,$from,$absolute);
+		}
 	}
 	# avoid using our injected beautify_urlpath if run by cgi_editpage,
 	# so that one is redirected to the just-edited page rather than to the
@@ -815,7 +836,7 @@ sub _istranslation ($) {
 			 && pagetype($file) eq 'po';
 	return 0 if $file =~ /\.pot$/;
 
-	my ($masterpage, $lang) = ($page =~ /(.*)[.]([a-z]{2})$/);
+	my ($masterpage, $lang) = ($page =~ /(.*)[.]($language_code_pattern)$/);
 	return 0 unless defined $masterpage && defined $lang
 			 && length $masterpage && length $lang
 			 && ($lang eq $master_language_code
@@ -878,7 +899,7 @@ sub lang ($) {
 sub islanguagecode ($) {
 	my $code=shift;
 
-	return $code =~ /^[a-z]{2}$/;
+	return $code =~ /^$language_code_pattern$/;
 }
 
 sub otherlanguage_page ($$) {
@@ -1161,7 +1182,7 @@ sub deletetranslations ($) {
 			IkiWiki::rcs_remove($_);
 		}
 		else {
-			IkiWiki::prune("$config{srcdir}/$_");
+			IkiWiki::prune("$config{srcdir}/$_", $config{srcdir});
 		}
 	} @todelete;
 
@@ -1311,6 +1332,7 @@ sub po4a_options($) {
 		# how to disable options is not consistent across po4a modules
 		$options{includessi} = '';
 		$options{includeexternal} = 0;
+		$options{ontagerror} = 'warn';
 	}
 	elsif ($pagetype eq 'mdwn') {
 		$options{markdown} = 1;
@@ -1325,7 +1347,7 @@ sub po4a_options($) {
 sub splitlangpair ($) {
 	my $pair=shift;
 
-	my ($code, $name) = ( $pair =~ /^([a-z]{2})\|(.+)$/ );
+	my ($code, $name) = ( $pair =~ /^($language_code_pattern)\|(.+)$/ );
 	if (! defined $code || ! defined $name ||
 	    ! length $code || ! length $name) {
 		# not a fatal error to avoid breaking if used with web setup
@@ -1377,7 +1399,7 @@ sub match_lang ($$;@) {
 
 	my $regexp=IkiWiki::glob2re($wanted);
 	my $lang=IkiWiki::Plugin::po::lang($page);
-	if ($lang !~ /^$regexp$/i) {
+	if ($lang !~ $regexp) {
 		return IkiWiki::FailReason->new("file language is $lang, not $wanted");
 	}
 	else {

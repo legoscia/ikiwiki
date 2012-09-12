@@ -13,7 +13,7 @@ sub import {
 	hook(type => "needsbuild", id => "pinger", call => \&needsbuild);
 	hook(type => "preprocess", id => "ping", call => \&preprocess);
 	hook(type => "delete", id => "pinger", call => \&ping);
-	hook(type => "change", id => "pinger", call => \&ping);
+	hook(type => "rendered", id => "pinger", call => \&ping);
 }
 
 sub getsetup () {
@@ -67,6 +67,8 @@ sub ping {
 	if (! $pinged && %pages) {
 		$pinged=1;
 		
+		eval q{use Net::INET6Glue::INET_is_INET6}; # may not be available
+		
 		my $ua;
 		eval q{use LWPx::ParanoidAgent};
 		if (!$@) {
@@ -106,6 +108,8 @@ sub ping {
 			# only ping when a page was changed, so a ping loop
 			# will still be avoided.
 			next if $url=~/^\Q$config{cgiurl}\E/;
+			my $local_cgiurl = IkiWiki::cgiurl();
+			next if $url=~/^\Q$local_cgiurl\E/;
 			
 			$ua->get($url);
 		}

@@ -43,4 +43,41 @@ time I sign in on any ikiwiki installation of {ikiwiki.kitenet, ikidev,
 betacantrips}, and I think re-logging in always works. --Ethan
 
 > Does seem easier to repro than I thought.
-> Ok, fixed it.. [[bugs/done]] --[[Joey]]
+> Ok, fixed it.. done --[[Joey]] (reopened for new instance of same error
+> message below)
+
+----
+
+## the return of the nasty bug
+
+Hmmmmm, looks like it is not entirely fixed.  I am getting it on my own
+[blog](http://blog.tobez.org/).  Just upgraded to 3.20110430, same same.
+I am using custom openid with redirection to myopenid.com.
+Please tell me if you need more info.  The same openid worked fine to login to *this* site to post this.
+-- Anton
+
+> Well, this bug is from 2007. Probably you are not encountering the same
+> bug.
+> 
+> I also have a openid delegation to myopenid, and I can reproduce the
+> problem when logging into your site.
+>
+> What version of the
+> Net::OpenId::Consumer perl library do you have installed? --[[Joey]] 
+
+>> It is the latest version from FreeBSD's ports collection,
+>> which happens to be a [slightly patched up](http://www.freebsd.org/cgi/cvsweb.cgi/~checkout~/ports/net/p5-Net-OpenID-Consumer/files/patch-Consumer.pm?rev=1.2;content-type=text%2Fplain)
+>> variant of an
+>> ["unauthorized" CPAN release 1.06](http://search.cpan.org/~gugu/Net-OpenID-Consumer-1.06/)
+>>
+>> Do you think it might be a good idea to try with 1.03 or with an unpatched 1.06?
+>> -- Anton
+
+>>> Absolutely. --[[Joey]] 
+
+>>>> 1.03 fails with "Error: login failed, perhaps you need to turn on cookies?" (needless to say cookies are enabled).  
+>>>> Unpatched 1.06 fails with "Error: login failed, perhaps you need to turn on cookies?".  
+>>>> 1.03 with the same patch fails with "Error: OpenID failure: time_bad_sig:" -- Anton.
+
+>>>>> Investigation revealed it was a bug in the freebsd patch, which I
+>>>>> understand is going to be dealt with. [[done]] --[[Joey]] 

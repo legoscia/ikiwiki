@@ -5,11 +5,11 @@ use warnings;
 use strict;
 use IkiWiki;
 use Encode;
+use URI::Escape q{uri_escape_utf8};
 use open qw{:utf8 :std};
 
 my $sha1_pattern     = qr/[0-9a-fA-F]{40}/; # pattern to validate Git sha1sums
 my $dummy_commit_msg = 'dummy commit';      # message to skip in recent changes
-my $git_dir=undef;
 
 sub import {
 	hook(type => "checkconfig", id => "git", call => \&checkconfig);
@@ -151,11 +151,23 @@ sub genwrapper {
 	}
 }
 
-sub safe_git (&@) {
-	# Start a child process safely without resorting /bin/sh.
-	# Return command output or success state (in scalar context).
+my $git_dir=undef;
+my $prefix=undef;
 
-	my ($error_handler, @cmdline) = @_;
+sub in_git_dir ($$) {
+	$git_dir=shift;
+	my @ret=shift->();
+	$git_dir=undef;
+	$prefix=undef;
+	return @ret;
+}
+
+sub safe_git (&@) {
+	# Start a child process safely without resorting to /bin/sh.
+	# Returns command output (in list content) or success state
+	# (in scalar context), or runs the specified data handler.
+
+	my ($error_handler, $data_handler, @cmdline) = @_;
 
 	my $pid = open my $OUT, "-|";
 
@@ -187,7 +199,12 @@ sub safe_git (&@) {
 
 		chomp;
 
-		push @lines, $_;
+		if (! defined $data_handler) {
+			push @lines, $_;
+		}
+		else {
+			last unless $data_handler->($_);
+		}
 	}
 
 	close $OUT;
@@ -197,9 +214,9 @@ sub safe_git (&@) {
 	return wantarray ? @lines : ($? == 0);
 }
 # Convenient wrappers.
-sub run_or_die ($@) { safe_git(\&error, @_) }
-sub run_or_cry ($@) { safe_git(sub { warn @_ },  @_) }
-sub run_or_non ($@) { safe_git(undef,            @_) }
+sub run_or_die ($@) { safe_git(\&error, undef, @_) }
+sub run_or_cry ($@) { safe_git(sub { warn @_ }, undef, @_) }
+sub run_or_non ($@) { safe_git(undef, undef, @_) }
 
 
 sub merge_past ($$$) {
@@ -296,8 +313,6 @@ sub merge_past ($$$) {
 	return $conflict;
 }
 
-{
-my $prefix;
 sub decode_git_file ($) {
 	my $file=shift;
 
@@ -318,7 +333,6 @@ sub decode_git_file ($) {
 	$file =~ s/^\Q$prefix\E//;
 
 	return decode("utf8", $file);
-}
 }
 
 sub parse_diff_tree ($) {
@@ -455,13 +469,10 @@ sub git_sha1 (;$) {
 	# Ignore error since a non-existing file might be given.
 	my ($sha1) = run_or_non('git', 'rev-list', '--max-count=1', 'HEAD',
 		'--', $file);
-	if ($sha1) {
+	if (defined $sha1) {
 		($sha1) = $sha1 =~ m/($sha1_pattern)/; # sha1 is untainted now
 	}
-	else {
-		debug("Empty sha1sum for '$file'.");
-	}
-	return defined $sha1 ? $sha1 : q{};
+	return defined $sha1 ? $sha1 : '';
 }
 
 sub rcs_update () {
@@ -496,16 +507,16 @@ sub rcs_commit (@) {
 		return $conflict if defined $conflict;
 	}
 
-	rcs_add($params{file});
-	return rcs_commit_staged(
-		message => $params{message},
-		session => $params{session},
-	);
+	return rcs_commit_helper(@_);
 }
 
 sub rcs_commit_staged (@) {
 	# Commits all staged changes. Changes can be staged using rcs_add,
 	# rcs_remove, and rcs_rename.
+	return rcs_commit_helper(@_);
+}
+
+sub rcs_commit_helper (@) {
 	my %params=@_;
 	
 	my %env=%ENV;
@@ -546,10 +557,12 @@ sub rcs_commit_staged (@) {
 			$params{message}.=".";
 		}
 	}
-	push @opts, '-q';
-	# git commit returns non-zero if file has not been really changed.
-	# so we should ignore its exit status (hence run_or_non).
-	if (run_or_non('git', 'commit', @opts, '-m', $params{message})) {
+	if (exists $params{file}) {
+		push @opts, '--', $params{file};
+	}
+	# git commit returns non-zero if nothing really changed.
+	# So we should ignore its exit status (hence run_or_non).
+	if (run_or_non('git', 'commit', '-m', $params{message}, '-q', @opts)) {
 		if (length $config{gitorigin_branch}) {
 			run_or_cry('git', 'push', $config{gitorigin_branch});
 		}
@@ -602,9 +615,10 @@ sub rcs_recentchanges ($) {
 		my @pages;
 		foreach my $detail (@{ $ci->{'details'} }) {
 			my $file = $detail->{'file'};
+			my $efile = uri_escape_utf8($file);
 
 			my $diffurl = defined $config{'diffurl'} ? $config{'diffurl'} : "";
-			$diffurl =~ s/\[\[file\]\]/$file/go;
+			$diffurl =~ s/\[\[file\]\]/$efile/go;
 			$diffurl =~ s/\[\[sha1_parent\]\]/$ci->{'parent'}/go;
 			$diffurl =~ s/\[\[sha1_from\]\]/$detail->{'sha1_from'}/go;
 			$diffurl =~ s/\[\[sha1_to\]\]/$detail->{'sha1_to'}/go;
@@ -661,15 +675,19 @@ sub rcs_recentchanges ($) {
 	return @rets;
 }
 
-sub rcs_diff ($) {
+sub rcs_diff ($;$) {
 	my $rev=shift;
+	my $maxlines=shift;
 	my ($sha1) = $rev =~ /^($sha1_pattern)$/; # untaint
 	my @lines;
-	foreach my $line (run_or_non("git", "show", $sha1)) {
-		if (@lines || $line=~/^diff --git/) {
-			push @lines, $line."\n";
-		}
-	}
+	my $addlines=sub {
+		my $line=shift;
+		return if defined $maxlines && @lines == $maxlines;
+		push @lines, $line."\n"
+			if (@lines || $line=~/^diff --git/);
+		return 1;
+	};
+	safe_git(undef, $addlines, "git", "show", $sha1);
 	if (wantarray) {
 		return @lines;
 	}
@@ -750,6 +768,7 @@ sub git_find_root {
 }
 
 sub git_parse_changes {
+	my $reverted = shift;
 	my @changes = @_;
 
 	my ($subdir, $rootdir) = git_find_root();
@@ -770,11 +789,11 @@ sub git_parse_changes {
 				$mode=$detail->{'mode_to'};
 			}
 			elsif ($detail->{'status'} =~ /^[AM]+\d*$/) {
-				$action="add";
+				$action= $reverted ? "remove" : "add";
 				$mode=$detail->{'mode_to'};
 			}
 			elsif ($detail->{'status'} =~ /^[DAM]+\d*/) {
-				$action="remove";
+				$action= $reverted ? "add" : "remove";
 				$mode=$detail->{'mode_from'};
 			}
 			else {
@@ -797,7 +816,7 @@ sub git_parse_changes {
 				eval q{use File::Temp};
 				die $@ if $@;
 				my $fh;
-				($fh, $path)=File::Temp::tempfile("XXXXXXXXXX", UNLINK => 1);
+				($fh, $path)=File::Temp::tempfile(undef, UNLINK => 1);
 				my $cmd = "cd $git_dir && ".
 				          "git show $detail->{sha1_to} > '$path'";
 				if (system($cmd) != 0) {
@@ -832,9 +851,9 @@ sub rcs_receive () {
 		# (Also, if a subdir is involved, we don't want to chdir to
 		# it and only see changes in it.)
 		# The pre-receive hook already puts us in the right place.
-		$git_dir=".";
-		push @rets, git_parse_changes(git_commit_info($oldrev."..".$newrev));
-		$git_dir=undef;
+		in_git_dir(".", sub {
+			push @rets, git_parse_changes(0, git_commit_info($oldrev."..".$newrev));
+		});
 	}
 
 	return reverse @rets;
@@ -847,21 +866,21 @@ sub rcs_preprevert ($) {
 	# Examine changes from root of git repo, not from any subdir,
 	# in order to see all changes.
 	my ($subdir, $rootdir) = git_find_root();
-	$git_dir=$rootdir;
-	my @commits=git_commit_info($sha1, 1);
-	$git_dir=undef;
+	in_git_dir($rootdir, sub {
+		my @commits=git_commit_info($sha1, 1);
+	
+		if (! @commits) {
+			error "unknown commit"; # just in case
+		}
 
-	if (! @commits) {
-		error "unknown commit"; # just in case
-	}
+		# git revert will fail on merge commits. Add a nice message.
+		if (exists $commits[0]->{parents} &&
+		    @{$commits[0]->{parents}} > 1) {
+			error gettext("you are not allowed to revert a merge");
+		}
 
-	# git revert will fail on merge commits. Add a nice message.
-	if (exists $commits[0]->{parents} &&
-	    @{$commits[0]->{parents}} > 1) {
-		error gettext("you are not allowed to revert a merge");
-	}
-
-	return git_parse_changes(@commits);
+		git_parse_changes(1, @commits);
+	});
 }
 
 sub rcs_revert ($) {

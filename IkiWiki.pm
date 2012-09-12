@@ -20,7 +20,7 @@ use Exporter q{import};
 our @EXPORT = qw(hook debug error htmlpage template template_depends
 	deptype add_depends pagespec_match pagespec_match_list bestlink
 	htmllink readfile writefile pagetype srcfile pagename
-	displaytime will_render gettext ngettext urlto targetpage
+	displaytime strftime_utf8 will_render gettext ngettext urlto targetpage
 	add_underlay pagetitle titlepage linkpage newpagefile
 	inject add_link add_autofile
 	%config %links %pagestate %wikistate %renderedfiles
@@ -237,8 +237,8 @@ sub getsetup () {
 	html5 => {
 		type => "boolean",
 		default => 0,
-		description => "generate HTML5? (experimental)",
-		advanced => 1,
+		description => "generate HTML5?",
+		advanced => 0,
 		safe => 1,
 		rebuild => 1,
 	},
@@ -305,9 +305,9 @@ sub getsetup () {
 		rebuild => 0,
 	},
 	umask => {
-		type => "integer",
-		example => "022",
-		description => "force ikiwiki to use a particular umask",
+		type => "string",
+		example => "public",
+		description => "force ikiwiki to use a particular umask (keywords public, group or private, or a number)",
 		advanced => 1,
 		safe => 0, # paranoia
 		rebuild => 0,
@@ -335,6 +335,14 @@ sub getsetup () {
 		description => "environment variables",
 		safe => 0, # paranoia
 		rebuild => 0,
+	},
+	timezone => {
+		type => "string", 
+		default => "",
+		example => "US/Eastern",
+		description => "time zone name",
+		safe => 1,
+		rebuild => 1,
 	},
 	include => {
 		type => "string",
@@ -477,7 +485,7 @@ sub getsetup () {
 	},
 	setuptype => {
 		type => "internal",
-		default => "Standard",
+		default => "Yaml",
 		description => "perl class to use to dump setup file",
 		safe => 0,
 		rebuild => 0,
@@ -497,9 +505,14 @@ sub defaultconfig () {
 	foreach my $key (keys %s) {
 		push @ret, $key, $s{$key}->{default};
 	}
-	use Data::Dumper;
 	return @ret;
 }
+
+# URL to top of wiki as a path starting with /, valid from any wiki page or
+# the CGI; if that's not possible, an absolute URL. Either way, it ends with /
+my $local_url;
+# URL to CGI script, similar to $local_url
+my $local_cgiurl;
 
 sub checkconfig () {
 	# locale stuff; avoid LC_ALL since it overrides everything
@@ -523,6 +536,12 @@ sub checkconfig () {
 			$ENV{$val}=$config{ENV}{$val};
 		}
 	}
+	if (defined $config{timezone} && length $config{timezone}) {
+		$ENV{TZ}=$config{timezone};
+	}
+	else {
+		$config{timezone}=$ENV{TZ};
+	}
 
 	if ($config{w3mmode}) {
 		eval q{use Cwd q{abs_path}};
@@ -537,12 +556,54 @@ sub checkconfig () {
 	if ($config{cgi} && ! length $config{url}) {
 		error(gettext("Must specify url to wiki with --url when using --cgi"));
 	}
-	
+
+	if (defined $config{url} && length $config{url}) {
+		eval q{use URI};
+		my $baseurl = URI->new($config{url});
+
+		$local_url = $baseurl->path . "/";
+		$local_cgiurl = undef;
+
+		if (length $config{cgiurl}) {
+			my $cgiurl = URI->new($config{cgiurl});
+
+			$local_cgiurl = $cgiurl->path;
+
+			if ($cgiurl->scheme ne $baseurl->scheme or
+				$cgiurl->authority ne $baseurl->authority) {
+				# too far apart, fall back to absolute URLs
+				$local_url = "$config{url}/";
+				$local_cgiurl = $config{cgiurl};
+			}
+		}
+
+		$local_url =~ s{//$}{/};
+	}
+	else {
+		$local_cgiurl = $config{cgiurl};
+	}
+
 	$config{wikistatedir}="$config{srcdir}/.ikiwiki"
 		unless exists $config{wikistatedir} && defined $config{wikistatedir};
 
 	if (defined $config{umask}) {
-		umask(possibly_foolish_untaint($config{umask}));
+		my $u = possibly_foolish_untaint($config{umask});
+
+		if ($u =~ m/^\d+$/) {
+			umask($u);
+		}
+		elsif ($u eq 'private') {
+			umask(077);
+		}
+		elsif ($u eq 'group') {
+			umask(027);
+		}
+		elsif ($u eq 'public') {
+			umask(022);
+		}
+		else {
+			error(sprintf(gettext("unsupported umask setting %s"), $u));
+		}
 	}
 
 	run_hooks(checkconfig => sub { shift->() });
@@ -778,17 +839,23 @@ sub srcfile ($;$) {
 	return (srcfile_stat(@_))[0];
 }
 
-sub add_underlay ($) {
+sub add_literal_underlay ($) {
 	my $dir=shift;
+
+	if (! grep { $_ eq $dir } @{$config{underlaydirs}}) {
+		unshift @{$config{underlaydirs}}, $dir;
+	}
+}
+
+sub add_underlay ($) {
+	my $dir = shift;
 
 	if ($dir !~ /^\//) {
 		$dir="$config{underlaydirbase}/$dir";
 	}
 
-	if (! grep { $_ eq $dir } @{$config{underlaydirs}}) {
-		unshift @{$config{underlaydirs}}, $dir;
-	}
-
+	add_literal_underlay($dir);
+	# why does it return 1? we just don't know
 	return 1;
 }
 
@@ -975,7 +1042,7 @@ sub bestlink ($$) {
 sub isinlinableimage ($) {
 	my $file=shift;
 	
-	return $file =~ /\.(png|gif|jpg|jpeg)$/i;
+	return $file =~ /\.(png|gif|jpg|jpeg|svg)$/i;
 }
 
 sub pagetitle ($;$) {
@@ -1010,24 +1077,45 @@ sub linkpage ($) {
 sub cgiurl (@) {
 	my %params=@_;
 
-	my $cgiurl=$config{cgiurl};
+	my $cgiurl=$local_cgiurl;
+
 	if (exists $params{cgiurl}) {
 		$cgiurl=$params{cgiurl};
 		delete $params{cgiurl};
 	}
+
+	unless (%params) {
+		return $cgiurl;
+	}
+
 	return $cgiurl."?".
 		join("&amp;", map $_."=".uri_escape_utf8($params{$_}), keys %params);
+}
+
+sub cgiurl_abs (@) {
+	eval q{use URI};
+	URI->new_abs(cgiurl(@_), $config{cgiurl});
 }
 
 sub baseurl (;$) {
 	my $page=shift;
 
-	return "$config{url}/" if ! defined $page;
+	return $local_url if ! defined $page;
 	
 	$page=htmlpage($page);
 	$page=~s/[^\/]+$//;
 	$page=~s/[^\/]+\//..\//g;
 	return $page;
+}
+
+sub urlabs ($$) {
+	my $url=shift;
+	my $urlbase=shift;
+
+	return $url unless defined $urlbase && length $urlbase;
+
+	eval q{use URI};
+	URI->new_abs($url, $urlbase)->as_string;
 }
 
 sub abs2rel ($$) {
@@ -1065,9 +1153,19 @@ sub formattime ($;$) {
 		$format=$config{timeformat};
 	}
 
+	return strftime_utf8($format, localtime($time));
+}
+
+my $strftime_encoding;
+sub strftime_utf8 {
 	# strftime doesn't know about encodings, so make sure
-	# its output is properly treated as utf8
-	return decode_utf8(POSIX::strftime($format, localtime($time)));
+	# its output is properly treated as utf8.
+	# Note that this does not handle utf-8 in the format string.
+	($strftime_encoding) = POSIX::setlocale(&POSIX::LC_TIME) =~ m#\.([^@]+)#
+		unless defined $strftime_encoding;
+	$strftime_encoding
+		? Encode::decode($strftime_encoding, POSIX::strftime(@_))
+		: POSIX::strftime(@_);
 }
 
 sub date_3339 ($) {
@@ -1096,13 +1194,13 @@ sub beautify_urlpath ($) {
 	return $url;
 }
 
-sub urlto ($$;$) {
+sub urlto ($;$$) {
 	my $to=shift;
 	my $from=shift;
 	my $absolute=shift;
 	
 	if (! length $to) {
-		return beautify_urlpath(baseurl($from)."index.$config{htmlext}");
+		$to = 'index';
 	}
 
 	if (! $destsources{$to}) {
@@ -1111,6 +1209,12 @@ sub urlto ($$;$) {
 
 	if ($absolute) {
 		return $config{url}.beautify_urlpath("/".$to);
+	}
+
+	if (! defined $from) {
+		my $u = $local_url || '';
+		$u =~ s{/$}{};
+		return $u.beautify_urlpath("/".$to);
 	}
 
 	my $link = abs2rel($to, dirname(htmlpage($from)));
@@ -1164,7 +1268,7 @@ sub htmllink ($$$;@) {
 				$cgilink = "<a href=\"".
 					cgiurl(
 						do => "create",
-						page => lc($link),
+						page => $link,
 						from => $lpage
 					)."\" rel=\"nofollow\">?</a>";
 			}
@@ -1201,7 +1305,7 @@ sub userpage ($) {
 sub openiduser ($) {
 	my $user=shift;
 
-	if ($user =~ m!^https?://! &&
+	if (defined $user && $user =~ m!^https?://! &&
 	    eval q{use Net::OpenID::VerifiedIdentity; 1} && !$@) {
 		my $display;
 
@@ -1319,10 +1423,15 @@ sub preprocess ($$$;$$) {
 				|
 					"([^"]*?)"	# 3: single-quoted value
 				|
-					(\S+)		# 4: unquoted value
+					'''(.*?)'''     # 4: triple-single-quote
+				|
+					<<([a-zA-Z]+)\n # 5: heredoc start
+					(.*?)\n\5	# 6: heredoc value
+				|
+					(\S+)		# 7: unquoted value
 				)
 				(?:\s+|$)		# delimiter to next param
-			}sgx) {
+			}msgx) {
 				my $key=$1;
 				my $val;
 				if (defined $2) {
@@ -1336,6 +1445,12 @@ sub preprocess ($$$;$$) {
 				}
 				elsif (defined $4) {
 					$val=$4;
+				}
+				elsif (defined $7) {
+					$val=$7;
+				}
+				elsif (defined $6) {
+					$val=$6;
 				}
 
 				if (defined $key) {
@@ -1405,6 +1520,11 @@ sub preprocess ($$$;$$) {
 						|
 						"[^"]*?"	# single-quoted value
 						|
+						'''.*?'''	# triple-single-quote
+						|
+						<<([a-zA-Z]+)\n # 5: heredoc start
+						(?:.*?)\n\5	# heredoc value
+						|
 						[^"\s\]]+	# unquoted value
 					)
 					\s*			# whitespace or end
@@ -1427,6 +1547,11 @@ sub preprocess ($$$;$$) {
 						""".*?"""	# triple-quoted value
 						|
 						"[^"]*?"	# single-quoted value
+						|
+						'''.*?'''       # triple-single-quote
+						|
+						<<([a-zA-Z]+)\n # 5: heredoc start
+						(?:.*?)\n\5	# heredoc value
 						|
 						[^"\s\]]+	# unquoted value
 					)
@@ -1847,6 +1972,7 @@ sub template_depends ($$;@) {
 		},
 		loop_context_vars => 1,
 		die_on_bad_params => 0,
+		parent_global_vars => 1,
 		filename => $filename,
 		@_,
 		($untrusted ? (no_includes => 1) : ()),
@@ -1859,39 +1985,6 @@ sub template_depends ($$;@) {
 
 sub template ($;@) {
 	template_depends(shift, undef, @_);
-}
-
-sub misctemplate ($$;@) {
-	my $title=shift;
-	my $content=shift;
-	my %params=@_;
-	
-	my $template=template("page.tmpl");
-
-	my $page="";
-	if (exists $params{page}) {
-		$page=delete $params{page};
-	}
-	run_hooks(pagetemplate => sub {
-		shift->(
-			page => $page,
-			destpage => $page,
-			template => $template,
-		);
-	});
-	templateactions($template, "");
-
-	$template->param(
-		dynamic => 1,
-		title => $title,
-		wikiname => $config{wikiname},
-		content => $content,
-		baseurl => baseurl(),
-		html5 => $config{html5},
-		%params,
-	);
-	
-	return $template->output;
 }
 
 sub templateactions ($$) {
@@ -1988,7 +2081,7 @@ sub rcs_recentchanges ($) {
 	$hooks{rcs}{rcs_recentchanges}{call}->(@_);
 }
 
-sub rcs_diff ($) {
+sub rcs_diff ($;$) {
 	$hooks{rcs}{rcs_diff}{call}->(@_);
 }
 
@@ -2388,7 +2481,7 @@ sub glob2re ($) {
 	my $re=quotemeta(shift);
 	$re=~s/\\\*/.*/g;
 	$re=~s/\\\?/./g;
-	return $re;
+	return qr/^$re$/i;
 }
 
 package IkiWiki::FailReason;
@@ -2482,6 +2575,8 @@ sub derel ($$) {
 	return $path;
 }
 
+my %glob_cache;
+
 sub match_glob ($$;@) {
 	my $page=shift;
 	my $glob=shift;
@@ -2489,8 +2584,13 @@ sub match_glob ($$;@) {
 	
 	$glob=derel($glob, $params{location});
 
-	my $regexp=IkiWiki::glob2re($glob);
-	if ($page=~/^$regexp$/i) {
+	# Instead of converting the glob to a regex every time,
+	# cache the compiled regex to save time.
+	my $re=$glob_cache{$glob};
+	unless (defined $re) {
+		$glob_cache{$glob} = $re = IkiWiki::glob2re($glob);
+	}
+	if ($page =~ $re) {
 		if (! IkiWiki::isinternal($page) || $params{internal}) {
 			return IkiWiki::SuccessReason->new("$glob matches $page");
 		}
@@ -2562,8 +2662,14 @@ sub match_link ($$;@) {
 }
 
 sub match_backlink ($$;@) {
-	my $ret=match_link($_[1], $_[0], @_);
-	$ret->influences($_[1] => $IkiWiki::DEPEND_LINKS);
+	my $page=shift;
+	my $testpage=shift;
+	my %params=@_;
+	if ($testpage eq '.') {
+		$testpage = $params{'location'}
+	}
+	my $ret=match_link($testpage, $page, @_);
+	$ret->influences($testpage => $IkiWiki::DEPEND_LINKS);
 	return $ret;
 }
 
@@ -2660,7 +2766,7 @@ sub match_user ($$;@) {
 		return IkiWiki::ErrorReason->new("no user specified");
 	}
 
-	if (defined $params{user} && $params{user}=~/^$regexp$/i) {
+	if (defined $params{user} && $params{user}=~$regexp) {
 		return IkiWiki::SuccessReason->new("user is $user");
 	}
 	elsif (! defined $params{user}) {
@@ -2723,6 +2829,7 @@ sub cmp_title {
 	IkiWiki::pagetitle(IkiWiki::basename($b))
 }
 
+sub cmp_path { IkiWiki::pagetitle($a) cmp IkiWiki::pagetitle($b) }
 sub cmp_mtime { $IkiWiki::pagemtime{$b} <=> $IkiWiki::pagemtime{$a} }
 sub cmp_age { $IkiWiki::pagectime{$b} <=> $IkiWiki::pagectime{$a} }
 

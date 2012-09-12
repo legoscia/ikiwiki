@@ -60,7 +60,7 @@ These options control the mode that ikiwiki operates in.
 
 * --clean
 
-  This makes ikiwiki clean up by removing any files it denerated in the 
+  This makes ikiwiki clean up by removing any files it generated in the
   `destination` directory, as well as any configured wrappers, and the
   `.ikiwiki` state directory. This is mostly useful if you're running
   ikiwiki in a Makefile to build documentation and want a corresponding
@@ -253,8 +253,10 @@ also be configured using a setup file.
 
   Specifies a username of a user (or, if openid is enabled, an openid) 
   who has the powers of a wiki admin. Currently allows locking of any page,
-  and [[banning|banned_users]] users; other powers may be added later.
-  May be specified multiple times for multiple admins.
+  and [[banning|banned_users]] users, as well as powers granted by
+  enabled plugins (such as [[moderating comments|plugins/moderatedcomments]] 
+  and [[plugins/websetup]]. May be specified multiple times for multiple
+  admins.
 
   For an openid user specify the full URL of the login, including "http://".
 
@@ -384,4 +386,4 @@ also be configured using a setup file.
 
 Joey Hess <joey@ikiwiki.info>
 
-Warning: this page is automatically made into ikiwiki's man page via [mdwn2man](http://git.ikiwiki.info/?p=ikiwiki;a=blob;f=mdwn2man;hb=HEAD).  Edit with care
+Warning: Automatically converted into a man page by mdwn2man. Edit with care

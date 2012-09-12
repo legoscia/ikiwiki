@@ -39,7 +39,7 @@ sub refresh () {
 				}
 				if ($delete) {
 					debug(sprintf(gettext("removing old preview %s"), $file));
-					IkiWiki::prune("$config{destdir}/$file");
+					IkiWiki::prune("$config{destdir}/$file", $config{destdir});
 				}
 			}
 			elsif (defined $mtime) {
@@ -64,7 +64,8 @@ sub cgi_editpage ($$) {
 
 	decode_cgi_utf8($q);
 
-	my @fields=qw(do rcsinfo subpage from page type editcontent editmessage);
+	my @fields=qw(do rcsinfo subpage from page type editcontent
+		editmessage subscribe);
 	my @buttons=("Save Page", "Preview", "Cancel");
 	eval q{use CGI::FormBuilder};
 	error($@) if $@;
@@ -75,7 +76,7 @@ sub cgi_editpage ($$) {
 		required => [qw{editcontent}],
 		javascript => 0,
 		params => $q,
-		action => $config{cgiurl},
+		action => IkiWiki::cgiurl(),
 		header => 0,
 		table => 0,
 		template => { template("editpage.tmpl") },
@@ -91,6 +92,9 @@ sub cgi_editpage ($$) {
 	# This untaint is safe because we check file_pruned and
 	# wiki_file_regexp.
 	my ($page)=$form->field('page')=~/$config{wiki_file_regexp}/;
+	if (! defined $page) {
+		error(gettext("bad page name"));
+	}
 	$page=possibly_foolish_untaint($page);
 	my $absolute=($page =~ s#^/+##); # absolute name used to force location
 	if (! defined $page || ! length $page ||
@@ -98,7 +102,7 @@ sub cgi_editpage ($$) {
 		error(gettext("bad page name"));
 	}
 
-	my $baseurl = urlto($page, undef, 1);
+	my $baseurl = urlto($page);
 
 	my $from;
 	if (defined $form->field('from')) {
@@ -128,7 +132,8 @@ sub cgi_editpage ($$) {
 			# favor the type of linking page
 			$type=pagetype($pagesources{$from});
 		}
-		$type=$config{default_pageext} unless defined $type;
+		$type=$config{default_pageext}
+			if ! defined $type || $type=~/^_/; # not internal type
 		$file=newpagefile($page, $type);
 		if (! $form->submitted) {
 			$form->field(name => "rcsinfo", value => "", force => 1);
@@ -153,16 +158,27 @@ sub cgi_editpage ($$) {
 			noimageinline => 1,
 			linktext => "FormattingHelp"));
 	
+	my $cansubscribe=IkiWiki::Plugin::notifyemail->can("subscribe")
+		&& IkiWiki::Plugin::comments->can("import")
+		&& defined $session->param('name');
+	if ($cansubscribe) {
+		$form->field(name => "subscribe", type => "checkbox",
+			options => [gettext("email comments to me")]);
+	}
+	else {
+		$form->field(name => "subscribe", type => 'hidden');
+	}
+	
 	my $previewing=0;
 	if ($form->submitted eq "Cancel") {
 		if ($form->field("do") eq "create" && defined $from) {
-			redirect($q, urlto($from, undef, 1));
+			redirect($q, urlto($from));
 		}
 		elsif ($form->field("do") eq "create") {
-			redirect($q, $config{url});
+			redirect($q, baseurl(undef));
 		}
 		else {
-			redirect($q, urlto($page, undef, 1));
+			redirect($q, $baseurl);
 		}
 		exit;
 	}
@@ -223,27 +239,36 @@ sub cgi_editpage ($$) {
 			    $absolute ||
 			    $form->submitted) {
 				@page_locs=$best_loc=$page;
+				unshift @page_locs, lc($page)
+					if ! $form->submitted && lc($page) ne $page;
+			}
+			elsif (lc $page eq lc $config{discussionpage}) {
+				@page_locs=$best_loc="$from/".lc($page);
 			}
 			else {
 				my $dir=$from."/";
 				$dir=~s![^/]+/+$!!;
 				
 				if ((defined $form->field('subpage') &&
-				     length $form->field('subpage')) ||
-				    $page eq lc($config{discussionpage})) {
+				     length $form->field('subpage'))) {
 					$best_loc="$from/$page";
 				}
 				else {
 					$best_loc=$dir.$page;
 				}
 				
+				my $mixedcase=lc($page) ne $page;
+
+				push @page_locs, $dir.lc($page) if $mixedcase;
 				push @page_locs, $dir.$page;
-				push @page_locs, "$from/$page";
+				push @page_locs, $from."/".lc($page) if $mixedcase;
+				push @page_locs, $from."/".$page;
 				while (length $dir) {
 					$dir=~s![^/]+/+$!!;
+					push @page_locs, $dir.lc($page) if $mixedcase;
 					push @page_locs, $dir.$page;
 				}
-			
+
 				my $userpage=IkiWiki::userpage($page);
 				push @page_locs, $userpage
 					if ! grep { $_ eq $userpage } @page_locs;
@@ -262,7 +287,7 @@ sub cgi_editpage ($$) {
 					@page_locs=$page;
 				}
 				else {
-					redirect($q, urlto($page, undef, 1));
+					redirect($q, $baseurl);
 					exit;
 				}
 			}
@@ -291,7 +316,7 @@ sub cgi_editpage ($$) {
 				value => $best_loc);
 			$form->field(name => "type", type => 'select',
 				options => \@page_types);
-			$form->title(sprintf(gettext("creating %s"), pagetitle($page)));
+			$form->title(sprintf(gettext("creating %s"), pagetitle(basename($page))));
 			
 		}
 		elsif ($form->field("do") eq "edit") {
@@ -309,11 +334,10 @@ sub cgi_editpage ($$) {
 			$form->tmpl_param("page_select", 0);
 			$form->field(name => "page", type => 'hidden');
 			$form->field(name => "type", type => 'hidden');
-			$form->title(sprintf(gettext("editing %s"), pagetitle($page)));
+			$form->title(sprintf(gettext("editing %s"), pagetitle(basename($page))));
 		}
 		
-		showform($form, \@buttons, $session, $q,
-			forcebaseurl => $baseurl, page => $page);
+		showform($form, \@buttons, $session, $q, page => $page);
 	}
 	else {
 		# save page
@@ -331,7 +355,7 @@ sub cgi_editpage ($$) {
 			$form->field(name => "type", type => 'hidden');
 			$form->title(sprintf(gettext("editing %s"), $page));
 			showform($form, \@buttons, $session, $q,
-				forcebaseurl => $baseurl, page => $page);
+				page => $page);
 			exit;
 		}
 		elsif ($form->field("do") eq "create" && $exists) {
@@ -346,7 +370,7 @@ sub cgi_editpage ($$) {
 				         "\n\n\n".$form->field("editcontent"),
 				force => 1);
 			showform($form, \@buttons, $session, $q,
-				forcebaseurl => $baseurl, page => $page);
+				page => $page);
 			exit;
 		}
 			
@@ -387,7 +411,7 @@ sub cgi_editpage ($$) {
 			$form->field(name => "type", type => 'hidden');
 			$form->title(sprintf(gettext("editing %s"), $page));
 			showform($form, \@buttons, $session, $q,
-				forcebaseurl => $baseurl, page => $page);
+				page => $page);
 			exit;
 		}
 		
@@ -429,12 +453,18 @@ sub cgi_editpage ($$) {
 			$form->field(name => "type", type => 'hidden');
 			$form->title(sprintf(gettext("editing %s"), $page));
 			showform($form, \@buttons, $session, $q,
-				forcebaseurl => $baseurl, page => $page);
+				page => $page);
 		}
 		else {
 			# The trailing question mark tries to avoid broken
 			# caches and get the most recent version of the page.
-			redirect($q, urlto($page, undef, 1)."?updated");
+			redirect($q, $baseurl."?updated");
+		}
+
+		if ($cansubscribe && length $form->field("subscribe")) {
+			my $subspec="comment($page)";
+			IkiWiki::Plugin::notifyemail::subscribe(
+				$session->param('name'), $subspec);
 		}
 	}
 

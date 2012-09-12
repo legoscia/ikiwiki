@@ -48,7 +48,6 @@ sub getsetup () {
 		plugin => {
 			safe => 1,
 			rebuild => undef,
-			section => "misc",
 		},
 }
 
@@ -161,7 +160,7 @@ sub match_mimetype ($$;@) {
 	}
 
 	my $regexp=IkiWiki::glob2re($wanted);
-	if ($mimetype!~/^$regexp$/i) {
+	if ($mimetype!~$regexp) {
 		return IkiWiki::FailReason->new("file MIME type is $mimetype, not $wanted");
 	}
 	else {

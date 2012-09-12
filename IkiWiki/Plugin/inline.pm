@@ -19,14 +19,14 @@ sub import {
 	hook(type => "checkconfig", id => "inline", call => \&checkconfig);
 	hook(type => "sessioncgi", id => "inline", call => \&sessioncgi);
 	hook(type => "preprocess", id => "inline", 
-		call => \&IkiWiki::preprocess_inline);
+		call => \&IkiWiki::preprocess_inline, scan => 1);
 	hook(type => "pagetemplate", id => "inline",
 		call => \&IkiWiki::pagetemplate_inline);
 	hook(type => "format", id => "inline", call => \&format, first => 1);
 	# Hook to change to do pinging since it's called late.
 	# This ensures each page only pings once and prevents slow
 	# pings interrupting page builds.
-	hook(type => "change", id => "inline", call => \&IkiWiki::pingurl);
+	hook(type => "rendered", id => "inline", call => \&IkiWiki::pingurl);
 }
 
 sub getopt () {
@@ -104,7 +104,7 @@ sub checkconfig () {
 }
 
 sub format (@) {
-        my %params=@_;
+	my %params=@_;
 
 	# Fill in the inline content generated earlier. This is actually an
 	# optimisation.
@@ -128,10 +128,10 @@ sub sessioncgi ($$) {
 			$add=1 unless length $add;
 			$add++;
 		}
-		$q->param('page', $page.$add);
+		$q->param('page', "/$from/$page$add");
 		# now go create the page
 		$q->param('do', 'create');
-		# make sure the editpage plugin in loaded
+		# make sure the editpage plugin is loaded
 		if (IkiWiki->can("cgi_editpage")) {
 			IkiWiki::cgi_editpage($q, $session);
 		}
@@ -155,12 +155,29 @@ sub preprocess_inline (@) {
 	if (! exists $params{pages} && ! exists $params{pagenames}) {
 		error gettext("missing pages parameter");
 	}
+
+	if (! defined wantarray) {
+		# Running in scan mode: only do the essentials
+
+		if (yesno($params{trail}) && IkiWiki::Plugin::trail->can("preprocess_trailitems")) {
+			# default to sorting age, the same as inline itself,
+			# but let the params override that
+			IkiWiki::Plugin::trail::preprocess_trailitems(sort => 'age', %params);
+		}
+
+		return;
+	}
+
+	if (yesno($params{trail}) && IkiWiki::Plugin::trail->can("preprocess_trailitems")) {
+		scalar IkiWiki::Plugin::trail::preprocess_trailitems(sort => 'age', %params);
+	}
+
 	my $raw=yesno($params{raw});
 	my $archive=yesno($params{archive});
 	my $rss=(($config{rss} || $config{allowrss}) && exists $params{rss}) ? yesno($params{rss}) : $config{rss};
 	my $atom=(($config{atom} || $config{allowatom}) && exists $params{atom}) ? yesno($params{atom}) : $config{atom};
 	my $quick=exists $params{quick} ? yesno($params{quick}) : 0;
-	my $feeds=! $nested && (exists $params{feeds} ? yesno($params{feeds}) : !$quick && ! $raw);
+	my $feeds=exists $params{feeds} ? yesno($params{feeds}) : !$quick && ! $raw;
 	my $emptyfeeds=exists $params{emptyfeeds} ? yesno($params{emptyfeeds}) : 1;
 	my $feedonly=yesno($params{feedonly});
 	if (! exists $params{show} && ! $archive) {
@@ -194,8 +211,7 @@ sub preprocess_inline (@) {
 			}
 		}
 
-		@list = map { bestlink($params{page}, $_) }
-		        split ' ', $params{pagenames};
+		@list = split ' ', $params{pagenames};
 
 		if (yesno($params{reverse})) {
 			@list=reverse(@list);
@@ -204,6 +220,8 @@ sub preprocess_inline (@) {
 		foreach my $p (@list) {
 			add_depends($params{page}, $p, deptype($quick ? "presence" : "content"));
 		}
+
+		@list = grep { exists $pagesources{$_} } @list;
 	}
 	else {
 		my $num=0;
@@ -269,7 +287,7 @@ sub preprocess_inline (@) {
 			}
 			$params{feedfile}=possibly_foolish_untaint($params{feedfile});
 		}
-		$feedbase=targetpage($params{destpage}, "", $params{feedfile});
+		$feedbase=targetpage($params{page}, "", $params{feedfile});
 
 		my $feedid=join("\0", $feedbase, map { $_."\0".$params{$_} } sort keys %params);
 		if (exists $knownfeeds{$feedid}) {
@@ -290,8 +308,17 @@ sub preprocess_inline (@) {
 		}
 	}
 
-	my $rssurl=abs2rel($feedbase."rss".$feednum, dirname(htmlpage($params{destpage}))) if $feeds && $rss;
-	my $atomurl=abs2rel($feedbase."atom".$feednum, dirname(htmlpage($params{destpage}))) if $feeds && $atom;
+	my ($rssurl, $atomurl, $rssdesc, $atomdesc);
+	if ($feeds) {
+		if ($rss) {
+			$rssurl=abs2rel($feedbase."rss".$feednum, dirname(htmlpage($params{destpage})));
+			$rssdesc = sprintf(gettext("%s (RSS feed)"), $desc);
+		}
+		if ($atom) {
+			$atomurl=abs2rel($feedbase."atom".$feednum, dirname(htmlpage($params{destpage})));
+			$atomdesc = sprintf(gettext("%s (Atom feed)"), $desc);
+		}
+	}
 
 	my $ret="";
 
@@ -300,10 +327,18 @@ sub preprocess_inline (@) {
 	    IkiWiki->can("cgi_editpage")) {
 		# Add a blog post form, with feed buttons.
 		my $formtemplate=template_depends("blogpost.tmpl", $params{page}, blind_cache => 1);
-		$formtemplate->param(cgiurl => $config{cgiurl});
+		$formtemplate->param(cgiurl => IkiWiki::cgiurl());
 		$formtemplate->param(rootpage => rootpage(%params));
-		$formtemplate->param(rssurl => $rssurl) if $feeds && $rss;
-		$formtemplate->param(atomurl => $atomurl) if $feeds && $atom;
+		if ($feeds) {
+			if ($rss) {
+				$formtemplate->param(rssurl => $rssurl);
+				$formtemplate->param(rssdesc => $rssdesc);
+			}
+			if ($atom) {
+				$formtemplate->param(atomurl => $atomurl);
+				$formtemplate->param(atomdesc => $atomdesc);
+			}
+		}
 		if (exists $params{postformtext}) {
 			$formtemplate->param(postformtext =>
 				$params{postformtext});
@@ -311,6 +346,10 @@ sub preprocess_inline (@) {
 		else {
 			$formtemplate->param(postformtext =>
 				gettext("Add a new post titled:"));
+		}
+		if (exists $params{id}) {
+			$formtemplate->param(postformid =>
+				$params{id});
 		}
 		$ret.=$formtemplate->output;
 	    	
@@ -321,8 +360,17 @@ sub preprocess_inline (@) {
 	elsif ($feeds && !$params{preview} && ($emptyfeeds || @feedlist)) {
 		# Add feed buttons.
 		my $linktemplate=template_depends("feedlink.tmpl", $params{page}, blind_cache => 1);
-		$linktemplate->param(rssurl => $rssurl) if $rss;
-		$linktemplate->param(atomurl => $atomurl) if $atom;
+		if ($rss) {
+			$linktemplate->param(rssurl => $rssurl);
+			$linktemplate->param(rssdesc => $rssdesc);
+		}
+		if ($atom) {
+			$linktemplate->param(atomurl => $atomurl);
+			$linktemplate->param(atomdesc => $atomdesc);
+		}
+		if (exists $params{id}) {
+			$linktemplate->param(id => $params{id});
+		}
 		$ret.=$linktemplate->output;
 	}
 	
@@ -417,9 +465,9 @@ sub preprocess_inline (@) {
 			if (! $params{preview}) {
 				writefile($rssp, $config{destdir},
 					genfeed("rss",
-						$config{url}."/".$rssp, $desc, $params{guid}, $params{destpage}, @feedlist));
+						$config{url}."/".$rssp, $desc, $params{guid}, $params{page}, @feedlist));
 				$toping{$params{destpage}}=1 unless $config{rebuild};
-				$feedlinks{$params{destpage}}.=qq{<link rel="alternate" type="application/rss+xml" title="$desc (RSS)" href="$rssurl" />};
+				$feedlinks{$params{destpage}}.=qq{<link rel="alternate" type="application/rss+xml" title="$rssdesc" href="$rssurl" />};
 			}
 		}
 		if ($atom) {
@@ -427,9 +475,9 @@ sub preprocess_inline (@) {
 			will_render($params{destpage}, $atomp);
 			if (! $params{preview}) {
 				writefile($atomp, $config{destdir},
-					genfeed("atom", $config{url}."/".$atomp, $desc, $params{guid}, $params{destpage}, @feedlist));
+					genfeed("atom", $config{url}."/".$atomp, $desc, $params{guid}, $params{page}, @feedlist));
 				$toping{$params{destpage}}=1 unless $config{rebuild};
-				$feedlinks{$params{destpage}}.=qq{<link rel="alternate" type="application/atom+xml" title="$desc (Atom)" href="$atomurl" />};
+				$feedlinks{$params{destpage}}.=qq{<link rel="alternate" type="application/atom+xml" title="$atomdesc" href="$atomurl" />};
 			}
 		}
 	}
@@ -476,7 +524,7 @@ sub get_inline_content ($$) {
 		if (isinternal($page)) {
 			# make inlined text of internal pages searchable
 			run_hooks(indexhtml => sub {
-				shift->(page => $page, destpage => $page,
+				shift->(page => $page, destpage => $destpage,
 					content => $ret);
 			});
 		}
@@ -506,26 +554,61 @@ sub date_822 ($) {
 }
 
 sub absolute_urls ($$) {
-	# sucky sub because rss sucks
-	my $content=shift;
+	# needed because rss sucks
+	my $html=shift;
 	my $baseurl=shift;
 
 	my $url=$baseurl;
 	$url=~s/[^\/]+$//;
+	my $urltop; # calculated if needed
 
-        # what is the non path part of the url?
-        my $top_uri = URI->new($url);
-        $top_uri->path_query(""); # reset the path
-        my $urltop = $top_uri->as_string;
+	my $ret="";
 
-	$content=~s/(<a(?:\s+(?:class|id)\s*="?\w+"?)?)\s+href=\s*"(#[^"]+)"/$1 href="$baseurl$2"/mig;
-        # relative to another wiki page
-	$content=~s/(<a(?:\s+(?:class|id)\s*="?\w+"?)?)\s+href=\s*"(?!\w+:)([^\/][^"]*)"/$1 href="$url$2"/mig;
-	$content=~s/(<img(?:\s+(?:class|id|width|height)\s*="?\w+"?)*)\s+src=\s*"(?!\w+:)([^\/][^"]*)"/$1 src="$url$2"/mig;
-        # relative to the top of the site
-	$content=~s/(<a(?:\s+(?:class|id)\s*="?\w+"?)?)\s+href=\s*"(?!\w+:)(\/[^"]*)"/$1 href="$urltop$2"/mig;
-	$content=~s/(<img(?:\s+(?:class|id|width|height)\s*="?\w+"?)*)\s+src=\s*"(?!\w+:)(\/[^"]*)"/$1 src="$urltop$2"/mig;
-	return $content;
+	eval q{use HTML::Parser; use HTML::Tagset};
+	die $@ if $@;
+	my $p = HTML::Parser->new(api_version => 3);
+	$p->handler(default => sub { $ret.=join("", @_) }, "text");
+	$p->handler(start => sub {
+		my ($tagname, $pos, $text) = @_;
+		if (ref $HTML::Tagset::linkElements{$tagname}) {
+			while (4 <= @$pos) {
+				# use attribute sets from right to left
+				# to avoid invalidating the offsets
+				# when replacing the values
+				my ($k_offset, $k_len, $v_offset, $v_len) =
+					splice(@$pos, -4);
+				my $attrname = lc(substr($text, $k_offset, $k_len));
+				next unless grep { $_ eq $attrname } @{$HTML::Tagset::linkElements{$tagname}};
+				next unless $v_offset; # 0 v_offset means no value
+				my $v = substr($text, $v_offset, $v_len);
+				$v =~ s/^([\'\"])(.*)\1$/$2/;
+				eval q{use HTML::Entities};
+				my $dv = decode_entities($v);
+				if ($dv=~/^#/) {
+					$v=$baseurl.$v; # anchor
+				}
+				elsif ($dv=~/^(?!\w+:)[^\/]/) {
+					$v=$url.$v; # relative url
+				}
+				elsif ($dv=~/^\//) {
+					if (! defined $urltop) {
+						# what is the non path part of the url?
+						my $top_uri = URI->new($url);
+						$top_uri->path_query(""); # reset the path
+						$urltop = $top_uri->as_string;
+					}
+					$v=$urltop.$v; # url relative to top of site
+				}
+				$v =~ s/\"/&quot;/g; # since we quote with ""
+				substr($text, $v_offset, $v_len) = qq("$v");
+			}
+		}
+		$ret.=$text;
+	}, "tagname, tokenpos, text");
+	$p->parse($html);
+	$p->eof;
+
+	return $ret;
 }
 
 sub genfeed ($$$$$@) {
@@ -612,7 +695,6 @@ sub genfeed ($$$$$@) {
 		guid => $guid,
 		feeddate => date_3339($lasttime),
 		feedurl => $feedurl,
-		version => $IkiWiki::version,
 	);
 	run_hooks(pagetemplate => sub {
 		shift->(page => $page, destpage => $page,

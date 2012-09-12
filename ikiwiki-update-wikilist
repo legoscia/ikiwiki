@@ -1,6 +1,6 @@
 #!/usr/bin/perl -t
 # Add a user to the system wide wikilist.
-# This script can safely be made suid.
+# This script can safely be made suid or put in /etc/sudoers.
 use warnings;
 use strict;
 use English;
@@ -29,6 +29,9 @@ while (<$list>) {
 			if (! $remove) {
 				$seen=1;
 				push @lines, $_;
+			}
+			else {
+				$changed=1;
 			}
 		}
 		else {

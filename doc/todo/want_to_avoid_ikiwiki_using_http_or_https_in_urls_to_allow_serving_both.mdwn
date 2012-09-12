@@ -1,3 +1,46 @@
+## current status
+
+[[done]] again! :)
+
+Actually, there are two places where the configured url is still hardcoded:
+
+1. When searching, all the links will use it. This is annoying to fix,
+   and we deem it not a problem.
+2. When ikiwiki dies with an error, the links on the error page will
+   use it. Too bad :)
+
+------
+
+## semi-old
+
+
+* CGI pages, with the exception of edit pages, set `<base>` to
+  `$config{url}`
+
+  I had to revert using `baseurl(undef)` for that, because it needs
+  to be a full url.
+
+  Ideally, baseurl would return an absolute url derived from the url
+  being used to access the cgi, but that needs access to the CGI object,
+  which it does not currently have. Similarly, `misctemplate`
+  does not have access to the CGI object, so it cannot use it to
+  generate a better baseurl. Not sure yet what to do; may have to thread
+  a cgi parameter through all the calls to misctemplate. --[[Joey]]
+
+  > Fixed, cgitemplate is used now. --[[Joey]] 
+
+* Using `do=goto` to go to a comment or recentchanges item
+  will redirect to the `$config{url}`-based url, since the
+  permalinks are made to be absolute urls now.
+
+  Fixing this would seem to involve making meta force permalinks
+  to absolute urls when fulling out templates, while allowing them
+  to be left as partial urls internally, for use by goto. --[[Joey]]
+
+  > This reversion has now been fixed. --[[Joey]]
+
+## old attempt
+
 It looks like all links in websites are absolute paths, this has some limitations:
 
 * If connecting to website via https://... all links will take you back to http://
@@ -165,14 +208,17 @@ whether `url` and `cgiurl` are on the same server with the the same URL
 scheme. In theory you could use things like `//static.example.com/wiki/`
 and `//dynamic.example.com/ikiwiki.cgi` to preserve choice of http/https
 while switching server, but I don't know how consistently browsers
-suppot that.
+support that.
 
 "local" here is short for "locally valid", because these URLs are neither
 fully relative nor fully absolute, and there doesn't seem to be a good name
 for them...
 
-I've tested this on a demo website with the CGI enabled, and it seems to
+I've tested this on a demo website with the CGI enabled, and it seemed to
 work nicely (there might be bugs in some plugins, I didn't try all of them).
+The branch at [[todo/use secure cookies for SSL logins]] goes well with
+this one.
+
 The `$config{url}` and `$config{cgiurl}` are both HTTP, but if I enable
 `httpauth`, set `cgiauthurl` to a HTTPS version of the same site and log
 in via that, links all end up in the HTTPS version.
@@ -181,15 +227,93 @@ New API added by this branch:
 
 * `urlto(x, y, 'local')` uses `$local_url` instead of `$config{url}`
 
+  > Yikes. I see why you wanted to keep it to 3 parameters (4 is too many,
+  > and po overrides it), but I dislike overloading the third parameter
+  > like that.
+  > 
+  > There are fairly few calls to `urlto($foo, $bar)`, so why not
+  > make that always return the semi-local url form, and leave the third
+  > parameter for the cases that need a true fully-qualified url.
+  > The new form for local urls will typically be only a little bit longer,
+  > except in the unusual case where the cgiurl is elsewhere. --[[Joey]]
+
+  >> So, have urlto(x, y) use `$local_url`? There are few calls, but IMO
+  >> they're for the most important things - wikilinks, img, map and
+  >> other ordinary hyperlinks. Using `$local_url` would be fine for
+  >> webserver-based use, but it does stop you browsing your wiki's
+  >> HTML over `file:///` (unless you set that as the base URL, but
+  >> then you can't move it around), and stops you moving simple
+  >> outputs (like the docwiki!) around.
+  >>
+  >> I personally think breaking the docwiki is enough to block that.
+  >>
+  >>> Well, the docwiki doesn't have an url configured at all, so I assumed
+  >>> it would need to fall back to current behavior in that case. I had
+  >>> not thought about browsing wiki's html files though, good point.
+  >>
+  >> How about this?
+  >>
+  >> * `urlto($link, $page)` with `$page` defined: relative
+  >> * `urlto($link, undef)`: local, starts with `/`
+  >> * `urlto($link)`: also local, as a side-effect
+  >> * `urlto($link, $anything, 1)` (but idiomatically, `$anything` is
+  >>   normally undef): absolute, starts with `http[s]://`
+  >>
+  >> --[[smcv]]
+  >> 
+  >>> That makes a great deal of sense, bravo for actually removing
+  >>> parameters in the common case while maintaining backwards
+  >>> compatability! --[[Joey]]
+  >>>
+  >>>> Done in my `localurl` branch; not tested in a whole-wiki way
+  >>>> yet, but I did add a regression test. I've used
+  >>>> `urlto(x, undef)` rather than `urlto(x)` so far, but I could
+  >>>> go back through the codebase using the short form if you'd
+  >>>> prefer. --[[smcv]]
+  >>> 
+  >>> It does highlight that it would be better to have a
+  >>> `absolute_urlto($link)` (or maybe `absolute(urlto($link))` )
+  >>> rather than the 3 parameter form. --[[Joey]]
+  >>>
+  >>> Possibly. I haven't added this.
+
 * `IkiWiki::baseurl` has a new second argument which works like the
   third argument of `urlto`
 
+  > I assume you have no objection to this --[[smcv]]
+
+  >> It's so little used that I don't really care if it's a bit ugly.
+  >> (But I assume changes to `urlto` will follow through here anyway.)
+  >> --[[Joey]] 
+
+  >>> I had to use it a bit more, as a replacement for `$config{url}`
+  >>> when doing things like referencing stylesheets or redirecting to
+  >>> the top of the wiki.
+  >>>
+  >>> I ended up redoing this without the extra parameter. Previously,
+  >>> `baseurl(undef)` was the absolute URL; now, `baseurl(undef)` is
+  >>> the local path. I know you objected to me using `baseurl()` in
+  >>> an earlier branch, because `baseurl().$x` looks confusingly
+  >>> similar to `baseurl($x)` but has totally different semantics;
+  >>> I've generally written it `baseurl(undef)` now, to be more
+  >>> explicit. --[[smcv]]
+
 * `IkiWiki::cgiurl` uses `$local_cgiurl` if passed `local_cgiurl => 1`
+
+  > Now changed to always use the `$local_cgiurl`. --[[smcv]]
 
 * `IkiWiki::cgiurl` omits the trailing `?` if given no named parameters
   except `cgiurl` and/or `local_cgiurl`
 
-Bugs:
+  > I assume you have no objection to this --[[smcv]]
+  > 
+  >> Nod, although I don't know of a use case. --[[Joey]]
+
+  >>> The use-case is that I can replace `$config{cgiurl}` with
+  >>> `IkiWiki::cgiurl()` for things like the action attribute of
+  >>> forms. --[[smcv]]
+
+Fixed bugs:
 
 * I don't think anything except `openid` calls `cgiurl` without also
   passing in `local_cgiurl => 1`, so perhaps that should be the default;
@@ -199,8 +323,28 @@ Bugs:
   `cgiurl(cgiurl => $config{cgiurl}, ...)`,
   although that does look a bit strange
 
+  > I agree that makes sense. --[[Joey]]
+
+  >> I'm not completely sure whether you're agreeing with "perhaps do this"
+  >> or "that looks too strange", so please disambiguate:
+  >> would you accept a patch that makes `cgiurl` default to a local
+  >> (starts-with-`/`) result? If you would, that'd reduce the diff. --[[smcv]]
+
+  >>> Yes, I absolutely think it should default to local. (Note that
+  >>> if `absolute()` were implemented as suggested above, it could also
+  >>> be used with cgiurl if necessary.) --[[Joey]]
+
+  >>>> Done (minus `absolute()`). --[[smcv]]
+
+Potential future things:
+
 * It occurs to me that `IkiWiki::cgiurl` could probably benefit from being
   exported? Perhaps also `IkiWiki::baseurl`?
+
+  > Possibly, see [[firm_up_plugin_interface]]. --[[Joey]]
+
+  >> Not really part of this branch, though, so wontfix (unless you ask me
+  >> to do so). --[[smcv]]
 
 * Or, to reduce use of the unexported `baseurl` function, it might make
   sense to give `urlto` a special case that references the root of the wiki,
@@ -210,3 +354,23 @@ Bugs:
         do_something(baseurl => urlto('/', undef, local)`);
         do_something_else(urlto('/').'style.css');
         IkiWiki::redirect(urlto('/', undef, 1));
+
+  > AFACIS, `baseurl` is only called in 3 places so I don't think that's
+  > needed. --[[Joey]] 
+
+  >> OK, wontfix. For what it's worth, my branch has 6 uses in IkiWiki
+  >> core code (IkiWiki, CGI, Render and the pseudo-core part of editpage)
+  >> and 5 in plugins, since I used it for things like redirection back
+  >> to the top of the wiki --[[smcv]]
+
+merged|done --[[Joey]] (But reopened, see above.)
+
+----
+
+Update: I had to revert part of 296e5cb2fd3690e998b3824d54d317933c595873,
+since it broke openid logins. The openid object requires a complete,
+not a relative cgiurl. I'm not sure if my changing that back to using
+`$config{cgiurl}` will force users back to eg, the non-https version of a
+site when logging in via openid.
+
+> Ok, changed it to use `CGI->url` to get the current absolute cgi url. --[[Joey]] 

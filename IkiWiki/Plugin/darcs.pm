@@ -3,6 +3,7 @@ package IkiWiki::Plugin::darcs;
 
 use warnings;
 use strict;
+use URI::Escape q{uri_escape_utf8};
 use IkiWiki;
 
 sub import {
@@ -336,7 +337,8 @@ sub rcs_recentchanges ($) {
 
 		foreach my $f (@files) {
 			my $d = defined $config{'diffurl'} ? $config{'diffurl'} : "";
-			$d =~ s/\[\[file\]\]/$f/go;
+			my $ef = uri_escape_utf8($f);
+			$d =~ s/\[\[file\]\]/$ef/go;
 			$d =~ s/\[\[hash\]\]/$hash/go;
 
 			push @pg, {
@@ -373,11 +375,14 @@ sub rcs_recentchanges ($) {
 	return @ret;
 }
 
-sub rcs_diff ($) {
+sub rcs_diff ($;$) {
 	my $rev=shift;
+	my $maxlines=shift;
 	my @lines;
-	foreach my $line (silentsystem("darcs", "diff", "--match", "hash ".$rev)) {
+	my $repodir=$config{srcdir};
+	foreach my $line (`darcs diff --repodir  $repodir --match 'hash $rev'`) {
 		if (@lines || $line=~/^diff/) {
+			last if defined $maxlines && @lines == $maxlines;
 			push @lines, $line."\n";
 		}
 	}

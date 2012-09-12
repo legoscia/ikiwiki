@@ -151,7 +151,10 @@ sub showfields ($$$@) {
 		my %info=%{shift @show};
 
 		my $description=$info{description};
-		if (exists $info{link} && length $info{link}) {
+		if (exists $info{htmldescription}) {
+			$description=$info{htmldescription};
+		}
+		elsif (exists $info{link} && length $info{link}) {
 			if ($info{link} =~ /^\w+:\/\//) {
 				$description="<a href=\"$info{link}\">$description</a>";
 			}
@@ -288,7 +291,7 @@ sub showform ($$) {
 		fieldsets => [
 			[main => gettext("main")], 
 		],
-		action => $config{cgiurl},
+		action => IkiWiki::cgiurl(),
 		template => {type => 'div'},
 		stylesheet => 1,
 	);
@@ -344,7 +347,7 @@ sub showform ($$) {
 	IkiWiki::decode_form_utf8($form);
 	
 	if ($form->submitted eq "Cancel") {
-		IkiWiki::redirect($cgi, $config{url});
+		IkiWiki::redirect($cgi, IkiWiki::baseurl(undef));
 		return;
 	}
 	elsif (($form->submitted eq 'Save Setup' || $form->submitted eq 'Rebuild Wiki') && $form->validate) {
@@ -447,10 +450,10 @@ sub showform ($$) {
 			IkiWiki::saveindex();
 			IkiWiki::unlockwiki();
 
-			# Print the top part of a standard misctemplate,
+			# Print the top part of a standard cgitemplate,
 			# then show the rebuild or refresh, live.
 			my $divider="\0";
-			my $html=IkiWiki::misctemplate("setup", $divider);
+			my $html=IkiWiki::cgitemplate($cgi, "setup", $divider);
 			IkiWiki::printheader($session);
 			my ($head, $tail)=split($divider, $html, 2);
 			print $head."<pre>\n";
@@ -475,7 +478,7 @@ sub showform ($$) {
 						join(" ", @command), $ret).
 					'</p>';
 				open(OUT, ">", $config{setupfile}) || error("$config{setupfile}: $!");
-				print OUT $oldsetup;
+				print OUT Encode::encode_utf8($oldsetup);
 				close OUT;
 			}
 

@@ -5,7 +5,6 @@ package IkiWiki;
 use warnings;
 use strict;
 use IkiWiki;
-use Encode;
 
 my (%backlinks, %rendered);
 our %brokenlinks;
@@ -94,7 +93,8 @@ sub genpage ($$) {
 	}
 	if (defined $config{historyurl} && length $config{historyurl}) {
 		my $u=$config{historyurl};
-		$u=~s/\[\[file\]\]/$pagesources{$page}/g;
+		my $p=uri_escape_utf8($pagesources{$page}, '^A-Za-z0-9\-\._~/');
+		$u=~s/\[\[file\]\]/$p/g;
 		$template->param(historyurl => $u);
 		$actions++;
 	}
@@ -262,12 +262,13 @@ sub render ($$) {
 	}
 }
 
-sub prune ($) {
+sub prune ($;$) {
 	my $file=shift;
+	my $up_to=shift;
 
 	unlink($file);
 	my $dir=dirname($file);
-	while (rmdir($dir)) {
+	while ((! defined $up_to || $dir =~ m{^\Q$up_to\E\/}) && rmdir($dir)) {
 		$dir=dirname($dir);
 	}
 }
@@ -447,7 +448,7 @@ sub remove_del (@) {
 		}
 	
 		foreach my $old (@{$oldrenderedfiles{$page}}) {
-			prune($config{destdir}."/".$old);
+			prune($config{destdir}."/".$old, $config{destdir});
 		}
 
 		foreach my $source (keys %destsources) {
@@ -475,8 +476,18 @@ sub find_changed ($) {
 			$pagemtime{$page}=$stat[9];
 
 			if (isinternal($page)) {
+				my $content = readfile($srcfile);
+
 				# Preprocess internal page in scan-only mode.
-				preprocess($page, $page, readfile($srcfile), 1);
+				preprocess($page, $page, $content, 1);
+
+				run_hooks(scan => sub {
+					shift->(
+						page => $page,
+						content => $content,
+					);
+				});
+
 				push @internal_changed, $file;
 			}
 			else {
@@ -527,7 +538,7 @@ sub remove_unrendered () {
 		foreach my $file (@{$oldrenderedfiles{$page}}) {
 			if (! grep { $_ eq $file } @{$renderedfiles{$page}}) {
 				debug(sprintf(gettext("removing %s, no longer built by %s"), $file, $page));
-				prune($config{destdir}."/".$file);
+				prune($config{destdir}."/".$file, $config{destdir});
 			}
 		}
 	}
@@ -790,6 +801,14 @@ sub refresh () {
 		derender_internal($file);
 	}
 
+	run_hooks(build_affected => sub {
+		my %affected = shift->();
+		while (my ($page, $message) = each %affected) {
+			next unless exists $pagesources{$page};
+			render($pagesources{$page}, $message);
+		}
+	});
+
 	my ($backlinkchanged, $linkchangers)=calculate_changed_links($changed,
 		$del, $oldlink_targets);
 
@@ -811,8 +830,13 @@ sub refresh () {
 		run_hooks(delete => sub { shift->(@$del, @$internal_del) });
 	}
 	if (%rendered) {
-		run_hooks(change => sub { shift->(keys %rendered) });
+		run_hooks(rendered => sub { shift->(keys %rendered) });
+		run_hooks(change => sub { shift->(keys %rendered) }); # back-compat
 	}
+	my %all_changed = map { $_ => 1 }
+		@$new, @$changed, @$del,
+		@$internal_new, @$internal_changed, @$internal_del;
+	run_hooks(changes => sub { shift->(keys %all_changed) });
 }
 
 sub clean_rendered {
@@ -821,7 +845,7 @@ sub clean_rendered {
 	remove_unrendered();
 	foreach my $page (keys %oldrenderedfiles) {
 		foreach my $file (@{$oldrenderedfiles{$page}}) {
-			prune($config{destdir}."/".$file);
+			prune($config{destdir}."/".$file, $config{destdir});
 		}
 	}
 }

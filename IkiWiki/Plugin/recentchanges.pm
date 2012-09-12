@@ -16,6 +16,8 @@ sub import {
 	hook(type => "sessioncgi", id => "recentchanges", call => \&sessioncgi);
 	# Load goto to fix up links from recentchanges
 	IkiWiki::loadplugin("goto");
+	# ... and transient as somewhere to put our internal pages
+	IkiWiki::loadplugin("transient");
 }
 
 sub getsetup () {
@@ -56,7 +58,7 @@ sub refresh ($) {
 	# delete old and excess changes
 	foreach my $page (keys %pagesources) {
 		if ($pagesources{$page} =~ /\._change$/ && ! $seen{$page}) {
-			unlink($config{srcdir}.'/'.$pagesources{$page});
+			unlink($IkiWiki::Plugin::transient::transientdir.'/'.$pagesources{$page}) || unlink($config{srcdir}.'/'.$pagesources{$page});
 		}
 	}
 }
@@ -84,7 +86,7 @@ sub sessioncgi ($$) {
 		method => 'POST',
 		javascript => 0,
 		params => $q,
-		action => $config{cgiurl},
+		action => IkiWiki::cgiurl(),
 		stylesheet => 1,
 		template => { template('revert.tmpl') },
 		fields => [qw{revertmessage do sid rev}],
@@ -121,13 +123,13 @@ sub sessioncgi ($$) {
 	}
 	elsif ($form->submitted ne 'Cancel') {
 	        $form->title(sprintf(gettext("confirm reversion of %s"), $rev));
-		$form->tmpl_param(diff => encode_entities(scalar IkiWiki::rcs_diff($rev)));
+		$form->tmpl_param(diff => encode_entities(scalar IkiWiki::rcs_diff($rev, 200)));
 		$form->field(name => "rev", type => "hidden", value => $rev, force => 1);
 		IkiWiki::showform($form, $buttons, $session, $q);
 		exit 0;
 	}
 
-	IkiWiki::redirect($q, urlto($config{recentchangespage}, ''));
+	IkiWiki::redirect($q, urlto($config{recentchangespage}));
 	exit 0;
 }
 
@@ -178,7 +180,6 @@ sub store ($$$) {
 			else {
 				$_->{link} = pagetitle($_->{page});
 			}
-			$_->{baseurl}="$config{url}/" if length $config{url};
 
 			$_;
 		} @{$change->{pages}}
@@ -226,7 +227,7 @@ sub store ($$$) {
 		wikiname => $config{wikiname},
 	);
 	
-	$template->param(permalink => "$config{url}/$config{recentchangespage}/#change-".titlepage($change->{rev}))
+	$template->param(permalink => urlto($config{recentchangespage})."#change-".titlepage($change->{rev}))
 		if exists $config{url};
 	
 	IkiWiki::run_hooks(pagetemplate => sub {
@@ -235,8 +236,8 @@ sub store ($$$) {
 	});
 
 	my $file=$page."._change";
-	writefile($file, $config{srcdir}, $template->output);
-	utime $change->{when}, $change->{when}, "$config{srcdir}/$file";
+	writefile($file, $IkiWiki::Plugin::transient::transientdir, $template->output);
+	utime $change->{when}, $change->{when}, $IkiWiki::Plugin::transient::transientdir.'/'.$file;
 
 	return $page;
 }

@@ -1,4 +1,485 @@
-ikiwiki (3.20101024) UNRELEASED; urgency=low
+ikiwiki (3.20120726) UNRELEASED; urgency=low
+
+  * monochrome: New theme, contributed by Jon Dowland.
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 30 Aug 2012 11:56:12 -0400
+
+ikiwiki (3.20120725) unstable; urgency=low
+
+  * recentchangesdiff: When diffurl is not set, provide inline diffs
+    in the recentchanges page, with visibility toggleable via javascript.
+    Thanks, Antoine Beaupré
+  * Split CFLAGS into words when building wrapper. Closes: #682237
+  * osm: Avoid calling urlto before generated files are registered.
+    Thanks, Philippe Gauthier and Antoine Beaupré
+  * osm: Add osm_openlayers_url configuration setting.
+    Thanks, Genevieve
+  * osm: osm_layers can be used to configured the layers displayed on the map.
+    Thanks, Antoine Beaupré
+  * comments: Remove ipv6 address specific code.
+
+ -- Joey Hess <joeyh@debian.org>  Sat, 25 Aug 2012 10:58:42 -0400
+
+ikiwiki (3.20120629) unstable; urgency=low
+
+  * mirrorlist: Add mirrorlist_use_cgi setting that avoids usedirs or
+    other config differences by linking to the mirror's CGI. (intrigeri)
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 29 Jun 2012 10:16:08 -0400
+
+ikiwiki (3.20120516) unstable; urgency=high
+
+  * meta: Security fix; add missing sanitization of author and authorurl.
+    CVE-2012-0220 Thanks, Raúl Benencia
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 16 May 2012 19:51:27 -0400
+
+ikiwiki (3.20120419) unstable; urgency=low
+
+  * Remove dead link from plugins/teximg. Closes: #664885
+  * inline: When the pagenames list includes pages that do not exist, skip
+    them.
+  * meta: Export author information in html <meta> tag. Closes: #664779
+    Thanks, Martin Michlmayr
+  * notifyemail: New plugin, sends email notifications about new and 
+    changed pages, and allows subscribing to comments.
+  * Added a "changes" hook. Renamed the "change" hook to "rendered", but
+    the old hook name is called for now for back-compat.
+  * meta: Support keywords header. Closes: #664780
+    Thanks, Martin Michlmayr
+  * passwordauth: Fix url in password recovery email to be absolute.
+  * httpauth: When it's the only auth method, avoid a pointless and
+    confusing signin form, and go right to the httpauthurl.
+  * rename: Allow rename to be started not from the edit page; return to
+    the renamed page in this case.
+  * remove: Support removing of pages in the transient underlay. (smcv)
+  * inline, trail: The pagenames parameter is now a list of absolute
+    pagenames, not relative wikilink type names. This is necessary to fix
+    a bug, and makes pagenames more consistent with the pagespec used
+    in the pages parameter. (smcv)
+  * link: Fix renaming wikilinks that contain embedded urls.
+  * graphviz: Handle self-links.
+  * trail: Improve CSS, also display trail links at bottom of page,
+    and a bug fix. (smcv)
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 19 Apr 2012 15:32:07 -0400
+
+ikiwiki (3.20120319) unstable; urgency=low
+
+  * osm: New plugin to embed an OpenStreetMap into a wiki page.
+    Supports waypoints, tags, and can even draw paths matching
+    wikilinks between pages containing waypoints.
+    Thanks to Blars Blarson and Antoine Beaupré, as well as the worldwide
+    OpenStreetMap community for this utter awesomeness.
+  * trail: New plugin to add navigation trails through pages via Next and
+    Previous links. Trails can easily be added to existing inlines by setting
+    trail=yes in the inline.
+    Thanks to Simon McVittie for his persistance developing this feature.
+  * Fix a snail mail address. Closes: #659158
+  * openid-jquery.js: Update URL of Wordpress favicon. Closes: #660549
+  * Drop the version attribute on the generator tag in Atom feeds
+    to make builds more reproducible. Closes: #661569 (Paul Wise)
+  * shortcut: Support Wikipedia's form of url-encoding for unicode
+    characters, which involves mojibake. Closes: #661198
+  * Add a few missing jquery UI icons to attachment upload widget underlay.
+  * URI escape filename when generating the diffurl.
+  * Add build-affected hook. Used by trail.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 19 Mar 2012 14:24:43 -0400
+
+ikiwiki (3.20120202) unstable; urgency=low
+
+  * mdwn: Added nodiscount setting, which can be used to avoid using the
+    markdown discount engine, when maximum compatability is needed.
+  * Switch to YAML::XS to work around insanity in YAML::Mo. Closes: #657533
+  * cvs: Ensure text files are added in non-binary mode. (Amitai Schlair)
+  * cvs: Various cleanups and testing. (Amitai Schlair)
+  * calendar: Fix strftime encoding bug.
+  * shortcuts: Fixed a broken shortcut to wikipedia (accidentially
+    made into a shortcut to wikiMedia).
+  * Various portability improvements. (Amitai Schlair)
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 02 Feb 2012 21:42:40 -0400
+
+ikiwiki (3.20120115) unstable; urgency=low
+
+  * Make backlink(.) work. Thanks, Giuseppe Bilotta.
+  * mdwn: Workaround discount's eliding of <style> blocks.
+  * attachment: Fix utf-8 display bug.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 15 Jan 2012 16:19:25 -0400
+
+ikiwiki (3.20120109) unstable; urgency=low
+
+  * mdwn: Can use the discount markdown library, via the
+    Text::Markdown::Discount perl module. This is preferred if available
+    since it's the fastest currently supported markdown library, speeding up
+    ikiwiki's markdown rendering by a factor of 40.
+    (However, when multimarkdown is enabled, Text::Markdown::Multimarkdown
+    is still used.)
+  * On Debian, depend on libtext-markdown-discount.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 09 Jan 2012 11:49:14 -0400
+
+ikiwiki (3.20111229) unstable; urgency=low
+
+  * Consume all stdin when rcs_receive short-circuits,
+    to avoid git SIGPIPE race.
+  * Add path and path_natural sort orders (smcv)
+  * Test coverage can be checked with `make coverage` (smcv)
+  * tag: encode categories using numeric values. (tango)
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 29 Dec 2011 12:00:53 -0400
+
+ikiwiki (3.20111107) unstable; urgency=low
+
+  * img: Bugfix to width/height tags for scaled down image when only
+    one dimension was provided. Thanks, Per Carlson.
+  * editpage: Fix FormattingHelp link on Discussion pages.
+  * The umask setting can now be set to private, group, or public,
+    avoiding the need to enter octal correctly which is particularly
+    difficult in yaml setup files. (smcv)
+  * graphviz: Support urls embedded in the graph, by having graphviz
+    generate an imagemap.
+  * graphviz: Support wikilinks embedded in the graph.
+    (Sponsored by The TOVA Company.)
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 30 Nov 2011 16:31:48 -0400
+
+ikiwiki (3.20111106) unstable; urgency=low
+
+  * searchquery.tmpl: Track escaping change in upstream template.
+    Thanks Olly Betts for review.
+  * svn: Support subversion 1.7, which does not have .svn in each
+    subdirectory.
+  * rst: import docutils lazily, to avoid errors during ikiwiki --setup.
+    Closes: #637604 (Thanks, smcv)
+  * Make the setup automator create YAML formatted files.
+  * Fix handling of discussion page creation links to make discussion pages
+    in the right place and with the right case. Broken by page case
+    preservation feature added in 3.20110707.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 06 Nov 2011 16:27:29 -0400
+
+ikiwiki (3.20110905) unstable; urgency=low
+
+  * mercurial: Openid nicknames are now used when committing. (Daniel Andersson)
+  * mercurial: Implement rcs_commit_staged so comments, attachments, etc
+    can be used. (Daniel Andersson)
+  * mercurial: Implement rcs_rename, rcs_remove. (Daniel Andersson)
+  * mercurial: Fix viewing of a diff containing non-utf8 changes.
+    (Daniel Andersson)
+  * mercurial: Make both rcs_getctime and rcs_getmtime fast. (Daniel Andersson)
+  * mercurial: Implement rcs_diff. (Daniel Andersson)
+  * po: Add `LANG_CODE` and `LANG_NAME` template variables. (intrigeri)
+  * Fix typo in Danish translation of shortcuts page that caused exponential
+    regexp blowup.
+  * Fix escaping of html entities in permalinks.
+  * Fix escaping of html entities in tag names.
+  * Avoid using named capture groups in heredoc code for oldperl compatibility.
+  * Put in a workaround for #622591, by ensuring Search::Xapian gets loaded
+    before Image::Magick.
+  * Add unminified jquery js and css files to source.
+  * Update to jquery 1.6.2, and jquery-ui 1.8.14.
+  * Use lockf rather than flock when taking the cgilock, for better
+    portability.
+  * search: Fix encoding bug in calculation of maximum term size.
+  * inline: When indexing internal pages for searching, use the url of
+    the inlining page.
+  * Fix comments testsuite to not rely on Date::Parse's ability to
+    parse the date Columbus discovered America. Closes: #640350
+  * Avoid warning message when generating setup file if highlight
+    is not installed. Closes: #637606
+  * Promote RPC::XML to a Recommends, since it's used by auto-blog.setup.
+    Closes: #637603
+  * Fix web revert of a file deletion.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 05 Sep 2011 14:53:00 -0400
+
+ikiwiki (3.20110715) unstable; urgency=low
+
+  * rename: Fix logic error that broke renaming pages when the attachment
+    plugin was disabled.
+  * rename: Fix logic error that bypassed the usual pagespec checks.
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 15 Jul 2011 18:36:29 -0400
+
+ikiwiki (3.20110712) unstable; urgency=low
+
+  * attachment: Bugfix to create directory when moving attachment out of 
+    holding area.
+  * Display attachment manipulation links always, since attachments can be
+    uploaded via javascript.
+
+ -- Joey Hess <joeyh@debian.org>  Tue, 12 Jul 2011 00:41:26 -0400
+
+ikiwiki (3.20110711) unstable; urgency=low
+
+  * Add build dep on python-support. Closes: #633536
+  * attachment: Bugfix to move upload attachments out of holding area
+    when saving.
+  * attachment: Bugfix for trying to attach files to a subpage of the index
+    page.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 11 Jul 2011 13:03:04 -0400
+
+ikiwiki (3.20110707) unstable; urgency=low
+
+  * userlist: New plugin, lets admins see a list of users and their info.
+  * aggregate: Improve checking for too long aggregated filenames.
+  * Updated to jQuery 1.6.1.
+  * attachment: Speed up multiple file uploads by storing uploaded files
+    in a staging area until the page is saved/previewed, rather than
+    refreshing the site after each upload.
+    (Sponsored by The TOVA Company.)
+  * attachment: Files can be dragged into the edit page to upload them.
+    Multiple file batch upload support. Upload progress bars.
+    AJAX special effects. Impemented using the jQuery-File-Upload widget.
+    (If you don't have javascript don't worry, I kept that working too.)
+    (Sponsored by The TOVA Company.)
+  * Add libtext-multimarkdown-perl to Suggests. Closes: #630705
+  * headinganchors: Plugin by Paul Wise that adds ids to <hn> headings.
+  * html5 is not experimental anymore. But not the default either, quite yet.
+  * Support svg as a inlinable image type; svg images can be included on a
+    page by simply linking to them, or by using the img directive.
+    Note that sanitizing svg files is still not addressed.
+  * img: Generate png format thumbnails for svg images.
+  * Preserve mixed case in page creation links, and when creating a page
+    whose title is mixed case, allow selecting between the mixed case and
+    all lower-case names.
+  * Fix ikiwiki-update-wikilist -r to actually work.
+  * comments: collect metadata in a scan-phase preprocess hook, which
+    fixes sorting comments by date. (smcv)
+  * Run scan hooks for internal pages (preprocess hooks already run in scan
+    mode) (smcv)
+  * inline: Handle obfuscated urls, such as the mailto urls generated by
+    markdown when forcing urls absolute.
+  * Bugfix for wikilink containing an email address not showing up in 
+    brokenlinks list.
+  * Bugfix for trying to attach files to a subpage of the index page.
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 07 Jul 2011 20:38:31 -0400
+
+ikiwiki (3.20110608) unstable; urgency=high
+
+  * ikiwiki-mass-rebuild: Fix tty hijacking vulnerability by using su.
+    (Once su's related bug #628843 is fixed.) Thanks, Ludwig Nussel.
+    (CVE-2011-1408)
+  * search: Update search page when page.tmpl or searchquery.tmpl are locally
+    modified.
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 03 Jun 2011 20:30:35 -0400
+
+ikiwiki (3.20110431) unstable; urgency=low
+
+  * Danish translation update. Closes: #625721
+  * Danish underlay translation update. Closes: #625765
+    (Thanks, Jonas Smedegaard)
+  * Support YAML::XS by not passing decoded unicode to Load. Closes: #625713
+  * openid, aggregate, pinger: Use Net::INET6Glue if available to
+    support making ipv6 connections. (Note that if LWPx::ParanoidAgent
+    is installed, it defeats this for openid.)
+  * Add additional directive quoting styles, to better support nested
+    directives. Both triple-single-quote and heredoc quotes can be used.
+    (Thanks, Timo Paulssen)
+  * Changed license of madduck's python plugins from GPL-2 to BSD-2-clause.
+  * po: support language codes in the form of 'es_AR', and 'arn'. (intrigeri)
+    Closes: #627844
+  * po: Make po4a warn, not error on a malformed document. (intrigeri)
+  * Support the Hiawatha web server which sets HTTPS=off rather than not
+    setting it. (There does not seem to be a standard here.)
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 03 Jun 2011 14:38:23 -0400
+
+ikiwiki (3.20110430) unstable; urgency=low
+
+  * meta: Allow adding javascript to pages. Only when htmlscrubber is
+    disabled, naturally. (Thanks, Giuseppe Bilotta) Closes: #623154
+  * comments: Add avatar picture of comment author, using Libravatar::URL
+    when available. The avatar is looked up based on the user's openid,
+    or email address. (Thanks, Francois Marier)
+  * Recommend libgravatar-url-perl, which contains Libravatar::URL.
+  * monotone: Implement rcs_getmtime, and work around a problem with monotone
+    0.48 that affects rcs_getctime. (Thanks, Richard Levitte)
+  * meta: Fix bug in loading of HTML::Entities that can break inline
+    archive=yes (mostly masked by other plugins that load the module).
+  * Be quiet about updating wrappers, except in verbose mode. (jmtd)
+  * meta: Add FOAF support. Closes: #623156 (Jonas Smedegaard)
+  * Promote Crypt::SSLeay to Recommends; needed for https openid auth.
+  * tag: Avoid autocreating multiple tag pages that vary only in
+    capitalization. The first capitalization seen of a tag will be used
+    for the tag page.
+  * Fix yaml build dep. Closes: #624712
+
+ -- Joey Hess <joeyh@debian.org>  Sat, 30 Apr 2011 17:13:24 -0400
+
+ikiwiki (3.20110328) unstable; urgency=low
+
+  * Yaml formatted setup files are now produced by default.
+    (Perl formatted setup files can still be used.)
+  * Add timezone setting in setup file. This alows time zone to be configured
+    via the web.
+  * comment: Better fix to avoid showing comments of subpages, while
+    not breaking manual inlining of comments.
+  * meta: Security fix; don't allow alternative stylesheets to be added
+    on pages where the htmlscrubber is enabled. CVE-2011-1401
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 28 Mar 2011 12:23:26 -0400
+
+ikiwiki (3.20110321) unstable; urgency=low
+
+  * comment: Don't show comments of subpages on parent pages.
+    (Fixes bug introduced in version 3.20100505.)
+  * darcs: Fix multiple issues preventing rcs_diff from working.
+  * aggregate: Read cookies from ~/.ikiwiki/cookies by default.
+    Also, the cookiejar configuration setting can be used by
+    other plugins to provide a custom `cookie_jar` object for LWP::UserAgent.
+    (Thanks, schmonz)
+  * Avoid escaping / characters in filenames when building the cgiurl,
+    as this confuses eg, cvsweb. 
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 21 Mar 2011 14:45:05 -0400
+
+ikiwiki (3.20110225) unstable; urgency=low
+
+  * editpage: Avoid inheriting internal page types.
+  * htmltidy: Avoid breaking the sidebar when websetup is running.
+  * transient: New utility plugin that allows transient pages to
+    be stored in .ikiwiki/transient/ (smcv)
+  * aggregate: Aggregated content is stored in the transient underlay.
+    (Existing aggregated content is not moved, since it will eventually
+    expire and be removed) (smcv)
+  * autoindex, tag: Added autoindex_commit and tag_autocreate_commit that
+    can be unset to make index files and tags respectively not be committed,
+    and instead be stored in the transient underlay.
+    Closes: #544322 (smcv)
+  * autoindex: Adapted to use add_autofile. Slight behavior changes
+    in edge cases that are probably really bug fixes. (smcv)
+  * recentchanges: Use transient underlay (smcv)
+  * map: Avoid unnecessary ul's in maps with nested directories.
+    (Giuseppe Bilotta)
+  * Fix broken baseurl in cgi mode when usedirs is disabled. Bug introduced
+    in 3.20101231.
+  * inline: Fix link to nested inlined pages's feeds. (Giuseppe Bilotta)
+  * inline: Add 'id' parameter that can be used when styling individual
+    feedlinks and postforms. (Giuseppe Bilotta)
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 25 Feb 2011 17:31:08 -0400
+
+ikiwiki (3.20110124) unstable; urgency=low
+
+  * comments: Fix commenting, broken by security fix.
+  * blogspam: Don't check modifications from admins for spam, and also
+    allow the blogspam_pagespec to do other matches against who the user is.
+  * inline: Fix regression in feed titles. Closes: #610878
+    (Thanks, Paul Wise)
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 24 Jan 2011 17:07:44 -0400
+
+ikiwiki (3.20110123) unstable; urgency=low
+
+  * Adapt autoindex test suite to work with old Test::More.
+  * Fix posting by blog form, broken by last release.
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 23 Jan 2011 10:12:33 -0400
+
+ikiwiki (3.20110122) unstable; urgency=medium
+
+  * inline: Pass feed titles to templates and add title and rel attributes
+    to feed links. (Giuseppe Bilotta)
+  * inline: Use class rather than id for feedlinks and blogform.
+    (Giuseppe Bilotta)
+  * comments: Fix XSS security hole due to missing validation of page name.
+    CVE-2011-0428 (Thanks, Dave B.)
+  * rename: Fix crash when renaming a page that is linked to by a page
+    in an underlay.
+
+ -- Joey Hess <joeyh@debian.org>  Sat, 22 Jan 2011 10:22:25 -0400
+
+ikiwiki (3.20110105) unstable; urgency=low
+
+  * tag: Do not include tagbase in rss/atom category tags. (Giuseppe Bilotta)
+  * tag: Improve display of tags with a slash in their names.
+    (Giuseppe Bilotta)
+  * Fix redirect to use a full url. Was broken (in theory) by baseurl
+    changes in last release.
+  * Fix `<base>` output by cgi to have a full url again, broken by last
+    release.
+  * Fix permalinks to recentchanges items and comments, broken by last
+    release.
+  * Export three cgi env vars needed for CGI->url to work. Fixed
+    openid breakage from last release.
+  * Removed `IkiWiki::misctemplate()` function. Any plugins using
+    it should use `IkiWiki::cgitemplate()` instead.
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 05 Jan 2011 17:33:05 -0400
+
+ikiwiki (3.20101231) unstable; urgency=low
+
+  * Better support for serving the same site on multiple urls. (Such as
+    a http and a https url, or a ipv4 and an ipv6 url.)
+    (Thanks, smcv)
+  * API: urlto without a defined second parameter now generates an url
+    that starts with "/" (when possible; eg when the site's url and cgiurl
+    are on the same domain).
+  * Now when users log in via https, ikiwiki sends a secure cookie, that can
+    only be used over https. If the user switches to using http, they will
+    need to re-login. (smcv)
+  * inline: Display feed buttons for nested inlines, linking to the inlined
+    page's feed. (Giuseppe Bilotta)
+  * goldtype: New theme, based on blueview, contributed by Lars Wirzenius.
+  * po: do not override homepage title when it was overridden. (intrigeri)
+  * Set HTML::Template's parent_global_vars option to allow using parameters
+    like title_overridden that do not appear on the template. (intrigeri)
+    (See https://rt.cpan.org/Public/Bug/Display.html?id=64158)
+  * inline: Force an absolute page location when the inline postform is used.
+  * editpage, comment: Clean up title when editing or creating a page or
+    comment.
+  * teximg: Use `\[` and `\]` instead of not recommended `$$`. (Paul Menzel)
+    Closes: #596084
+  * monotone: Improve version parsing to support patch and development
+    versions of the monotone binary. (tommyd3mdi)
+  * highlight: Support highlight 3.2+svn19 (note that released version 3.2
+    is not supported). Closes: #605779 (David Bremner)
+  * Add a second parameter to the rcs_diff hook, and avoid bloating memory
+    reading in enormous commits.
+  * git: Fix bug involving attempting to web revert a commit that included
+    changes to attachments.
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 31 Dec 2010 21:23:37 -0400
+
+ikiwiki (3.20101201) unstable; urgency=low
+
+  * meta: Fix calling of htmlscrubber to pass the page parameter.
+    The change of the htmlscrubber to look at page rather than destpage
+    caused htmlscrubber_skip to not work for meta directives.
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 01 Dec 2010 20:28:01 -0400
+
+ikiwiki (3.20101129) unstable; urgency=low
+
+  * websetup: Fix encoding problem when restoring old setup file.
+  * more: Add pages parameter to limit where the more is displayed.
+    (thanks, dark)
+  * Fix escaping of filenames in historyurl. (Thanks, aj)
+  * inline: Improve RSS url munging to use a proper html parser,
+    and support all elements that HTML::Tagset knows about. 
+    (Which doesn't include html5 just yet, but then the old version
+    didn't either.) Bonus: 4 times faster than old regexp method.
+  * Optimise glob() pagespec. (Thanks, Kathryn and smcv)
+  * highlight: Support new format of filetypes.conf used by version 3.2
+    of the highlight package.
+  * edittemplate: Fix crash if using a .tmpl file or other non-page file
+    as a template for a new page.
+  * git: Fix temp file location.
+  * rename: Fix to pass named parameters to rcs_commit.
+  * git: Avoid adding files when committing, so as not to implicitly add
+    files like recentchanges files that are not normally checked in,
+    when fixing links after rename.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 29 Nov 2010 13:59:10 -0400
+
+ikiwiki (3.20101112) unstable; urgency=HIGH
 
   * txt: Fix display when used inside a format directive.
   * highlight: Ensure that other, more-specific format plugins,
@@ -8,8 +489,15 @@ ikiwiki (3.20101024) UNRELEASED; urgency=low
     (Thanks, Craig Lennox and Tuomas Jormola)
   * git: Use author date, not committer date. Closes: #602012
     (Thanks, Tuomas Jormola)
+  * Fix htmlscrubber_skip to be matched on the source page, not the page it is
+    inlined into. Should allow setting to "* and !comment(*)" to scrub
+    comments, but leave your blog posts unscrubbed, etc. CVE-2010-1673
+  * comments: Make postcomment() pagespec work when previewing a comment,
+    including during moderation. CVE-2010-1673
+  * comments: Make comment() pagespec also match comments that are being
+    posted. CVE-2010-1673
 
- -- Joey Hess <joeyh@debian.org>  Mon, 25 Oct 2010 22:30:29 -0400
+ -- Joey Hess <joeyh@debian.org>  Fri, 12 Nov 2010 00:36:06 -0400
 
 ikiwiki (3.20101023) unstable; urgency=low
 

@@ -356,20 +356,47 @@ when the page is being previewed.)
 The function is passed named parameters: "page" and "content", and 
 should return the formatted content.
 
+### build_affected
+
+	hook(type => "build_affected", id => "foo", call => \&build_affected);
+
+This hook is called after the directly changed pages have been built,
+and can cause extra pages to be built. If links and backlinks were provided
+by a plugin, this would be where that plugin would rebuild pages whose
+backlinks have changed, for instance. The [[trail]] plugin uses this hook
+to rebuild pages whose next or previous page has changed.
+
+The function should currently ignore its parameters. It returns a list with
+an even number of items (a hash in list context), where the first item of
+each pair is a page name to be rebuilt (if it was not already rebuilt), and
+the second is a log message resembling
+`building plugins/write because the phase of the moon has changed`.
+
 ### delete
 
 	hook(type => "delete", id => "foo", call => \&delete);
 
-Each time a page or pages is removed from the wiki, the referenced function
+After a page or pages is removed from the wiki, the referenced function
 is called, and passed the names of the source files that were removed.
 
-### change
+### rendered
 
-	hook(type => "change", id => "foo", call => \&render);
+	hook(type => "rendered", id => "foo", call => \&rendered);
 
-Each time ikiwiki renders a change or addition (but not deletion) to the
+After ikiwiki renders a change or addition (but not deletion) to the
 wiki, the referenced function is called, and passed the names of the
 source files that were rendered.
+
+(This hook used to be called "change", but that was not accurate.
+For now, plugins using the old hook name will still work.)
+
+### changes
+
+	hook(type => "changes", id => "foo", call => \&changes);
+
+After ikiwiki renders changes to the wiki, the referenced function is
+called, and passed the names of the source files that were added, modified,
+or deleted.
 
 ### cgi
 
@@ -580,6 +607,7 @@ describes the plugin as a whole. For example:
 * `description` is a short description of the option.
 * `link` is a link to further information about the option. This can either
   be a [[ikiwiki/WikiLink]], or an url.
+* `htmldescription` is displayed instead of the description by websetup.
 * `advanced` can be set to true if the option is more suitable for advanced
   users.
 * `safe` should be false if the option should not be displayed in unsafe
@@ -982,14 +1010,22 @@ This is the standard gettext function, although slightly optimised.
 
 This is the standard ngettext function, although slightly optimised.
 
-### `urlto($$;$)`
+### `urlto($;$$)`
 
 Construct a relative url to the first parameter from the page named by the
 second. The first parameter can be either a page name, or some other
 destination file, as registered by `will_render`.
 
-If the third parameter is passed and is true, an absolute url will be
-constructed instead of the default relative url.
+Provide a second parameter whenever possible, since this leads to better
+behaviour for the [[plugins/po]] plugin and `file:///` URLs.
+
+If the second parameter is not specified (or `undef`), the URL will be
+valid from any page on the wiki, or from the CGI; if possible it'll
+be a path starting with `/`, but an absolute URL will be used if
+the wiki and the CGI are on different domains.
+
+If the third parameter is passed and is true, the url will be a fully
+absolute url. This is useful when generating an url to publish elsewhere.
 
 ### `newpagefile($$)`
 
@@ -1101,9 +1137,7 @@ to version control; the subdir can be added if so.
 Remove a file. The filename is relative to the root of the srcdir.
 
 Note that this should not commit the removal, it should only prepare for it
-to be committed when `rcs_commit` (or `rcs_commit_staged`) is called. Note
-that the new file may be in a new subdir that is not yet in version
-control; the subdir can be added if so.
+to be committed when `rcs_commit` (or `rcs_commit_staged`) is called.
 
 #### `rcs_rename($$)`
 
@@ -1143,11 +1177,13 @@ The data structure returned for each change is:
 		],
 	}
 
-#### `rcs_diff($)`
+#### `rcs_diff($;$)`
 
-The parameter is the rev from `rcs_recentchanges`.
+The first parameter is the rev from `rcs_recentchanges`.
+The optional second parameter is how many lines to return (default: all).
+
 Should return a list of lines of the diff (including \n) in list
-context, and the whole diff in scalar context.
+context, and a string containing the whole diff in scalar context.
 
 #### `rcs_getctime($)`
 

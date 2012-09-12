@@ -33,12 +33,17 @@ use warnings;
 use strict;
 use IkiWiki;
 
+use URI::Escape q{uri_escape_utf8};
 use File::chdir;
 
+
+# GENERAL PLUGIN API CALLS
+
 sub import {
-	hook(type => "genwrapper", id => "cvs", call => \&genwrapper);
 	hook(type => "checkconfig", id => "cvs", call => \&checkconfig);
 	hook(type => "getsetup", id => "cvs", call => \&getsetup);
+	hook(type => "genwrapper", id => "cvs", call => \&genwrapper);
+
 	hook(type => "rcs", id => "rcs_update", call => \&rcs_update);
 	hook(type => "rcs", id => "rcs_prepedit", call => \&rcs_prepedit);
 	hook(type => "rcs", id => "rcs_commit", call => \&rcs_commit);
@@ -50,17 +55,6 @@ sub import {
 	hook(type => "rcs", id => "rcs_diff", call => \&rcs_diff);
 	hook(type => "rcs", id => "rcs_getctime", call => \&rcs_getctime);
 	hook(type => "rcs", id => "rcs_getmtime", call => \&rcs_getmtime);
-}
-
-sub genwrapper () {
-	return <<EOF;
-	{
-		int j;
-		for (j = 1; j < argc; j++)
-			if (strstr(argv[j], "New directory") != NULL)
-				exit(0);
-	}
-EOF
 }
 
 sub checkconfig () {
@@ -132,39 +126,22 @@ sub getsetup () {
 		},
 }
 
-sub cvs_info ($$) {
-	my $field=shift;
-	my $file=shift;
-
-	local $CWD = $config{srcdir};
-
-	my $info=`cvs status $file`;
-	my ($ret)=$info=~/^\s*$field:\s*(\S+)/m;
-	return $ret;
+sub genwrapper () {
+	return <<EOF;
+	{
+		int j;
+		for (j = 1; j < argc; j++)
+			if (strstr(argv[j], "New directory") != NULL)
+				exit(0);
+	}
+EOF
 }
 
-sub cvs_runcvs(@) {
-	my @cmd = @_;
-	unshift @cmd, 'cvs', '-Q';
 
-	local $CWD = $config{srcdir};
-
-	open(my $savedout, ">&STDOUT");
-	open(STDOUT, ">", "/dev/null");
-	my $ret = system(@cmd);
-	open(STDOUT, ">&", $savedout);
-
-	return ($ret == 0) ? 1 : 0;
-}
-
-sub cvs_is_controlling {
-	my $dir=shift;
-	$dir=$config{srcdir} unless defined($dir);
-	return (-d "$dir/CVS") ? 1 : 0;
-}
+# VCS PLUGIN API CALLS
 
 sub rcs_update () {
-	return unless cvs_is_controlling;
+	return unless cvs_is_controlling();
 	cvs_runcvs('update', '-dP');
 }
 
@@ -175,30 +152,12 @@ sub rcs_prepedit ($) {
 	# The file is relative to the srcdir.
 	my $file=shift;
 
-	return unless cvs_is_controlling;
+	return unless cvs_is_controlling();
 
 	# For cvs, return the revision of the file when
 	# editing begins.
 	my $rev=cvs_info("Repository revision", "$file");
 	return defined $rev ? $rev : "";
-}
-
-sub commitmessage (@) {
-	my %params=@_;
-	
-	if (defined $params{session}) {
-		if (defined $params{session}->param("name")) {
-			return "web commit by ".
-				$params{session}->param("name").
-				(length $params{message} ? ": $params{message}" : "");
-		}
-		elsif (defined $params{session}->remote_addr()) {
-			return "web commit from ".
-				$params{session}->remote_addr().
-				(length $params{message} ? ": $params{message}" : "");
-		}
-	}
-	return $params{message};
 }
 
 sub rcs_commit (@) {
@@ -207,7 +166,7 @@ sub rcs_commit (@) {
 	# The file is relative to the srcdir.
 	my %params=@_;
 
-	return unless cvs_is_controlling;
+	return unless cvs_is_controlling();
 
 	# Check to see if the page has been changed by someone
 	# else since rcs_prepedit was called.
@@ -250,9 +209,6 @@ sub rcs_add ($) {
 	my $parent=IkiWiki::dirname($file);
 	my @files_to_add = ($file);
 
-	eval q{use File::MimeInfo};
-	error($@) if $@;
-
 	until ((length($parent) == 0) || cvs_is_controlling("$config{srcdir}/$parent")){
 		push @files_to_add, $parent;
 		$parent = IkiWiki::dirname($parent);
@@ -261,15 +217,8 @@ sub rcs_add ($) {
 	while ($file = pop @files_to_add) {
 		if (@files_to_add == 0) {
 			# file
-			my $filemime = File::MimeInfo::default($file);
-			if (defined($filemime) && $filemime eq 'text/plain') {
-				cvs_runcvs('add', $file) ||
-					warn("cvs add $file failed\n");
-			}
-			else {
-				cvs_runcvs('add', '-kb', $file) ||
-					warn("cvs add binary $file failed\n");
-			}
+			cvs_runcvs('add', cvs_keyword_subst_args($file)) ||
+				warn("cvs add $file failed\n");
 		}
 		else {
 			# directory
@@ -283,7 +232,7 @@ sub rcs_remove ($) {
 	# filename is relative to the root of the srcdir
 	my $file=shift;
 
-	return unless cvs_is_controlling;
+	return unless cvs_is_controlling();
 
 	cvs_runcvs('rm', '-f', $file) ||
 		warn("cvs rm $file failed\n");
@@ -293,7 +242,7 @@ sub rcs_rename ($$) {
 	# filenames relative to the root of the srcdir
 	my ($src, $dest)=@_;
 
-	return unless cvs_is_controlling;
+	return unless cvs_is_controlling();
 
 	local $CWD = $config{srcdir};
 
@@ -309,7 +258,7 @@ sub rcs_recentchanges ($) {
 	my $num = shift;
 	my @ret;
 
-	return unless cvs_is_controlling;
+	return unless cvs_is_controlling();
 
 	eval q{use Date::Parse};
 	error($@) if $@;
@@ -367,7 +316,8 @@ sub rcs_recentchanges ($) {
 			$oldrev =~ s/INITIAL/0/;
 			$newrev =~ s/\(DEAD\)//;
 			my $diffurl = defined $config{diffurl} ? $config{diffurl} : "";
-			$diffurl=~s/\[\[file\]\]/$page/g;
+			my $epage = uri_escape_utf8($page);
+			$diffurl=~s/\[\[file\]\]/$epage/g;
 			$diffurl=~s/\[\[r1\]\]/$oldrev/g;
 			$diffurl=~s/\[\[r2\]\]/$newrev/g;
 			unshift @pages, {
@@ -436,8 +386,9 @@ sub rcs_recentchanges ($) {
 	return @ret;
 }
 
-sub rcs_diff ($) {
+sub rcs_diff ($;$) {
 	my $rev=IkiWiki::possibly_foolish_untaint(int(shift));
+	my $maxlines=shift;
 
 	local $CWD = $config{srcdir};
 
@@ -490,6 +441,76 @@ sub rcs_getctime ($) {
 
 sub rcs_getmtime ($) {
 	error "rcs_getmtime is not implemented for cvs\n"; # TODO
+}
+
+
+# INTERNAL SUPPORT ROUTINES
+
+sub commitmessage (@) {
+	my %params=@_;
+
+	if (defined $params{session}) {
+		if (defined $params{session}->param("name")) {
+			return "web commit by ".
+				$params{session}->param("name").
+				(length $params{message} ? ": $params{message}" : "");
+		}
+		elsif (defined $params{session}->remote_addr()) {
+			return "web commit from ".
+				$params{session}->remote_addr().
+				(length $params{message} ? ": $params{message}" : "");
+		}
+	}
+	return $params{message};
+}
+
+sub cvs_info ($$) {
+	my $field=shift;
+	my $file=shift;
+
+	local $CWD = $config{srcdir};
+
+	my $info=`cvs status $file`;
+	my ($ret)=$info=~/^\s*$field:\s*(\S+)/m;
+	return $ret;
+}
+
+sub cvs_is_controlling {
+	my $dir=shift;
+	$dir=$config{srcdir} unless defined($dir);
+	return (-d "$dir/CVS") ? 1 : 0;
+}
+
+sub cvs_keyword_subst_args ($) {
+	my $file = shift;
+
+	local $CWD = $config{srcdir};
+
+	eval q{use File::MimeInfo};
+	error($@) if $@;
+	my $filemime = File::MimeInfo::default($file);
+	# if (-T $file) {
+
+	if (defined($filemime) && $filemime eq 'text/plain') {
+		return ($file);
+	}
+	else {
+		return ('-kb', $file);
+	}
+}
+
+sub cvs_runcvs(@) {
+	my @cmd = @_;
+	unshift @cmd, 'cvs', '-Q';
+
+	local $CWD = $config{srcdir};
+
+	open(my $savedout, ">&STDOUT");
+	open(STDOUT, ">", "/dev/null");
+	my $ret = system(@cmd);
+	open(STDOUT, ">&", $savedout);
+
+	return ($ret == 0) ? 1 : 0;
 }
 
 1

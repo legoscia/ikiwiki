@@ -49,6 +49,7 @@ sub gen_wrapper () {
 	push @envsave, qw{REMOTE_ADDR QUERY_STRING REQUEST_METHOD REQUEST_URI
 	               CONTENT_TYPE CONTENT_LENGTH GATEWAY_INTERFACE
 		       HTTP_COOKIE REMOTE_USER HTTPS REDIRECT_STATUS
+		       HTTP_HOST SERVER_PORT HTTPS HTTP_ACCEPT
 		       REDIRECT_URL} if $config{cgi};
 	my $envsave="";
 	foreach my $var (@envsave) {
@@ -94,7 +95,7 @@ EOF
 		# IKIWIKI_CGILOCK_FD so unlockwiki can close it.
 		$pre_exec=<<"EOF";
 	lockfd=open("$config{wikistatedir}/cgilock", O_CREAT | O_RDWR, 0666);
-	if (lockfd != -1 && flock(lockfd, LOCK_EX) == 0) {
+	if (lockfd != -1 && lockf(lockfd, F_LOCK, 0) == 0) {
 		char *fd_s=malloc(8);
 		sprintf(fd_s, "%i", lockfd);
 		setenv("IKIWIKI_CGILOCK_FD", fd_s, 1);
@@ -215,7 +216,7 @@ $set_background_command
 EOF
 
 	my @cc=exists $ENV{CC} ? possibly_foolish_untaint($ENV{CC}) : 'cc';
-	push @cc, possibly_foolish_untaint($ENV{CFLAGS}) if exists $ENV{CFLAGS};
+	push @cc, split(' ', possibly_foolish_untaint($ENV{CFLAGS})) if exists $ENV{CFLAGS};
 	if (system(@cc, "$wrapper.c", "-o", "$wrapper.new") != 0) {
 		#translators: The parameter is a C filename.
 		error(sprintf(gettext("failed to compile %s"), "$wrapper.c"));
@@ -238,8 +239,7 @@ EOF
 		error("rename $wrapper.new $wrapper: $!");
 	}
 	#translators: The parameter is a filename.
-	printf(gettext("successfully generated %s"), $wrapper);
-	print "\n";
+	debug(sprintf(gettext("successfully generated %s"), $wrapper));
 }
 
 1

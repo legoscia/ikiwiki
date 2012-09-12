@@ -5,6 +5,7 @@ use warnings;
 use strict;
 use IkiWiki;
 use Encode;
+use URI::Escape q{uri_escape_utf8};
 use open qw{:utf8 :std};
 
 sub import {
@@ -242,8 +243,10 @@ sub rcs_recentchanges ($) {
 			# Skip source name in renames
 			$filename =~ s/^.* => //;
 
+			my $efilename = uri_escape_utf8($filename);
+
 			my $diffurl = defined $config{'diffurl'} ? $config{'diffurl'} : "";
-			$diffurl =~ s/\[\[file\]\]/$filename/go;
+			$diffurl =~ s/\[\[file\]\]/$efilename/go;
 			$diffurl =~ s/\[\[file-id\]\]/$fileid/go;
 			$diffurl =~ s/\[\[r2\]\]/$info->{revno}/go;
 
@@ -271,8 +274,9 @@ sub rcs_recentchanges ($) {
 	return @ret;
 }
 
-sub rcs_diff ($) {
+sub rcs_diff ($;$) {
 	my $taintedrev=shift;
+	my $maxlines=shift;
 	my ($rev) = $taintedrev =~ /^(\d+(\.\d+)*)$/; # untaint
 
 	my $prevspec = "before:" . $rev;
@@ -281,8 +285,11 @@ sub rcs_diff ($) {
 		"--new", $config{srcdir},
 		"-r", $prevspec . ".." . $revspec);
 	open (my $out, "@cmdline |");
-
-	my @lines = <$out>;
+	my @lines;
+	while (my $line=<$out>) {
+		last if defined $maxlines && @lines == $maxlines;
+		push @lines, $line;
+	}
 	if (wantarray) {
 		return @lines;
 	}

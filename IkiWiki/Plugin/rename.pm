@@ -126,7 +126,7 @@ sub rename_form ($$$) {
 		method => 'POST',
 		javascript => 0,
 		params => $q,
-		action => $config{cgiurl},
+		action => IkiWiki::cgiurl(),
 		stylesheet => 1,
 		fields => [qw{do page new_name attachment}],
 	);
@@ -179,8 +179,15 @@ sub rename_start ($$$$) {
 	my $attachment=shift;
 	my $page=shift;
 
-	check_canrename($page, $pagesources{$page}, undef, undef,
-		$q, $session);
+	# Special case for renaming held attachments; normal checks
+	# don't apply.
+	my $held=$attachment &&
+		IkiWiki::Plugin::attachment->can("is_held_attachment") &&
+		IkiWiki::Plugin::attachment::is_held_attachment($page);
+	if (! $held) {
+		check_canrename($page, $pagesources{$page}, undef, undef,
+			$q, $session);
+	}
 
    	# Save current form state to allow returning to it later
 	# without losing any edits.
@@ -199,14 +206,22 @@ sub rename_start ($$$$) {
 	exit 0;
 }
 
-sub postrename ($;$$$) {
+sub postrename ($$$;$$) {
+	my $cgi=shift;
 	my $session=shift;
 	my $src=shift;
 	my $dest=shift;
 	my $attachment=shift;
 
-	# Load saved form state and return to edit page.
-	my $postrename=CGI->new($session->param("postrename"));
+	# Load saved form state and return to edit page, using stored old
+	# cgi state. Or, if the rename was not started on the edit page, 
+	# return to the renamed page.
+	my $postrename=$session->param("postrename");
+	if (! defined $postrename) {
+		IkiWiki::redirect($cgi, urlto(defined $dest ? $dest : $src));
+		exit;
+	}
+	my $oldcgi=CGI->new($postrename);
 	$session->clear("postrename");
 	IkiWiki::cgi_savesession($session);
 
@@ -215,21 +230,21 @@ sub postrename ($;$$$) {
 			# They renamed the page they were editing. This requires
 			# fixups to the edit form state.
 			# Tweak the edit form to be editing the new page.
-			$postrename->param("page", $dest);
+			$oldcgi->param("page", $dest);
 		}
 
 		# Update edit form content to fix any links present
 		# on it.
-		$postrename->param("editcontent",
+		$oldcgi->param("editcontent",
 			renamepage_hook($dest, $src, $dest,
-				 $postrename->param("editcontent")));
+				 $oldcgi->param("editcontent")));
 
 		# Get a new edit token; old was likely invalidated.
-		$postrename->param("rcsinfo",
+		$oldcgi->param("rcsinfo",
 			IkiWiki::rcs_prepedit($pagesources{$dest}));
 	}
 
-	IkiWiki::cgi_editpage($postrename, $session);
+	IkiWiki::cgi_editpage($oldcgi, $session);
 }
 
 sub formbuilder (@) {
@@ -284,20 +299,18 @@ sub sessioncgi ($$) {
         	my $session=shift;
 		my ($form, $buttons)=rename_form($q, $session, Encode::decode_utf8($q->param("page")));
 		IkiWiki::decode_form_utf8($form);
+		my $src=$form->field("page");
 
 		if ($form->submitted eq 'Cancel') {
-			postrename($session);
+			postrename($q, $session, $src);
 		}
 		elsif ($form->submitted eq 'Rename' && $form->validate) {
 			IkiWiki::checksessionexpiry($q, $session, $q->param('sid'));
 
-			# Queue of rename actions to perfom.
-			my @torename;
-
 			# These untaints are safe because of the checks
 			# performed in check_canrename later.
-			my $src=$form->field("page");
-			my $srcfile=IkiWiki::possibly_foolish_untaint($pagesources{$src});
+			my $srcfile=IkiWiki::possibly_foolish_untaint($pagesources{$src})
+				if exists $pagesources{$src};
 			my $dest=IkiWiki::possibly_foolish_untaint(titlepage($form->field("new_name")));
 			my $destfile=$dest;
 			if (! $q->param("attachment")) {
@@ -312,6 +325,19 @@ sub sessioncgi ($$) {
 				
 				$destfile=newpagefile($dest, $type);
 			}
+		
+			# Special case for renaming held attachments.
+			my $held=$q->param("attachment") &&
+				IkiWiki::Plugin::attachment->can("is_held_attachment") &&
+				IkiWiki::Plugin::attachment::is_held_attachment($src);
+			if ($held) {
+				rename($held, IkiWiki::Plugin::attachment::attachment_holding_location($dest));
+				postrename($q, $session, $src, $dest, $q->param("attachment"))
+					unless defined $srcfile;
+			}
+			
+			# Queue of rename actions to perfom.
+			my @torename;
 			push @torename, {
 				src => $src,
 			       	srcfile => $srcfile,
@@ -412,7 +438,7 @@ sub sessioncgi ($$) {
 				$renamesummary.=$template->output;
 			}
 
-			postrename($session, $src, $dest, $q->param("attachment"));
+			postrename($q, $session, $src, $dest, $q->param("attachment"));
 		}
 		else {
 			IkiWiki::showform($form, $buttons, $session, $q);
@@ -567,6 +593,7 @@ sub fixlinks ($$$) {
 		}
 		if ($needfix) {
 			my $file=$pagesources{$page};
+			next unless -e $config{srcdir}."/".$file;
 			my $oldcontent=readfile($config{srcdir}."/".$file);
 			my $content=renamepage_hook($page, $rename->{src}, $rename->{dest}, $oldcontent);
 			if ($oldcontent ne $content) {
@@ -574,11 +601,10 @@ sub fixlinks ($$$) {
 				eval { writefile($file, $config{srcdir}, $content) };
 				next if $@;
 				my $conflict=IkiWiki::rcs_commit(
-					$file,
-					sprintf(gettext("update for rename of %s to %s"), $rename->{srcfile}, $rename->{destfile}),
-					$token,
-					$session->param("name"),
-					$session->remote_addr(),
+					file => $file,
+					message => sprintf(gettext("update for rename of %s to %s"), $rename->{srcfile}, $rename->{destfile}),
+					token => $token,
+					session => $session,
 				);
 				push @fixedlinks, $page if ! defined $conflict;
 			}

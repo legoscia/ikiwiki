@@ -12,7 +12,7 @@ use Encode;
 sub printheader ($) {
 	my $session=shift;
 	
-	if ($config{sslcookie}) {
+	if (($ENV{HTTPS} && lc $ENV{HTTPS} ne "off") || $config{sslcookie}) {
 		print $session->header(-charset => 'utf-8',
 			-cookie => $session->cookie(-httponly => 1, -secure => 1));
 	}
@@ -46,13 +46,51 @@ sub showform ($$$$;@) {
 	my $cgi=shift;
 
 	printheader($session);
-	print misctemplate($form->title, $form->render(submit => $buttons), @_);
+	print cgitemplate($cgi, $form->title,
+		$form->render(submit => $buttons), @_);
+}
+
+sub cgitemplate ($$$;@) {
+	my $cgi=shift;
+	my $title=shift;
+	my $content=shift;
+	my %params=@_;
+	
+	my $template=template("page.tmpl");
+
+	my $topurl = defined $cgi ? $cgi->url : $config{url};
+
+	my $page="";
+	if (exists $params{page}) {
+		$page=delete $params{page};
+		$params{forcebaseurl}=urlabs(urlto($page), $topurl);
+	}
+	run_hooks(pagetemplate => sub {
+		shift->(
+			page => $page,
+			destpage => $page,
+			template => $template,
+		);
+	});
+	templateactions($template, "");
+
+	$template->param(
+		dynamic => 1,
+		title => $title,
+		wikiname => $config{wikiname},
+		content => $content,
+		baseurl => urlabs(baseurl(), $topurl),
+		html5 => $config{html5},
+		%params,
+	);
+	
+	return $template->output;
 }
 
 sub redirect ($$) {
 	my $q=shift;
 	eval q{use URI};
-	my $url=URI->new(shift);
+	my $url=URI->new(urlabs(shift, $q->url));
 	if (! $config{w3mmode}) {
 		print $q->redirect($url);
 	}
@@ -93,7 +131,7 @@ sub needsignin ($$) {
 
 	if (! defined $session->param("name") ||
 	    ! userinfo_get($session->param("name"), "regdate")) {
-		$session->param(postsignin => $ENV{QUERY_STRING});
+		$session->param(postsignin => $q->query_string);
 		cgi_signin($q, $session);
 		cgi_savesession($session);
 		exit;
@@ -116,7 +154,7 @@ sub cgi_signin ($$;$) {
 		required => 'NONE',
 		javascript => 0,
 		params => $q,
-		action => $config{cgiurl},
+		action => cgiurl(),
 		header => 0,
 		template => {type => 'div'},
 		stylesheet => 1,
@@ -198,7 +236,7 @@ sub cgi_prefs ($$) {
 		required => 'NONE',
 		javascript => 0,
 		params => $q,
-		action => $config{cgiurl},
+		action => cgiurl(),
 		template => {type => 'div'},
 		stylesheet => 1,
 		fieldsets => [
@@ -231,11 +269,11 @@ sub cgi_prefs ($$) {
 	
 	if ($form->submitted eq 'Logout') {
 		$session->delete();
-		redirect($q, $config{url});
+		redirect($q, baseurl(undef));
 		return;
 	}
 	elsif ($form->submitted eq 'Cancel') {
-		redirect($q, $config{url});
+		redirect($q, baseurl(undef));
 		return;
 	}
 	elsif ($form->submitted eq 'Save Preferences' && $form->validate) {
@@ -391,7 +429,7 @@ sub cgi (;$$) {
 			# userinfo db.
 			if (! userinfo_get($session->param("name"), "regdate")) {
 				userinfo_setall($session->param("name"), {
-					email => "",
+					email => defined $session->param("email") ? $session->param("email") : "",
 					password => "",
 					regdate => time,
 				}) || error("failed adding user");
@@ -423,7 +461,7 @@ sub cgierror ($) {
 	my $message=shift;
 
 	print "Content-type: text/html\n\n";
-	print misctemplate(gettext("Error"),
+	print cgitemplate(undef, gettext("Error"),
 		"<p class=\"error\">".gettext("Error").": $message</p>");
 	die $@;
 }

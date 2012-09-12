@@ -7,7 +7,7 @@ use IkiWiki 3.00;
 
 my $link_regexp;
 
-my $email_regexp = qr/^.+@.+$/;
+my $email_regexp = qr/^.+@.+\..+$/;
 my $url_regexp = qr/^(?:[^:]+:\/\/|mailto:).*/i;
 
 sub import {
@@ -64,24 +64,16 @@ sub checkconfig () {
 	}
 }
 
-sub is_externallink ($$;$$) {
+sub is_externallink ($$;$) {
 	my $page = shift;
 	my $url = shift;
 	my $anchor = shift;
-	my $force = shift;
 	
 	if (defined $anchor) {
 		$url.="#".$anchor;
 	}
 
-	if (! $force && $url =~ /$email_regexp/) {
-		# url looks like an email address, so we assume it
-		# is supposed to be an external link if there is no
-		# page with that name.
-		return (! (bestlink($page, linkpage($url))))
-	}
-
-	return ($url =~ /$url_regexp/)
+	return ($url =~ /$url_regexp|$email_regexp/)
 }
 
 sub externallink ($$;$) {
@@ -140,7 +132,7 @@ sub scan (@) {
 	my $content=$params{content};
 
 	while ($content =~ /(?<!\\)$link_regexp/g) {
-		if (! is_externallink($page, $2, $3, 1)) {
+		if (! is_externallink($page, $2, $3)) {
 			add_link($page, linkpage($2));
 		}
 	}
@@ -152,9 +144,9 @@ sub renamepage (@) {
 	my $old=$params{oldpage};
 	my $new=$params{newpage};
 
-	$params{content} =~ s{(?<!\\)$link_regexp}{
-		if (! is_externallink($page, $2, $3)) {
-			my $linktext=$2;
+	$params{content} =~ s{(?<!\\)($link_regexp)}{
+		if (! is_externallink($page, $3, $4)) {
+			my $linktext=$3;
 			my $link=$linktext;
 			if (bestlink($page, linkpage($linktext)) eq $old) {
 				$link=pagetitle($new, 1);
@@ -169,9 +161,12 @@ sub renamepage (@) {
 					$link="/$link";
 				}
 			}
-			defined $1
-				? ( "[[$1|$link".($3 ? "#$3" : "")."]]" )
-				: ( "[[$link".   ($3 ? "#$3" : "")."]]" )
+			defined $2
+				? ( "[[$2|$link".($4 ? "#$4" : "")."]]" )
+				: ( "[[$link".   ($4 ? "#$4" : "")."]]" )
+		}
+		else {
+			$1
 		}
 	}eg;
 

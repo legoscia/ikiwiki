@@ -7,11 +7,14 @@ use strict;
 use IkiWiki 3.00;
 
 sub import {
+	hook(type => "checkconfig", id => "tag", call => \&checkconfig);
 	hook(type => "getopt", id => "tag", call => \&getopt);
 	hook(type => "getsetup", id => "tag", call => \&getsetup);
 	hook(type => "preprocess", id => "tag", call => \&preprocess_tag, scan => 1);
 	hook(type => "preprocess", id => "taglink", call => \&preprocess_taglink, scan => 1);
 	hook(type => "pagetemplate", id => "tag", call => \&pagetemplate);
+
+	IkiWiki::loadplugin("transient");
 }
 
 sub getopt () {
@@ -41,6 +44,20 @@ sub getsetup () {
 			safe => 1,
 			rebuild => undef,
 		},
+		tag_autocreate_commit => {
+			type => "boolean",
+			example => 1,
+			default => 1,
+			description => "commit autocreated tag pages",
+			safe => 1,
+			rebuild => 0,
+		},
+}
+
+sub checkconfig () {
+	if (! defined $config{tag_autocreate_commit}) {
+		$config{tag_autocreate_commit} = 1;
+	}
 }
 
 sub taglink ($) {
@@ -53,6 +70,17 @@ sub taglink ($) {
 	}
 
 	return $tag;
+}
+
+# Returns a tag name from a tag link
+sub tagname ($) {
+	my $tag=shift;
+	if (defined $config{tagbase}) {
+		$tag =~ s!^/\Q$config{tagbase}\E/!!;
+	} else {
+		$tag =~ s!^\.?/!!;
+	}
+	return pagetitle($tag, 1);
 }
 
 sub htmllink_tag ($$$;@) {
@@ -76,6 +104,9 @@ sub gentag ($) {
 		else {
 			$tagpage=~s/^\///;
 		}
+		if (exists $IkiWiki::pagecase{lc $tagpage}) {
+			$tagpage=$IkiWiki::pagecase{lc $tagpage}
+		}
 
 		my $tagfile = newpagefile($tagpage, $config{default_pageext});
 
@@ -84,10 +115,16 @@ sub gentag ($) {
 			debug($message);
 
 			my $template=template("autotag.tmpl");
-			$template->param(tagname => IkiWiki::basename($tag));
+			$template->param(tagname => tagname($tag));
 			$template->param(tag => $tag);
-			writefile($tagfile, $config{srcdir}, $template->output);
-			if ($config{rcs}) {
+
+			my $dir = $config{srcdir};
+			if (! $config{tag_autocreate_commit}) {
+				$dir = $IkiWiki::Plugin::transient::transientdir;
+			}
+
+			writefile($tagfile, $dir, $template->output);
+			if ($config{rcs} && $config{tag_autocreate_commit}) {
 				IkiWiki::disable_commit_hook();
 				IkiWiki::rcs_add($tagfile);
 				IkiWiki::rcs_commit_staged(message => $message);
@@ -154,15 +191,18 @@ sub pagetemplate (@) {
 
 	$template->param(tags => [
 		map { 
-			link => htmllink_tag($page, $destpage, $_, rel => "tag")
+			link => htmllink_tag($page, $destpage, $_,
+					rel => "tag", linktext => tagname($_))
 		}, sort keys %$tags
 	]) if defined $tags && %$tags && $template->query(name => "tags");
 
 	if ($template->query(name => "categories")) {
 		# It's an rss/atom template. Add any categories.
 		if (defined $tags && %$tags) {
-			$template->param(categories => [map { category => $_ },
-				sort keys %$tags]);
+			eval q{use HTML::Entities};
+			$template->param(categories =>
+				[map { category => HTML::Entities::encode_entities_numeric(tagname($_)) },
+					sort keys %$tags]);
 		}
 	}
 }

@@ -64,10 +64,11 @@ sub preprocess (@) {
 
 	my $dir = $params{page};
 	my $base = IkiWiki::basename($file);
+	my $issvg = $base=~s/\.svg$/.png/i;
 
 	eval q{use Image::Magick};
 	error gettext("Image::Magick is not installed") if $@;
-	my $im = Image::Magick->new;
+	my $im = Image::Magick->new($issvg ? (magick => "png") : ());
 	my $imglink;
 	my $r = $im->Read($srcfile);
 	error sprintf(gettext("failed to read %s: %s"), $file, $r) if $r;
@@ -117,7 +118,6 @@ sub preprocess (@) {
 				error sprintf(gettext("failed to read %s: %s"), $outfile, $r) if $r;
 			}
 			else {
-				($dwidth, $dheight)=($w, $h);
 				$r = $im->Resize(geometry => "${w}x${h}");
 				error sprintf(gettext("failed to resize: %s"), $r) if $r;
 
@@ -131,9 +131,10 @@ sub preprocess (@) {
 					$imglink = $file;
 				}
 			}
-			
-			$dwidth = $im->Get("width") unless defined $dwidth;
-			$dheight = $im->Get("height") unless defined $dheight;
+
+			# always get the true size of the resized image
+			$dwidth  = $im->Get("width"); 
+			$dheight = $im->Get("height");
 		}
 	}
 	else {
@@ -152,8 +153,8 @@ sub preprocess (@) {
 		$imgurl=urlto($imglink, $params{destpage});
 	}
 	else {
-		$fileurl="$config{url}/$file";
-		$imgurl="$config{url}/$imglink";
+		$fileurl=urlto($file);
+		$imgurl=urlto($imglink);
 	}
 
 	if (! exists $params{class}) {

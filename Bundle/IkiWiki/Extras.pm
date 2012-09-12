@@ -18,7 +18,6 @@ perl -MCPAN -e 'install Bundle::IkiWiki::Extras'
 
 Authen::Passphrase
 Search::Xapian
-RPC::XML
 File::MimeInfo
 Locale::gettext
 Net::OpenID::Consumer
@@ -34,7 +33,9 @@ Text::WikiCreole
 Term::ReadLine::Gnu
 HTML::Tree
 Sort::Naturally
-YAML
+Gravatar::URL
+Net::INET6Glue
+XML::Writer
 
 =head1 AUTHOR
 

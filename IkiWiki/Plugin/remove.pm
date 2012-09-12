@@ -22,6 +22,13 @@ sub getsetup () {
 		},
 }
 
+sub allowed_dirs {
+	return grep { defined $_ } (
+		$config{srcdir},
+		$IkiWiki::Plugin::transient::transientdir,
+	);
+}
+
 sub check_canremove ($$$) {
 	my $page=shift;
 	my $q=shift;
@@ -33,12 +40,22 @@ sub check_canremove ($$$) {
 			htmllink("", "", $page, noimageinline => 1)));
 	}
 
-	# Must exist on disk, and be a regular file.
+	# Must exist in either the srcdir or a suitable underlay (e.g.
+	# transient underlay), and be a regular file.
 	my $file=$pagesources{$page};
-	if (! -e "$config{srcdir}/$file") {
+	my $dir;
+
+	foreach my $srcdir (allowed_dirs()) {
+		if (-e "$srcdir/$file") {
+			$dir = $srcdir;
+			last;
+		}
+	}
+
+	if (! defined $dir) {
 		error(sprintf(gettext("%s is not in the srcdir, so it cannot be deleted"), $file));
 	}
-	elsif (-l "$config{srcdir}/$file" && ! -f _) {
+	elsif (-l "$dir/$file" && ! -f _) {
 		error(sprintf(gettext("%s is not a file"), $file));
 	}
 	
@@ -46,7 +63,7 @@ sub check_canremove ($$$) {
 	# This is sorta overkill, but better safe than sorry.
 	if (! defined pagetype($pagesources{$page})) {
 		if (IkiWiki::Plugin::attachment->can("check_canattach")) {
-			IkiWiki::Plugin::attachment::check_canattach($session, $page, "$config{srcdir}/$file");
+			IkiWiki::Plugin::attachment::check_canattach($session, $page, "$dir/$file");
 		}
 		else {
 			error("removal of attachments is not allowed");
@@ -100,7 +117,7 @@ sub confirmation_form ($$) {
 		method => 'POST',
 		javascript => 0,
 		params => $q,
-		action => $config{cgiurl},
+		action => IkiWiki::cgiurl(),
 		stylesheet => 1,
 		fields => [qw{do page}],
 	);
@@ -117,13 +134,26 @@ sub removal_confirm ($$@) {
 	my $session=shift;
 	my $attachment=shift;
 	my @pages=@_;
+		
+	# Special case for unsaved attachments.
+	foreach my $page (@pages) {
+		if ($attachment && IkiWiki::Plugin::attachment->can("is_held_attachment")) {
+			my $f=IkiWiki::Plugin::attachment::is_held_attachment($page);
+			if (defined $f) {
+				require IkiWiki::Render;
+				IkiWiki::prune($f, "$config{wikistatedir}/attachments");
+			}
+		}
+	}
+	@pages=grep { exists $pagesources{$_} } @pages;
+	return unless @pages;
 
 	foreach my $page (@pages) {
 		IkiWiki::check_canedit($page, $q, $session);
 		check_canremove($page, $q, $session);
 	}
 
-   	# Save current form state to allow returning to it later
+	# Save current form state to allow returning to it later
 	# without losing any edits.
 	# (But don't save what button was submitted, to avoid
 	# looping back to here.)
@@ -178,10 +208,10 @@ sub formbuilder (@) {
 }
 
 sub sessioncgi ($$) {
-        my $q=shift;
+	my $q=shift;
 
 	if ($q->param("do") eq 'remove') {
-        	my $session=shift;
+		my $session=shift;
 		my ($form, $buttons)=confirmation_form($q, $session);
 		IkiWiki::decode_form_utf8($form);
 
@@ -192,7 +222,7 @@ sub sessioncgi ($$) {
 			IkiWiki::checksessionexpiry($q, $session, $q->param('sid'));
 
 			my @pages=$form->field("page");
-	
+			
 			# Validate removal by checking that the page exists,
 			# and that the user is allowed to edit(/remove) it.
 			my @files;
@@ -210,21 +240,34 @@ sub sessioncgi ($$) {
 			require IkiWiki::Render;
 			if ($config{rcs}) {
 				IkiWiki::disable_commit_hook();
-				foreach my $file (@files) {
-					IkiWiki::rcs_remove($file);
+			}
+			my $rcs_removed = 1;
+
+			foreach my $file (@files) {
+				foreach my $srcdir (allowed_dirs()) {
+					if (-e "$srcdir/$file") {
+						if ($srcdir eq $config{srcdir} && $config{rcs}) {
+							IkiWiki::rcs_remove($file);
+							$rcs_removed = 1;
+						}
+						else {
+							IkiWiki::prune("$srcdir/$file", $srcdir);
+						}
+					}
 				}
-				IkiWiki::rcs_commit_staged(
-					message => gettext("removed"),
-					session => $session,
-				);
+			}
+
+			if ($config{rcs}) {
+				if ($rcs_removed) {
+					IkiWiki::rcs_commit_staged(
+						message => gettext("removed"),
+						session => $session,
+					);
+				}
 				IkiWiki::enable_commit_hook();
 				IkiWiki::rcs_update();
 			}
-			else {
-				foreach my $file (@files) {
-					IkiWiki::prune("$config{srcdir}/$file");
-				}
-			}
+
 			IkiWiki::refresh();
 			IkiWiki::saveindex();
 
@@ -240,7 +283,7 @@ sub sessioncgi ($$) {
 				if (! exists $pagesources{$parent}) {
 					$parent="index";
 				}
-				IkiWiki::redirect($q, urlto($parent, '/', 1));
+				IkiWiki::redirect($q, urlto($parent));
 			}
 		}
 		else {

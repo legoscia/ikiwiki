@@ -56,7 +56,7 @@ sub cgi_goto ($;$) {
 		IkiWiki::cgi_custom_failure(
 			$q,
 			"404 Not Found",
-			IkiWiki::misctemplate(gettext("missing page"),
+			IkiWiki::cgitemplate($q, gettext("missing page"),
 				"<p>".
 				sprintf(gettext("The page %s does not exist."),
 					htmllink("", "", $page)).
@@ -64,7 +64,7 @@ sub cgi_goto ($;$) {
 		)
 	}
 	else {
-		IkiWiki::redirect($q, urlto($link, undef, 1));
+		IkiWiki::redirect($q, urlto($link));
 	}
 
 	exit;

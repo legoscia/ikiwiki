@@ -22,8 +22,8 @@ this would be to limit web commits to those done by a certain user.
 
 ## other stuff to look at
 
-I need to audit the git backend a bit, and have been meaning to
-see if any CRLF injection type things can be done in the CGI code.
+I have been meaning to see if any CRLF injection type things can be
+done in the CGI code.
 
 ----
 
@@ -110,7 +110,7 @@ runs ikiwiki to update a given wiki. The wrapper can in turn be made suid,
 for example to be used in a [[post-commit]] hook by people who cannot write
 to the html pages, etc.
 
-If the wrapper script is made suid, then any bugs in this wrapper would be
+If the wrapper program is made suid, then any bugs in this wrapper would be
 security holes. The wrapper is written as securely as I know how, is based
 on code that has a history of security use long before ikiwiki, and there's
 been no problem yet.
@@ -440,3 +440,60 @@ with the release of ikiwiki 3.20100312.
 A fix was also backported to Debian etch, as version 2.53.5. I recommend
 upgrading to one of these versions if your wiki can be edited by third
 parties.
+
+## javascript insertion via insufficient htmlscrubbing of comments
+
+Kevin Riggle noticed that it was not possible to configure
+`htmlscrubber_skip` to scrub comments while leaving unscubbed the text
+of eg, blog posts. Confusingly, setting it to "* and !comment(*)" did not
+scrub comments.
+
+Additionally, it was discovered that comments' html was never scrubbed during
+preview or moderation of comments with such a configuration.
+
+These problems were discovered on 12 November 2010 and fixed the same
+hour with the release of ikiwiki 3.20101112. ([[!cve CVE-2010-1673]])
+
+## javascript insertion via insufficient checking in comments
+
+Dave B noticed that attempting to comment on an illegal page name could be
+used for an XSS attack.
+
+This hole was discovered on 22 Jan 2011 and fixed the same day with
+the release of ikiwiki 3.20110122. A fix was backported to Debian squeeze,
+as version 3.20100815.5. An upgrade is recommended for sites
+with the comments plugin enabled. ([[!cve CVE-2011-0428]])
+
+## possible javascript insertion via insufficient htmlscrubbing of alternate stylesheets
+
+Giuseppe Bilotta noticed that 'meta stylesheet` directives allowed anyone
+who could upload a malicious stylesheet to a site to add it to a
+page as an alternate stylesheet, or replacing the default stylesheet.
+
+This hole was discovered on 28 Mar 2011 and fixed the same hour with
+the release of ikiwiki 3.20110328. A fix was backported to Debian squeeze,
+as version 3.20100815.6. An upgrade is recommended for sites that have
+untrusted committers, or have the attachments plugin enabled.
+([[!cve CVE-2011-1401]])
+
+## tty hijacking via ikiwiki-mass-rebuild
+
+Ludwig Nussel discovered a way for users to hijack root's tty when
+ikiwiki-mass-rebuild was run. Additionally, there was some potential
+for information disclosure via symlinks. ([[!cve CVE-2011-1408]])
+
+This hole was discovered on 8 June 2011 and fixed the same day with
+the release of ikiwiki 3.20110608. Note that the fix is dependant on
+a version of su that has a similar hole fixed. Version 4.1.5 of the shadow
+package contains the fixed su; [[!debbug 628843]] tracks fixing the hole in
+Debian. An upgrade is a must for any sites that have `ikiwiki-update-wikilist`
+installed suid (not the default), and whose admins run `ikiwiki-mass-rebuild`.
+
+## javascript insertion via meta tags
+
+Raúl Benencia discovered an additional XSS exposure in the meta plugin.
+([[!cve CVE-2012-0220]])
+
+This hole was discovered on 16 May 2012 and fixed the same day with
+the release of ikiwiki 3.20120516. A fix was backported to Debian squeeze,
+as version 3.20100815.9. An upgrade is recommended for all sites.
