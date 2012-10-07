@@ -73,6 +73,8 @@ sub import {
 		}
 		$origsubs{'isselflink'}=\&IkiWiki::isselflink;
 		inject(name => "IkiWiki::isselflink", call => \&myisselflink);
+		$origsubs{'pagetitle'}=\&IkiWiki::pagetitle;
+		inject(name => "IkiWiki::pagetitle", call => \&mypagetitle);
 	}
 }
 
@@ -746,6 +748,20 @@ sub myisselflink ($$) {
 		return $origsubs{'isselflink'}->(masterpage($page), $link);
 	}
 	return;
+}
+
+sub mypagetitle ($;$) {
+	my $page=shift;
+	my $unescaped=shift;
+
+	my $masterpage = masterpage($page);
+	my $masterpagelang = lang($masterpage);
+	if ($masterpage =~ /(.*)[.]$masterpagelang$/) {
+		# If the master page has a language code in its filename,
+		# strip it.
+		$masterpage = $1;
+	}
+	return $origsubs{'pagetitle'}->($masterpage, $unescaped);
 }
 
 # ,----
